@@ -868,7 +868,6 @@ GameObject:
   - component: {fileID: 146379600}
   - component: {fileID: 146379599}
   - component: {fileID: 146379598}
-  - component: {fileID: 146379597}
   m_Layer: 5
   m_Name: Left Arm Menu
   m_TagString: Untagged
@@ -884,7 +883,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146379595}
   m_LocalRotation: {x: -0, y: -0.38268343, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.29}
   m_LocalScale: {x: 0.050000004, y: 0.05, z: 0.10000001}
   m_Children:
   - {fileID: 1456316933}
@@ -893,23 +892,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: -1}
+  m_AnchoredPosition: {x: -1.29, y: -1}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &146379597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 146379595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6146325ab9f5bf049a46aa44c24fc3b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  distanceFromCamera: 0
 --- !u!114 &146379598
 MonoBehaviour:
   m_ObjectHideFlags: 0
