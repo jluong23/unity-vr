@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 public class TranslateObject : MonoBehaviour
 {
 
-    public InputActionReference translateXReference = null;
-    public InputActionReference translateYReference = null;
+    public InputActionReference translateReference = null;
     public InputActionReference selectObjectReference = null;
 
     public float speed = 0.2f;
@@ -21,9 +20,8 @@ public class TranslateObject : MonoBehaviour
         }
 
         if(holding){
-            Vector3 dy = speed * transform.up * translateYReference.action.ReadValue<float>();
-            Vector3 dx = speed * transform.right * translateXReference.action.ReadValue<float>();
-            transform.Translate(dx+dy);
+	    Vector3 pointerPos = translateReference.action.ReadValue<Vector2>();
+            transform.position = pointerPos;
         }
     }
 }

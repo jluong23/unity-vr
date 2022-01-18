@@ -1091,15 +1091,6 @@
             "id": "c34b81da-52c1-49cb-b8a1-b38514a937db",
             "actions": [
                 {
-                    "name": "Toggle",
-                    "type": "Button",
-                    "id": "54fd9f1e-bbb6-4bd8-84e9-2c2a465fbf0e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Colour",
                     "type": "Value",
                     "id": "d37975af-1b55-4605-9311-b5084d30ea32",
@@ -1109,19 +1100,10 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "TranslateX",
+                    "name": "Translate Object",
                     "type": "Value",
                     "id": "e6e06677-9915-465a-b20e-8849872f4f8c",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "TranslateY",
-                    "type": "Value",
-                    "id": "d797501e-f958-4a3d-af18-2fcd90ea79dd",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -1139,17 +1121,6 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "73f6bd3b-8093-484a-9d41-d731484200d7",
-                    "path": "<OculusTouchController>/thumbstickClicked",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Toggle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "ed1c60a9-e628-4f97-9971-088e9c6cce33",
                     "path": "<OculusTouchController>/trigger",
                     "interactions": "",
@@ -1162,29 +1133,18 @@
                 {
                     "name": "",
                     "id": "142c68a1-47ee-4c11-846a-120f5d42cf5d",
-                    "path": "<XRController>{RightHand}/devicePosition/x",
+                    "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TranslateX",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "68eb5a8d-53ca-439d-b42e-9f4c6cd6fbcf",
-                    "path": "<XRController>{RightHand}/devicePosition/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TranslateY",
+                    "action": "Translate Object",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "658802f5-1755-48e2-83cd-9e345811fa3d",
-                    "path": "<OculusTouchController>/primaryButton",
+                    "path": "<OculusTouchController>/gripPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
