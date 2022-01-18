@@ -1107,6 +1107,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "TranslateX",
+                    "type": "Value",
+                    "id": "e6e06677-9915-465a-b20e-8849872f4f8c",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "TranslateY",
+                    "type": "Value",
+                    "id": "d797501e-f958-4a3d-af18-2fcd90ea79dd",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Select Object",
+                    "type": "Button",
+                    "id": "211b0730-838f-4016-a2e8-a79c0c6b757c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1129,6 +1156,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Colour",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "142c68a1-47ee-4c11-846a-120f5d42cf5d",
+                    "path": "<XRController>{RightHand}/devicePosition/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TranslateX",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "68eb5a8d-53ca-439d-b42e-9f4c6cd6fbcf",
+                    "path": "<XRController>{RightHand}/devicePosition/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TranslateY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "658802f5-1755-48e2-83cd-9e345811fa3d",
+                    "path": "<OculusTouchController>/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select Object",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
