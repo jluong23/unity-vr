@@ -1124,7 +1124,7 @@
                 {
                     "name": "",
                     "id": "ed1c60a9-e628-4f97-9971-088e9c6cce33",
-                    "path": "<OpenVROculusTouchController>/trigger",
+                    "path": "<OculusTouchController>/trigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
