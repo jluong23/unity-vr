@@ -58,3 +58,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# google api data
+Assets/credentials.json
+Assets/credentials.json.meta
+Assets/token/
+Assets/token.meta
