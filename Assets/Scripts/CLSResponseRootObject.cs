@@ -58,8 +58,13 @@ public class ContentFilter
    public string[] excludedContentCategories;
 
    public ContentFilter(){
-      includedContentCategories = new string[] {"TRAVEL"};
+      includedContentCategories = new string[] {"NONE"};
       excludedContentCategories = new string[] {};
+   }
+
+   public ContentFilter(string[] includedCategories, string[] excludedCategories){
+      includedContentCategories = includedCategories;
+      excludedContentCategories = excludedCategories;
    }
 }
 
@@ -94,9 +99,17 @@ public class MediaFilter
    public FeatureFilter featureFilter;
 
    public MediaFilter(){
-      // uses defaults for each filter
+      // uses defaults for each filter, default content is "NONE" 
       // dateFilter = new DateFilter();
       contentFilter = new ContentFilter();
+      mediaTypeFilter = new MediaTypeFilter();
+      featureFilter = new FeatureFilter();
+   }
+
+   public MediaFilter(string[] includedCategories, string[] excludedCategories){
+      // uses defaults for each filter, but use included and excluded categories arrays
+      // dateFilter = new DateFilter();
+      contentFilter = new ContentFilter(includedCategories, excludedCategories);
       mediaTypeFilter = new MediaTypeFilter();
       featureFilter = new FeatureFilter();
    }
@@ -112,9 +125,14 @@ public class MediaItemSearchRequest
 
    public string orderBy;
 
-   public MediaItemSearchRequest(){
-      mediaFilter = new MediaFilter();
-      pageSize = 10;
+   public MediaItemSearchRequest(int pageSize){
+      this.mediaFilter = new MediaFilter();
+      this.pageSize = pageSize;
+   }
+
+   public MediaItemSearchRequest(int pageSize, string[] includedCategories, string[] excludedCategories){
+      this.mediaFilter = new MediaFilter(includedCategories, excludedCategories);
+      this.pageSize = pageSize;
    }
 
    public string getJson(){
