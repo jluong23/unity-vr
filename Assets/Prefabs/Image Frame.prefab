@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7067779317431145621}
   - component: {fileID: 2692457349739630540}
   - component: {fileID: 2062628274461480453}
+  - component: {fileID: 8865696917450598386}
   m_Layer: 0
   m_Name: Image Frame
   m_TagString: Untagged
@@ -131,6 +132,19 @@ MonoBehaviour:
   selectObjectReference: {fileID: 4598672043302944868, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   speed: 0.2
+--- !u!114 &8865696917450598386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767163706062880629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce0e2a518798224287a3313ba76644d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mediaPhotoUrl: 
 --- !u!1 &6591367573624374398
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,8 +203,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a24f595525600cf4ca914018c6ad8ae3, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
