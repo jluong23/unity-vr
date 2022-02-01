@@ -38,4 +38,6 @@ public class MediaFrame : MonoBehaviour
             Debug.Log(string.Join(",", mediaItem.categories));
         }
     }
+
+    
 }

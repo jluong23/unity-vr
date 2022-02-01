@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 107465906}
   - component: {fileID: 107465905}
   m_Layer: 5
-  m_Name: Photos Data Text
+  m_Name: Category Counts Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195,9 +195,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Photos Data
-
-'
+  m_Text: 'Category Counts:'
 --- !u!222 &107465906
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3042,7 +3040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0abcfa05e029414aba0b2156761cc75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  photosWallText: {fileID: 107465905}
+  categoryCountsWall: {fileID: 107465905}
   showPhotosButton: {fileID: 802239387}
   gallery: {fileID: 403053645}
 --- !u!4 &1133457464
@@ -3294,7 +3292,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453126916}
   m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: -4.93, y: 1.69, z: -7.4}
+  m_LocalPosition: {x: -6.69, y: 1.69, z: -5.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 761697362}
