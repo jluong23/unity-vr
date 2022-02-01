@@ -1151,6 +1151,17 @@
                     "action": "Select Object",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b7e97597-af42-46b6-be8a-e6ca788e5fa7",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select Object",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

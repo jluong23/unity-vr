@@ -13,6 +13,7 @@ public class MediaItem
    public string mimeType;
    public MediaMetadata mediaMetadata;
    public string filename;
+   public List<string> categories = new List<string>();
 }
 
 public class MediaItemRequestResponse

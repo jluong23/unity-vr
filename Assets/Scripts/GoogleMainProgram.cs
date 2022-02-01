@@ -3,75 +3,91 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GoogleMainProgram : MonoBehaviour {
 
-   public Text photosWallText;
+   public Text categoryCountsWall;
    public Button showPhotosButton;
    public GameObject gallery;
    static public int maxPhotos = 12;
 
-   static private Dictionary<string,List<MediaItem>> categorisedPhotos = new Dictionary<string, List<MediaItem>>();
-   static private List<MediaItem> allPhotos = new List<MediaItem>();
+   static private Dictionary<string, MediaItem> allPhotos = new Dictionary<string, MediaItem>();
+   static private Dictionary<string, int> categoryCounts = new Dictionary<string, int>();
 
-   static private void setAllPhotos(UserCredential credential){
+   // coroutine which updates the dictionaries categoryCounts and allPhotos
+   private static IEnumerator populatePhotos(UserCredential credential, bool categorise){
       string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
       MediaItemRequestResponse responseObject = GoogleHelper.performGetRequest(credential, link);
-      allPhotos = responseObject.mediaItems;
-   }
-
-   static private void setCategorisedPhotos(UserCredential credential){
-      string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-      string[] includedCategories = {"NONE", "TRAVEL", "PEOPLE", "SPORT"};
-      // string[] includedCategories = {"NONE"};
-      foreach (var category in includedCategories)
-      {
-         // perform post request for each category (api calls = num categories)
-         MediaItemSearchRequest searchReq = new MediaItemSearchRequest(maxPhotos, new string[]{category}, new string[] {}); //no excluded categories
-         string jsonBody = searchReq.getJson();
-         // perform post request
-         MediaItemRequestResponse responseObject = GoogleHelper.performPostRequest(credential, link, jsonBody);
-         // store list of images in dictionary for given category
-         categorisedPhotos.Add(category, responseObject.mediaItems);
+      // turn list of MediaItems into dictionary from ids to MediaItem
+      allPhotos = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
+      
+      if(categorise){
+         // perform categorisation process
+         link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
+         string[] includedCategories = {"NONE", "TRAVEL", "PEOPLE", "SPORT"};
+         // string[] includedCategories = {"NONE"};
+         foreach (var category in includedCategories)
+         {
+            // perform post request for each category (api calls = num categories)
+            MediaItemSearchRequest searchReq = new MediaItemSearchRequest(maxPhotos, new string[]{category}, new string[] {}); //no excluded categories
+            string jsonBody = searchReq.getJson();
+            // perform post request
+            MediaItemRequestResponse categoryResponseObject = GoogleHelper.performPostRequest(credential, link, jsonBody);
+            foreach (var mediaItem in categoryResponseObject.mediaItems)
+            {
+               // add category to according photo in allPhotos by id
+               allPhotos[mediaItem.id].categories.Add(category);
+            }
+            // set category counts for this category
+            categoryCounts[category] = categoryResponseObject.mediaItems.Count;
+         }
       }
-   }
-
-   // coroutine which updates the dictionaries categorisedPhotos and allPhotos, calling their setter methods
-   private static IEnumerator populatePhotos(UserCredential credential){
-      setAllPhotos(credential);
-      setCategorisedPhotos(credential);
+      else{
+         // categorise = false, all photos have 'NONE' category
+         foreach (var mediaItem in allPhotos.Values)
+         {
+            mediaItem.categories = new List<string> {"NONE"};
+         }
+         // set category counts 
+         categoryCounts["NONE"] = allPhotos.Count;
+      }
       yield return null;
    }
 
+
+   // ran when the 'show photos data' button is pressed
    public void updatePhotosWall(){
+      bool categorise = true;
       string user = "jluong1@sheffield.ac.uk";
       string[] scopes = {
          "https://www.googleapis.com/auth/photoslibrary.readonly"
       };
       UserCredential credential = GoogleHelper.getCredential(user, scopes);
-      // populate photos variables
-      StartCoroutine(populatePhotos(credential));
+
+      // populate allPhotos
+      StartCoroutine(populatePhotos(credential, categorise));
 
       if(allPhotos.Count > 0){
 
          // update the gallery of frames for this category with all images
          int i = 0;
-         foreach (var mediaPhoto in allPhotos)
+         foreach (var mediaPhoto in allPhotos.Values)
          {
-            gallery.transform.GetChild(i).GetComponent<ImageDownloader>().setTexture(mediaPhoto.baseUrl);
+            MediaFrame mediaFrameComponent = gallery.transform.GetChild(i).GetComponent<MediaFrame>();
+            // set the MediaItem attribute for the mediaFrame component
+            mediaFrameComponent.mediaItem = mediaPhoto;
+            // set the texture of frame, showing the image itself
+            mediaFrameComponent.displayTexture();
             i+=1;
          }
 
-         // update the photos data wall (category info)
-         photosWallText.text = "Photos Data \n";
-         foreach(var entry in categorisedPhotos)
+         // update the category counts wall
+         categoryCountsWall.text = "Category Counts: \n";
+         foreach(var entry in categoryCounts)
          {
-            if(entry.Key == "NONE"){
-               photosWallText.text += "Total: " + categorisedPhotos["NONE"].Count;
-            }else{
-               photosWallText.text += entry.Key + ": " + entry.Value.Count;
-            }
-            photosWallText.text += "\n";
+            categoryCountsWall.text += entry.Key + ": " + entry.Value.ToString();
+            categoryCountsWall.text += "\n";
          }
 
       }
