@@ -57,6 +57,11 @@ public class ContentFilter
 {
    public string[] includedContentCategories;
    public string[] excludedContentCategories;
+   public static string[] ALL_CATEGORIES = new string[] {
+      "NONE", "LANDSCAPES", "RECEIPTS", "CITYSCAPES", "LANDMARKS", "SELFIES", "PEOPLE", "PETS", "WEDDINGS",
+      "DOCUMENTS", "TRAVEL", "ANIMALS", "FOOD", "SPORT", "NIGHT", "PERFORMANCES", "WHITEBOARDS", "SCREENSHOTS", 
+      "UTILITY", "ARTS", "CRAFTS", "FASHION", "HOUSES", "GARDENS", "FLOWERS", "HOLIDAYS"
+   };
 
    public ContentFilter(){
       includedContentCategories = new string[] {"NONE"};

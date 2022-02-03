@@ -25,7 +25,8 @@ public class GoogleMainProgram : MonoBehaviour {
       if(categorise){
          // perform categorisation process
          link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-         string[] includedCategories = {"NONE", "TRAVEL", "PEOPLE", "SPORT"};
+         // string[] includedCategories = {"NONE", "TRAVEL", "PEOPLE", "SPORT"};
+         string[] includedCategories = ContentFilter.ALL_CATEGORIES;
          // string[] includedCategories = {"NONE"};
          foreach (var category in includedCategories)
          {
@@ -33,14 +34,22 @@ public class GoogleMainProgram : MonoBehaviour {
             MediaItemSearchRequest searchReq = new MediaItemSearchRequest(maxPhotos, new string[]{category}, new string[] {}); //no excluded categories
             string jsonBody = searchReq.getJson();
             // perform post request
+
             MediaItemRequestResponse categoryResponseObject = GoogleHelper.performPostRequest(credential, link, jsonBody);
-            foreach (var mediaItem in categoryResponseObject.mediaItems)
-            {
-               // add category to according photo in allPhotos by id
-               allPhotos[mediaItem.id].categories.Add(category);
+               // if photos exist for this category
+            if(categoryResponseObject.mediaItems != null && categoryResponseObject.mediaItems.Count > 0){
+               foreach (var mediaItem in categoryResponseObject.mediaItems)
+               {
+                  // add category to according photo in allPhotos by id
+                  allPhotos[mediaItem.id].categories.Add(category);
+               }
+               // set category counts for this category
+               categoryCounts[category] = categoryResponseObject.mediaItems.Count;
+            }else{
+               // set category counts to 0 for this category
+               categoryCounts[category] = 0; 
+
             }
-            // set category counts for this category
-            categoryCounts[category] = categoryResponseObject.mediaItems.Count;
          }
       }
       else{
@@ -86,8 +95,10 @@ public class GoogleMainProgram : MonoBehaviour {
          categoryCountsWall.text = "Category Counts: \n";
          foreach(var entry in categoryCounts)
          {
-            categoryCountsWall.text += entry.Key + ": " + entry.Value.ToString();
-            categoryCountsWall.text += "\n";
+            if(entry.Value > 0){
+               categoryCountsWall.text += entry.Key + ": " + entry.Value.ToString();
+               categoryCountsWall.text += "\n";
+            }
          }
 
       }
