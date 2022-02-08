@@ -7,10 +7,10 @@ using System.Linq;
 
 public class GoogleMainProgram : MonoBehaviour {
 
-   public Text categoryCountsWall;
-   public Button showPhotosButton;
+   public GameObject menu;
    public GameObject gallery;
    static public int maxPhotos = 12;
+
 
    static private Dictionary<string, MediaItem> allPhotos = new Dictionary<string, MediaItem>();
    static private Dictionary<string, int> categoryCounts = new Dictionary<string, int>();
@@ -78,6 +78,9 @@ public class GoogleMainProgram : MonoBehaviour {
       StartCoroutine(populatePhotos(credential, categorise));
 
       if(allPhotos.Count > 0){
+         // update category counts for each category
+         Debug.Log(menu.transform.Find("Category Panel"));
+         menu.GetComponent<ShowCategories>().appendCategoryCounts(categoryCounts);
 
          // update the gallery of frames for this category with all images
          int i = 0;
@@ -90,17 +93,6 @@ public class GoogleMainProgram : MonoBehaviour {
             mediaFrameComponent.displayTexture();
             i+=1;
          }
-
-         // update the category counts wall
-         categoryCountsWall.text = "Category Counts: \n";
-         foreach(var entry in categoryCounts)
-         {
-            if(entry.Value > 0){
-               categoryCountsWall.text += entry.Key + ": " + entry.Value.ToString();
-               categoryCountsWall.text += "\n";
-            }
-         }
-
       }
 
    }

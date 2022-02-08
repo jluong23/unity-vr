@@ -876,17 +876,6 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "third",
-                    "id": "3ef0a781-60c5-48bc-a584-f95553f8ae0a",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Generic XR Controller",
-                    "action": "Position",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "1ce80054-410d-4112-a332-50faa7fb4f23",
                     "path": "<XRController>{RightHand}/gripPressed",
