@@ -12,15 +12,15 @@ public class GoogleMainProgram : MonoBehaviour {
    static public int maxPhotos = 12;
 
    // dictionary from id to mediaItem object
-   static private Dictionary<string, MediaItem> allPhotos = new Dictionary<string, MediaItem>();
+   static public Dictionary<string, MediaItem> allPhotos = new Dictionary<string, MediaItem>();
    // dictionary from category to count in allPhotos
    static private Dictionary<string, int> categoryCounts = new Dictionary<string, int>();
-   // subset of allPhotos, currently shown photos
-   static private Dictionary<string, MediaItem> currentPhotos = new Dictionary<string, MediaItem>();
-   
 
+   // array of mediaItem ids for currently shown photos, subset of allPhotos
+   List<string> currentPhotos = new List<string>();
+   
    // coroutine which updates the dictionaries categoryCounts and allPhotos
-   private static IEnumerator populatePhotos(UserCredential credential, bool categorise){
+   private static IEnumerator populateAllPhotos(UserCredential credential, bool categorise){
       string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
       MediaItemRequestResponse responseObject = GoogleHelper.performGetRequest(credential, link);
       // turn list of MediaItems into dictionary from ids to MediaItem
@@ -38,7 +38,6 @@ public class GoogleMainProgram : MonoBehaviour {
             MediaItemSearchRequest searchReq = new MediaItemSearchRequest(maxPhotos, new string[]{category}, new string[] {}); //no excluded categories
             string jsonBody = searchReq.getJson();
             // perform post request
-
             MediaItemRequestResponse categoryResponseObject = GoogleHelper.performPostRequest(credential, link, jsonBody);
                // if photos exist for this category
             if(categoryResponseObject.mediaItems != null && categoryResponseObject.mediaItems.Count > 0){
@@ -79,23 +78,16 @@ public class GoogleMainProgram : MonoBehaviour {
       UserCredential credential = GoogleHelper.getCredential(user, scopes);
 
       // populate allPhotos
-      StartCoroutine(populatePhotos(credential, categorise));
-
+      StartCoroutine(populateAllPhotos(credential, categorise));
+      
       if(allPhotos.Count > 0){
          // update category counts for each category
-         menu.GetComponent<ShowCategories>().appendCategoryCounts(categoryCounts);
+         menu.GetComponent<CategoryMenu>().appendCategoryCounts(categoryCounts);
+         // enable category buttons
+         menu.GetComponent<CategoryMenu>().toggleCategoryButtons();
 
-         // update the gallery of frames for this category with all images
-         int i = 0;
-         foreach (var mediaPhoto in allPhotos.Values)
-         {
-            MediaFrame mediaFrameComponent = gallery.transform.GetChild(i).GetComponent<MediaFrame>();
-            // set the MediaItem attribute for the mediaFrame component
-            mediaFrameComponent.mediaItem = mediaPhoto;
-            // set the texture of frame, showing the image itself
-            mediaFrameComponent.displayTexture();
-            i+=1;
-         }
+         // update the gallery of frames with all images
+         gallery.GetComponent<Gallery>().showPhotos(new List<string>(allPhotos.Keys));
       }
    }
 }

@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// a single category toggle button
 public class CategoryToggle : MonoBehaviour
 {
-     private Toggle toggle;
-     private Image toggleBackground;
-     private void Start()
+    private Toggle toggle;
+    private Image toggleBackground;
+    private string category;
+
+    private void Start()
      {
          toggle = GetComponent<Toggle>();
-         toggle.isOn = false;
+         category = GetComponentInChildren<Text>().text;
+        //  toggle.isOn = false;
+         toggle.interactable = false;  // disabled until user has loaded their images 
          toggleBackground = GetComponentInChildren<Image>();
          toggle.onValueChanged.AddListener(OnToggleValueChanged);
      }
  
-     private void OnToggleValueChanged(bool isOn)
+    private void OnToggleValueChanged(bool isOn)
      {
          Color cb;
          if (isOn)

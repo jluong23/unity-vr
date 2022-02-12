@@ -7,10 +7,20 @@ using UnityEngine.InputSystem;
 public class MediaFrame : MonoBehaviour
 {
     private Texture downloadedTexture;
+    private Texture originalTexture;
     public MediaItem mediaItem;
     public InputActionReference selectObjectReference = null;
 
-
+    void Start() {
+        // save the default texture
+        originalTexture = transform.GetChild(0).GetComponent<Renderer>().material.GetTexture("_MainTex");
+    }
+   
+    public void restoreTexture() {
+        mediaItem = null;
+        transform.GetChild(0).GetComponent<Renderer>().material.SetTexture("_MainTex", originalTexture);
+    }
+    
     public void displayTexture(){    
         // changes the image displayed on the frame
         if(mediaItem != null){
