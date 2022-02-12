@@ -11,9 +11,13 @@ public class GoogleMainProgram : MonoBehaviour {
    public GameObject gallery;
    static public int maxPhotos = 12;
 
-
+   // dictionary from id to mediaItem object
    static private Dictionary<string, MediaItem> allPhotos = new Dictionary<string, MediaItem>();
+   // dictionary from category to count in allPhotos
    static private Dictionary<string, int> categoryCounts = new Dictionary<string, int>();
+   // subset of allPhotos, currently shown photos
+   static private Dictionary<string, MediaItem> currentPhotos = new Dictionary<string, MediaItem>();
+   
 
    // coroutine which updates the dictionaries categoryCounts and allPhotos
    private static IEnumerator populatePhotos(UserCredential credential, bool categorise){
@@ -79,7 +83,6 @@ public class GoogleMainProgram : MonoBehaviour {
 
       if(allPhotos.Count > 0){
          // update category counts for each category
-         Debug.Log(menu.transform.Find("Category Panel"));
          menu.GetComponent<ShowCategories>().appendCategoryCounts(categoryCounts);
 
          // update the gallery of frames for this category with all images
@@ -94,7 +97,6 @@ public class GoogleMainProgram : MonoBehaviour {
             i+=1;
          }
       }
-
    }
 }
 

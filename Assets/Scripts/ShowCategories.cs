@@ -10,21 +10,25 @@ public class ShowCategories : MonoBehaviour
     private Text[] buttonTextElements;
     void Start()
     {
-        // // print categories on available buttons
         buttonTextElements = transform.Find("Category Panel").GetComponentsInChildren<Text>();
-        for (int i = 0; i < buttonTextElements.Count(); i++)
-        {   
-            buttonTextElements[i].text = ContentFilter.ALL_CATEGORIES[i];
-        }
+        updateCategoryButtonsText();
     }
 
-    // add category counts to each category button
-    public void appendCategoryCounts(Dictionary<string, int> categoryCounts){
+    // update text on category buttons
+    void updateCategoryButtonsText(){
         for (int i = 0; i < buttonTextElements.Count(); i++)
         {   
-            Text currentButton = buttonTextElements[i];
-            string category = currentButton.text;
-            currentButton.text += string.Format(" ({0})", categoryCounts[category]);
+            string category = ContentFilter.ALL_CATEGORIES[i];
+
+            buttonTextElements[i].text = category[0] + category.Substring(1).ToLower();
+        }
+    }
+    // add category counts to each category button
+    public void appendCategoryCounts(Dictionary<string, int> categoryCounts){
+        foreach (var buttonText in buttonTextElements)
+        {
+            string category = buttonText.text;
+            buttonText.text += string.Format(" ({0})", categoryCounts[category.ToUpper()]);
         }
     }
 

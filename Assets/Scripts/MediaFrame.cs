@@ -34,9 +34,9 @@ public class MediaFrame : MonoBehaviour
 
     void Update() {
         
-        if(selectObjectReference.action.triggered && mediaItem != null){
-            Debug.Log(string.Join(",", mediaItem.categories));
-        }
+        // if(selectObjectReference.action.triggered && mediaItem != null){
+        //     Debug.Log(string.Join(",", mediaItem.categories));
+        // }
     }
 
     
