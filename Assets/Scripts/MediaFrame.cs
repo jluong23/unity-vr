@@ -40,14 +40,5 @@ public class MediaFrame : MonoBehaviour
             downloadedTexture = ((DownloadHandlerTexture) request.downloadHandler).texture;
             // change the texture to the downloaded image (gameObject child is the quad where the texture is displayed)
             transform.GetChild(0).GetComponent<Renderer>().material.SetTexture("_MainTex", downloadedTexture);
-    } 
-
-    void Update() {
-        
-        // if(selectObjectReference.action.triggered && mediaItem != null){
-        //     Debug.Log(string.Join(",", mediaItem.categories));
-        // }
-    }
-
-    
+    }     
 }

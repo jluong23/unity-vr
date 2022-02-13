@@ -7,47 +7,46 @@ using System.Linq;
 
 public class CategoryMenu : MonoBehaviour
 {
-    private Text[] buttonTextElements;
-    private Toggle[] buttonToggleComponents;
+    // different category buttons as children
+    private CategoryToggle[] categoryToggles;
     void Start()
     {
-        buttonTextElements = transform.Find("Category Panel").GetComponentsInChildren<Text>();
-        buttonToggleComponents = transform.Find("Category Panel").GetComponentsInChildren<Toggle>();
+        categoryToggles = transform.Find("Category Panel").GetComponentsInChildren<CategoryToggle>();
         updateCategoryButtonsText();
     }
 
     // makes all category toggles interactable or non interactable, opposite from current state
     public void toggleCategoryButtons()
     {
-        foreach (var toggle in buttonToggleComponents)
+        foreach (var categoryToggle in categoryToggles)
         {
-            toggle.interactable = !toggle.interactable;
+            categoryToggle.toggle.interactable = !categoryToggle.toggle.interactable;
         }
     }
 
     // update text on category buttons
     void updateCategoryButtonsText(){
-        for (int i = 0; i < buttonTextElements.Count(); i++)
+        for (int i = 0; i < categoryToggles.Count(); i++)
         {   
             string category = ContentFilter.ALL_CATEGORIES[i];
-
-            // from full caps category, capitalise first letter, lowercase the rest
-            buttonTextElements[i].text = category[0] + category.Substring(1).ToLower();
+            categoryToggles[i].setCategory(category);
         }
     }
     // add category counts to each category button
     public void appendCategoryCounts(Dictionary<string, int> categoryCounts){
 
-        foreach (var buttonText in buttonTextElements)
+        foreach (var categoryToggle in categoryToggles)
         {
-            string category = buttonText.text.ToUpper();
-            if(categoryCounts.ContainsKey(category) && categoryCounts[category] > 0){
-                buttonText.text += string.Format(" <b>({0})</b>", categoryCounts[category]);
-            }
-            else{
-                buttonText.text += " <b>(0)</b>";
-            }
+            string category = categoryToggle.getCategory();
+            // count is 0 if the category does not exist
+            int count = categoryCounts.ContainsKey(category) ? categoryCounts[category] : 0;
+            categoryToggle.appendCategoryCount(count);
         }
     }
+
+    // // return a list of categories which are selected on the menu
+    // public List<string> getSelectedCategories(){
+        
+    // }
 
 }

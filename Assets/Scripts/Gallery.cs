@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 using Google.Apis.Auth.OAuth2;
 
@@ -34,9 +35,9 @@ public class Gallery : MonoBehaviour
       if(categorise){
          // perform categorisation process
          link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-         // string[] includedCategories = {"NONE", "TRAVEL", "PEOPLE", "SPORT"};
+         // string[] includedCategories = {"None", "TRAVEL", "PEOPLE", "SPORT"};
          string[] includedCategories = ContentFilter.ALL_CATEGORIES;
-         // string[] includedCategories = {"NONE"};
+         // string[] includedCategories = {"None"};
          foreach (var category in includedCategories)
          {
             // perform post request for each category (api calls = num categories)
@@ -61,13 +62,13 @@ public class Gallery : MonoBehaviour
          }
       }
       else{
-         // categorise = false, all photos have 'NONE' category
+         // categorise = false, all photos have 'None' category
          foreach (var mediaItem in allPhotos.Values)
          {
-            mediaItem.categories = new List<string> {"NONE"};
+            mediaItem.categories = new List<string> {"None"};
          }
          // set category counts 
-         categoryCounts["NONE"] = allPhotos.Count;
+         categoryCounts["None"] = allPhotos.Count;
       }
       yield return null;
    }
@@ -75,8 +76,18 @@ public class Gallery : MonoBehaviour
     // from allPhotos, retrieve a subset of allPhotos
     // which have the given categories
     public List<string> getPhotoIds(List<string> includedCategories){
-    
-    return null;
+        List<string> foundPhotoIds = new List<string>();
+        if(allPhotos.Count > 0){
+            // count of intersection between photos categories and includedCategories == count of included categories
+            // ie. photo's categories contains all includedCategories
+            var foundPhotos = allPhotos.Where(i => 
+                i.Value.categories.Intersect(includedCategories).ToList().Count == includedCategories.Count);
+            foreach (var photo in foundPhotos)
+            {
+                foundPhotoIds.Add(photo.Key);
+            }
+        }
+        return foundPhotoIds;    
    }
 
     // ran when the 'show photos data' button is pressed for the first time, showing all photos 
@@ -94,6 +105,10 @@ public class Gallery : MonoBehaviour
             menu.GetComponent<CategoryMenu>().toggleCategoryButtons();
             // update the gallery of frames with all images
             GetComponent<Gallery>().showPhotos(new List<string>(allPhotos.Keys));
+
+            // TODO Test: update gallery with images of given category
+            // List<string> includedCategories = new List<string>{"People"};
+            // GetComponent<Gallery>().showPhotos(new List<string>(getPhotoIds(includedCategories)));
         }
     }
 

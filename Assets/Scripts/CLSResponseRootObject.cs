@@ -57,14 +57,13 @@ public class ContentFilter
 {
    public string[] includedContentCategories;
    public string[] excludedContentCategories;
-   public static string[] ALL_CATEGORIES = new string[] {
-      "NONE", "LANDSCAPES", "RECEIPTS", "CITYSCAPES", "LANDMARKS", "SELFIES", "PEOPLE", "PETS", "WEDDINGS",
-      "DOCUMENTS", "TRAVEL", "ANIMALS", "FOOD", "SPORT", "NIGHT", "PERFORMANCES", "WHITEBOARDS", "SCREENSHOTS", 
-      "UTILITY", "ARTS", "CRAFTS", "FASHION", "HOUSES", "GARDENS", "FLOWERS", "HOLIDAYS"
-   };
+   public static string[] ALL_CATEGORIES = new string[] {"None", "Landscapes", "Receipts", "Cityscapes", "Landmarks", "Selfies", "People", 
+   "Pets", "Weddings", "Documents", "Travel", "Animals", "Food", "Sport", "Night", "Performances",
+   "Whiteboards", "Screenshots", "Utility", "Arts", "Crafts", "Fashion", "Houses", "Gardens", "Flowers", "Holidays"};
+
 
    public ContentFilter(){
-      includedContentCategories = new string[] {"NONE"};
+      includedContentCategories = new string[] {"None"};
       excludedContentCategories = new string[] {};
    }
 
@@ -126,6 +125,7 @@ public class MediaItemSearchRequest
    public string albumId;
    public int pageSize;
    public string pageToken;
+   // json key to 'filters' for post request 
    [JsonProperty(PropertyName = "filters")]
    public MediaFilter mediaFilter;
 
