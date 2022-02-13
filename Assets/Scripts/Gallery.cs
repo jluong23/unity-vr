@@ -73,10 +73,14 @@ public class Gallery : MonoBehaviour
       yield return null;
    }
 
-    // from allPhotos, retrieve a subset of allPhotos
-    // which have the given categories
-    public List<string> getPhotoIds(List<string> includedCategories){
+    // from allPhotos, retrieve a subset of allPhotos which have the given categories
+    private List<string> getPhotoIds(List<string> includedCategories){
         List<string> foundPhotoIds = new List<string>();
+        
+        if(includedCategories.Count == 0){
+            return foundPhotoIds;
+        }
+
         if(allPhotos.Count > 0){
             // count of intersection between photos categories and includedCategories == count of included categories
             // ie. photo's categories contains all includedCategories
@@ -103,25 +107,28 @@ public class Gallery : MonoBehaviour
             menu.GetComponent<CategoryMenu>().appendCategoryCounts(categoryCounts);
             // enable category buttons
             menu.GetComponent<CategoryMenu>().toggleCategoryButtons();
-            // update the gallery of frames with all images
-            GetComponent<Gallery>().showPhotos(new List<string>(allPhotos.Keys));
-
-            // TODO Test: update gallery with images of given category
-            // List<string> includedCategories = new List<string>{"People"};
-            // GetComponent<Gallery>().showPhotos(new List<string>(getPhotoIds(includedCategories)));
         }
     }
 
-    public void showPhotos(List<string> newPhotoIds){
-        // update currentPhotoIdsIds
+    // update the gallery with photos with the selected categories from the category menu
+    public void updatePhotos(){
+        // clear current gallery
+        clearGallery();
+
+        // get ids of the photos with selected categories
+        List<string> selectedCategories = menu.GetComponent<CategoryMenu>().getSelectedCategories();
+        List<string> newPhotoIds = getPhotoIds(selectedCategories);
+        Debug.Log(string.Join(",", selectedCategories));
+        // update currentPhotoIds
         currentPhotoIds = newPhotoIds;
         int i = 0;
-        foreach (var mediaPhotoId in currentPhotoIds)
+        foreach (var photoId in currentPhotoIds)
         {
-            MediaItem mediaPhoto = allPhotos[mediaPhotoId];
+            // start setting the media frames
+            MediaItem mediaItem = allPhotos[photoId];
             MediaFrame mediaFrameComponent = transform.GetChild(i).GetComponent<MediaFrame>();
             // set the mediaItem attribute for the mediaFrame component
-            mediaFrameComponent.mediaItem = mediaPhoto;
+            mediaFrameComponent.mediaItem = mediaItem;
             // set the texture of frame, showing the image itself
             mediaFrameComponent.displayTexture();
             i+=1;

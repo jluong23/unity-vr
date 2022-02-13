@@ -6,17 +6,19 @@ using UnityEngine.UI;
 // a single category toggle button
 public class CategoryToggle : MonoBehaviour
 {
-    public Toggle toggle;
+    private Toggle toggle;
+    public Gallery gallery; 
     private Image toggleBackground;
     private string category;
     private Text textElement;
 
     private void Start()
     {
-        toggle = GetComponent<Toggle>();
         category = "";
         textElement = GetComponentInChildren<Text>();
-        //  toggle.isOn = false;
+
+        toggle = GetComponent<Toggle>();
+        toggle.isOn = false;
         toggle.interactable = false;  // disabled until user has loaded their images 
         toggleBackground = GetComponentInChildren<Image>();
         toggle.onValueChanged.AddListener(OnToggleValueChanged);
@@ -53,7 +55,8 @@ public class CategoryToggle : MonoBehaviour
     private void OnToggleValueChanged(bool isOn)
     {
         setColour(isOn);
-        // update the gallery 
+        // update the gallery with the newly selected categories
+        gallery.updatePhotos();
 
     }
 }

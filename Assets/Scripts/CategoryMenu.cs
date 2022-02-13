@@ -20,7 +20,7 @@ public class CategoryMenu : MonoBehaviour
     {
         foreach (var categoryToggle in categoryToggles)
         {
-            categoryToggle.toggle.interactable = !categoryToggle.toggle.interactable;
+            categoryToggle.GetComponent<Toggle>().interactable = !categoryToggle.GetComponent<Toggle>().interactable;
         }
     }
 
@@ -45,8 +45,8 @@ public class CategoryMenu : MonoBehaviour
     }
 
     // // return a list of categories which are selected on the menu
-    // public List<string> getSelectedCategories(){
-        
-    // }
+    public List<string> getSelectedCategories(){
+        return categoryToggles.Where(i => i.GetComponent<Toggle>().isOn).Select(i => i.getCategory()).ToList();
+    }
 
 }
