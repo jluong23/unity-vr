@@ -9,6 +9,12 @@ public class Gallery : MonoBehaviour
 {
     public GameObject menu;
     static public int maxPhotos = 12;
+    public bool categorisePhotos = true;
+    public string user = "jluong1@sheffield.ac.uk";
+    public string[] scopes = {
+        "https://www.googleapis.com/auth/photoslibrary.readonly"
+    };
+
 
     // dictionary from id to mediaItem object
     static public Dictionary<string, MediaItem> allPhotos = new Dictionary<string, MediaItem>();
@@ -66,23 +72,20 @@ public class Gallery : MonoBehaviour
       yield return null;
    }
 
-
-   public List<string> getPhotoIds(List<string> includedCategories){
-      return null;
+    // from allPhotos, retrieve a subset of allPhotos
+    // which have the given categories
+    public List<string> getPhotoIds(List<string> includedCategories){
+    
+    return null;
    }
 
     // ran when the 'show photos data' button is pressed for the first time, showing all photos 
    // from the user's library
     public void initPhotos(){
-        bool categorise = true;
-        string user = "jluong1@sheffield.ac.uk";
-        string[] scopes = {
-            "https://www.googleapis.com/auth/photoslibrary.readonly"
-        };
         UserCredential credential = RestHelper.getCredential(user, scopes);
 
         // populate allPhotos
-        StartCoroutine(populateAllPhotos(credential, categorise));
+        StartCoroutine(populateAllPhotos(credential, categorisePhotos));
         
         if(allPhotos.Count > 0){
             // update category counts for each category

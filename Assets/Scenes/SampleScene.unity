@@ -2073,6 +2073,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1739814703}
+  categorisePhotos: 1
+  user: jluong1@sheffield.ac.uk
+  scopes:
+  - https://www.googleapis.com/auth/photoslibrary.readonly
 --- !u!1 &427299811
 GameObject:
   m_ObjectHideFlags: 0

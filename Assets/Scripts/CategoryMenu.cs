@@ -41,7 +41,7 @@ public class CategoryMenu : MonoBehaviour
         foreach (var buttonText in buttonTextElements)
         {
             string category = buttonText.text.ToUpper();
-            if(categoryCounts[category] > 0){
+            if(categoryCounts.ContainsKey(category) && categoryCounts[category] > 0){
                 buttonText.text += string.Format(" <b>({0})</b>", categoryCounts[category]);
             }
             else{
