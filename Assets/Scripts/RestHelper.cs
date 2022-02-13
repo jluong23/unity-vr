@@ -8,7 +8,7 @@ using System.Threading;
 using UnityEngine;
 using Newtonsoft.Json;
 
-public class GoogleHelper : MonoBehaviour {
+public class RestHelper : MonoBehaviour {
    
    static ClientSecrets clientSecrets;
 
@@ -37,8 +37,8 @@ public class GoogleHelper : MonoBehaviour {
       HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(link);
       httpWebRequest.Method = method;
       httpWebRequest.ContentType = "application/json";
-      httpWebRequest.Headers.Add("client_id", GoogleHelper.clientSecrets.ClientId);
-      httpWebRequest.Headers.Add("client_secret", GoogleHelper.clientSecrets.ClientSecret);
+      httpWebRequest.Headers.Add("client_id", clientSecrets.ClientId);
+      httpWebRequest.Headers.Add("client_secret", clientSecrets.ClientSecret);
       httpWebRequest.Headers.Add("Authorization:" + credential.Token.TokenType + " " + credential.Token.AccessToken);
       return httpWebRequest;
    }

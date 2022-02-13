@@ -21,7 +21,7 @@ public class Gallery : MonoBehaviour
     // coroutine which updates the dictionaries categoryCounts and allPhotos
     private static IEnumerator populateAllPhotos(UserCredential credential, bool categorise){
       string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
-      MediaItemRequestResponse responseObject = GoogleHelper.performGetRequest(credential, link);
+      MediaItemRequestResponse responseObject = RestHelper.performGetRequest(credential, link);
       // turn list of MediaItems into dictionary from ids to MediaItem
       allPhotos = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
       
@@ -37,7 +37,7 @@ public class Gallery : MonoBehaviour
             MediaItemSearchRequest searchReq = new MediaItemSearchRequest(maxPhotos, new string[]{category}, new string[] {}); //no excluded categories
             string jsonBody = searchReq.getJson();
             // perform post request
-            MediaItemRequestResponse categoryResponseObject = GoogleHelper.performPostRequest(credential, link, jsonBody);
+            MediaItemRequestResponse categoryResponseObject = RestHelper.performPostRequest(credential, link, jsonBody);
                // if photos exist for this category
             if(categoryResponseObject.mediaItems != null && categoryResponseObject.mediaItems.Count > 0){
                foreach (var mediaItem in categoryResponseObject.mediaItems)
@@ -79,7 +79,7 @@ public class Gallery : MonoBehaviour
         string[] scopes = {
             "https://www.googleapis.com/auth/photoslibrary.readonly"
         };
-        UserCredential credential = GoogleHelper.getCredential(user, scopes);
+        UserCredential credential = RestHelper.getCredential(user, scopes);
 
         // populate allPhotos
         StartCoroutine(populateAllPhotos(credential, categorise));
