@@ -15,15 +15,6 @@ public class CategoryMenu : MonoBehaviour
         updateCategoryButtonsText();
     }
 
-    // makes all category toggles interactable or non interactable, opposite from current state
-    public void toggleCategoryButtons()
-    {
-        foreach (var categoryToggle in categoryToggles)
-        {
-            categoryToggle.GetComponent<Toggle>().interactable = !categoryToggle.GetComponent<Toggle>().interactable;
-        }
-    }
-
     // update text on category buttons
     void updateCategoryButtonsText(){
         for (int i = 0; i < categoryToggles.Count(); i++)

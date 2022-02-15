@@ -105,8 +105,6 @@ public class Gallery : MonoBehaviour
         if(allPhotos.Count > 0){
             // update category counts for each category
             menu.GetComponent<CategoryMenu>().appendCategoryCounts(categoryCounts);
-            // enable category buttons
-            menu.GetComponent<CategoryMenu>().toggleCategoryButtons();
         }
     }
 
