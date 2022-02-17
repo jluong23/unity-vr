@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using System.Linq;
 
 public class Gallery : MonoBehaviour
@@ -21,6 +22,8 @@ public class Gallery : MonoBehaviour
         if(userPhotos.allPhotos.Count > 0){
             // update category counts for each category
             menu.GetComponent<CategoryMenu>().appendCategoryCounts(userPhotos.categoryCounts);
+            // update 
+            menu.GetComponent<DateMenu>().setDateRanges(userPhotos);
         }
     }
 

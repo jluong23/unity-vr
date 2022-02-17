@@ -20,17 +20,20 @@ public class UserPhotos
     private string email;
     private bool categorisePhotos;
 
-    public Tuple<DateTime, DateTime> getPhotosRange(){
-        return null;
+    public Tuple<DateTime, DateTime> getDateRange(){
+      List<MediaItem> photos = allPhotos.Values.ToList();  
+      // allPhotos and photos is from newest to oldest. So first element is newest photo
+      DateTime endDate = Convert.ToDateTime(photos[0].mediaMetadata.creationTime);
+      DateTime startDate = Convert.ToDateTime(photos[photos.Count-1].mediaMetadata.creationTime);
+      return new Tuple<DateTime, DateTime>(startDate, endDate);
     }
-    /**
-    Constructor for userPhotos.
-    categorisePhotos: If photos should be categorised. 
 
-    allPhotos should be sorted by newest to oldest, assuming elements are not deleted.
-
-    **/
     public UserPhotos(string email, bool categorisePhotos){
+      /// <summary>
+      /// Constructor for userPhotos.
+      /// categorisePhotos: If photos should be categorised. 
+      /// allPhotos should be sorted by newest to oldest, assuming elements are not deleted.
+      /// </summary>
         this.email = email;
         this.categorisePhotos = categorisePhotos;
         credential = RestHelper.getCredential(email, scopes);

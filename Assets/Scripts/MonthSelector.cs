@@ -18,9 +18,17 @@ public class MonthSelector : MonoBehaviour
         button.onClick.AddListener(changeMonth);
     }
 
-    void changeMonth(){
+    private void changeMonth(){
         int nextMonthIndex = (months.IndexOf(buttonText.text)+1) % 12;
         buttonText.text = months[nextMonthIndex];
+    }
+
+    /// <summary>
+    /// 1-based (from 1-12 inclusive)
+    /// </summary>
+    /// <param name="monthIndex"></param>
+    public void changeMonth(int monthIndex){
+        buttonText.text = months[monthIndex-1];
     }
 
 }
