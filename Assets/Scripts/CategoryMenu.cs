@@ -35,7 +35,7 @@ public class CategoryMenu : MonoBehaviour
         }
     }
 
-    // // return a list of categories which are selected on the menu
+    // return a list of categories which are selected on the menu
     public List<string> getSelectedCategories(){
         return categoryToggles.Where(i => i.GetComponent<Toggle>().isOn).Select(i => i.getCategory()).ToList();
     }

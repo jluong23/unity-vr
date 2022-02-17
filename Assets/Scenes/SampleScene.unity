@@ -2675,10 +2675,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1739814703}
+  email: jluong1@sheffield.ac.uk
   categorisePhotos: 1
-  user: jluong1@sheffield.ac.uk
-  scopes:
-  - https://www.googleapis.com/auth/photoslibrary.readonly
 --- !u!1 &407365719
 GameObject:
   m_ObjectHideFlags: 0
@@ -9311,7 +9309,7 @@ GameObject:
   - component: {fileID: 1622367894}
   - component: {fileID: 1622367896}
   m_Layer: 5
-  m_Name: Filter Panel
+  m_Name: Date Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
