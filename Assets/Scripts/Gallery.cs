@@ -23,7 +23,7 @@ public class Gallery : MonoBehaviour
             // update category counts for each category
             menu.GetComponent<CategoryMenu>().appendCategoryCounts(userPhotos.categoryCounts);
             // update 
-            menu.GetComponent<DateMenu>().setDateRanges(userPhotos);
+            menu.GetComponent<DateMenu>().setMaxDateRanges(userPhotos);
         }
     }
 

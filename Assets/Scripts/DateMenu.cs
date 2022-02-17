@@ -11,9 +11,18 @@ public class DateMenu : MonoBehaviour
     private Transform endDatePanel;
 
     private Dropdown startDateYearPanel;
-    private MonthSelector startDateMonthButton;
     private Dropdown endDateYearPanel;
-    private MonthSelector endDateMonthButton;
+
+    /// <summary> DateTime of oldest image in the data set </summary>
+    public DateTime maxStartDate; 
+    /// <summary> DateTime of latest image in the data set </summary>
+    public DateTime maxEndDate;
+
+    /// <summary> DateTime of start date currently selected in Date Filter UI </summary>
+    public DateTime currentStartDate;
+
+    /// <summary> DateTime of end date currently selected in Date Filter UI </summary>
+    public DateTime currentEndDate;
 
     void Start()
     {
@@ -22,11 +31,7 @@ public class DateMenu : MonoBehaviour
         endDatePanel = datePanel.Find("End Date Panel");
 
         startDateYearPanel = startDatePanel.GetComponentInChildren<Dropdown>();
-        startDateMonthButton = startDatePanel.GetComponentInChildren<MonthSelector>();
-
         endDateYearPanel = endDatePanel.GetComponentInChildren<Dropdown>();
-        endDateMonthButton = endDatePanel.GetComponentInChildren<MonthSelector>();
-
     }
 
     /// <summary>
@@ -34,35 +39,47 @@ public class DateMenu : MonoBehaviour
     /// for the date UI selector.
     /// </summary>
     /// <param name="userPhotos"></param>
-    public void setDateRanges(UserPhotos userPhotos){
+    public void setMaxDateRanges(UserPhotos userPhotos){
         Tuple<DateTime, DateTime> dateRange = userPhotos.getDateRange();
-        DateTime startDate = dateRange.Item1;
-        DateTime endDate = dateRange.Item2;
+        maxStartDate = dateRange.Item1;
+        maxEndDate = dateRange.Item2;
 
         // set year dropdown menu for both start and end date panels 
         // clear options first
         startDateYearPanel.options.Clear(); 
         endDateYearPanel.options.Clear(); 
-        for (int i=0; i <= endDate.Year - startDate.Year; i++)
+        for (int i=0; i <= maxEndDate.Year - maxStartDate.Year; i++)
         {
-            // add the year options
-            string newYearOption = (startDate.Year+i).ToString();
+            // add the year options for the drop down menu
+            // between start and end years 
+            string newYearOption = (maxStartDate.Year+i).ToString();
             startDateYearPanel.options.Add(new Dropdown.OptionData(newYearOption));
             endDateYearPanel.options.Add(new Dropdown.OptionData(newYearOption));
         }
 
         // change start date buttons
-        startDateMonthButton.changeMonth(startDate.Month);
+        startDatePanel.GetComponentInChildren<MonthSelector>().changeMonth(maxStartDate.Month);
         startDateYearPanel.value = 0;
         startDateYearPanel.RefreshShownValue();
 
         // change end date buttons
-        endDatePanel.GetComponentInChildren<MonthSelector>().changeMonth(endDate.Month);
-        endDateYearPanel.value = endDate.Year - startDate.Year;
+        endDatePanel.GetComponentInChildren<MonthSelector>().changeMonth(maxEndDate.Month);
+        endDateYearPanel.value = maxEndDate.Year - maxStartDate.Year;
         endDateYearPanel.RefreshShownValue();
 
+        // update currently selected dates
+        currentStartDate = maxStartDate;
+        currentEndDate = maxEndDate;
 
     }
 
+    public void updateSelectedDates(){
+        // TODO:
+        ///
+        /// on value change, update variables of currently selected dates.
+        ///
+        // currentEndDate = new DateTime();
+
+    }
 
 }
