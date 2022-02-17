@@ -128,7 +128,6 @@ public class MediaItemSearchRequest
    // json key to 'filters' for post request 
    [JsonProperty(PropertyName = "filters")]
    public MediaFilter mediaFilter;
-
    public string orderBy;
 
    public MediaItemSearchRequest(int pageSize){
