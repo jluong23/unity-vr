@@ -28,7 +28,6 @@ public class RestHelper : MonoBehaviour {
                CancellationToken.None,
                new FileDataStore(credPath, true))
                .Result;
-         Debug.Log("Credential file saved to: " + credPath);
       }
       return credential;
    }

@@ -16,13 +16,11 @@ public class Gallery : MonoBehaviour
     // ran when the 'show photos data' button is pressed for the first time, updating category counts in category menu
     public void initPhotos(){
         currentPhotoIds = new List<string>();
-        // takes a while to run, calling the photos api.
-        userPhotos = new UserPhotos(email, categorisePhotos);
-
+        userPhotos = new UserPhotos(email, true);
         if(userPhotos.allPhotos.Count > 0){
             // update category counts for each category
             menu.GetComponent<CategoryMenu>().appendCategoryCounts(userPhotos.categoryCounts);
-            // update 
+            // update the start and end date ranges
             menu.GetComponent<DateMenu>().setMaxDateRanges(userPhotos);
         }
     }
