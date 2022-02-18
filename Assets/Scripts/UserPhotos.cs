@@ -12,7 +12,7 @@ public class UserPhotos{
    static private string[] scopes = {
       "https://www.googleapis.com/auth/photoslibrary.readonly"
    };
-   static private string savePath = "Assets/token/";
+   static private string SAVE_PATH = "Assets/token/";
 
    // dictionary from id to mediaItem object
    public Dictionary<string, MediaItem> allPhotos;
@@ -33,7 +33,7 @@ public class UserPhotos{
       this.email = email;
       this.username = email.Split('@')[0];
       this.categorisePhotos = categorisePhotos;
-      string saveFilePath = savePath + username + ".json";
+      string saveFilePath = SAVE_PATH + username + ".json";
       if(File.Exists(saveFilePath)){
          // read stored data file if it exists
          Debug.Log("Loading data from " + saveFilePath);
@@ -48,7 +48,7 @@ public class UserPhotos{
          allPhotos = new Dictionary<string, MediaItem>();
          credential = RestHelper.getCredential(email, scopes);
          populateAllPhotos(); // updates categoryCounts and allPhotos
-         this.SaveData();
+         this.saveData();
       }
    }
 
@@ -67,9 +67,12 @@ public class UserPhotos{
       return new Tuple<DateTime, DateTime>(startDate, endDate);
    }
 
-   public void SaveData()
+   public void saveData()
    {
-      string saveFilePath = savePath + username + ".json";
+      /// <summary>
+      /// Saves user data in SAVE_PATH, does not overwrite. 
+      /// </summary>
+      string saveFilePath = SAVE_PATH + username + ".json";
       Debug.Log("Saving data to " + saveFilePath);
       StreamWriter writer = new StreamWriter(saveFilePath);
       writer.WriteLine(JsonConvert.SerializeObject(this));
