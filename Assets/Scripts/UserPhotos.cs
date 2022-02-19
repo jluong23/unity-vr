@@ -22,6 +22,7 @@ public class UserPhotos{
    private UserCredential credential;
    private string email;
    private string username;
+   private string saveFilePath;
    private bool categorisePhotos;
 
    public UserPhotos(string email, bool categorisePhotos){
@@ -33,7 +34,7 @@ public class UserPhotos{
       this.email = email;
       this.username = email.Split('@')[0];
       this.categorisePhotos = categorisePhotos;
-      string saveFilePath = SAVE_PATH + username + ".json";
+      this.saveFilePath = SAVE_PATH + username + ".json";
       if(File.Exists(saveFilePath)){
          // read stored data file if it exists
          Debug.Log("Loading data from " + saveFilePath);
@@ -72,7 +73,6 @@ public class UserPhotos{
       /// <summary>
       /// Saves user data in SAVE_PATH, does not overwrite. 
       /// </summary>
-      string saveFilePath = SAVE_PATH + username + ".json";
       Debug.Log("Saving data to " + saveFilePath);
       StreamWriter writer = new StreamWriter(saveFilePath);
       writer.WriteLine(JsonConvert.SerializeObject(this));
@@ -126,8 +126,14 @@ public class UserPhotos{
       }
    }
 
-   // from allPhotos, retrieve a subset of allPhotos.keys (photo ids) which have the given categories
-   public List<string> getPhotoIds(List<string> includedCategories){
+   // 
+   public List<string> getPhotoIds(List<string> includedCategories, Tuple<DateTime, DateTime> dateRange){
+      /// <summary>
+      /// from allPhotos, retrieve a subset of allPhotos.keys (photo ids) which have the given categories 
+      /// and creationTime attributes within the given dateRange
+      /// </summary>
+      /// <typeparam name="string"></typeparam>
+      /// <returns></returns>
         List<string> foundPhotoIds = new List<string>();
         
         if(includedCategories.Count == 0){
@@ -138,10 +144,14 @@ public class UserPhotos{
             // count of intersection between photos categories and includedCategories == count of included categories
             // ie. photo's categories contains all includedCategories
             var foundPhotos = allPhotos.Where(i => 
-                i.Value.categories.Intersect(includedCategories).ToList().Count == includedCategories.Count);
+               i.Value.categories.Intersect(includedCategories).ToList().Count == includedCategories.Count &&
+               // within the date range
+               Convert.ToDateTime(i.Value.mediaMetadata.creationTime) >= dateRange.Item1 && 
+               Convert.ToDateTime(i.Value.mediaMetadata.creationTime) <= dateRange.Item2
+            );
             foreach (var photo in foundPhotos)
             {
-                foundPhotoIds.Add(photo.Key);
+               foundPhotoIds.Add(photo.Key);
             }
         }
         return foundPhotoIds;    

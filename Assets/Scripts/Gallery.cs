@@ -16,6 +16,8 @@ public class Gallery : MonoBehaviour
     // ran when the 'show photos data' button is pressed for the first time, updating category counts in category menu
     public void initPhotos(){
         currentPhotoIds = new List<string>();
+        // get user photos, categorise if save does not exist
+        // if save exists for email, use existing user photos
         userPhotos = new UserPhotos(email, true);
         if(userPhotos.allPhotos.Count > 0){
             // update category counts for each category
@@ -27,13 +29,14 @@ public class Gallery : MonoBehaviour
 
     public void updatePhotos(){
         /// <summary>
-        /// update the gallery with photos with the selected categories from the category and date menus
+        /// update the gallery with photos with the selected categories and date ranges from the category and date menus
         /// </summary>
 
         // get ids of the photos with selected categories
         List<string> selectedCategories = menu.GetComponent<CategoryMenu>().getSelectedCategories();
-        
-        List<string> newPhotoIds = userPhotos.getPhotoIds(selectedCategories);
+        Tuple<DateTime, DateTime> currentDateRange = menu.GetComponent<DateMenu>().getCurrentDateRange();
+
+        List<string> newPhotoIds = userPhotos.getPhotoIds(selectedCategories, currentDateRange);
 
         // only update photos if the ids are different
         if(!Enumerable.SequenceEqual(newPhotoIds, currentPhotoIds)) {

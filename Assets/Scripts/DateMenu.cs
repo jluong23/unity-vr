@@ -9,13 +9,17 @@ public class DateMenu : MonoBehaviour
     private Transform datePanel;
     private Tuple<Transform, Transform> dateOptions;
     private Tuple<Dropdown, Dropdown> yearPanels;
-    public Tuple<DateTime, DateTime> currentDateRange;
-
+    private Tuple<DateTime, DateTime> currentDateRange;
+    public GameObject gallery;
     void Start()
     {
         datePanel = transform.Find("Date Panel");
         dateOptions = new Tuple<Transform, Transform>(datePanel.Find("Start Date Panel"), datePanel.Find("End Date Panel")); 
         yearPanels = new Tuple<Dropdown, Dropdown>(dateOptions.Item1.GetComponentInChildren<Dropdown>(), dateOptions.Item2.GetComponentInChildren<Dropdown>());
+    }
+
+    public Tuple<DateTime, DateTime> getCurrentDateRange(){
+        return currentDateRange;
     }
 
     /// <summary>
@@ -84,7 +88,8 @@ public class DateMenu : MonoBehaviour
             }
         }
         currentDateRange = new Tuple<DateTime, DateTime>(currentStartDate, currentEndDate);
-        Debug.Log(currentDateRange);
+        // update gallery shown
+        gallery.GetComponent<Gallery>().updatePhotos();
     }
 
 }
