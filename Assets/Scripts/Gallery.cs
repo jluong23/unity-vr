@@ -25,11 +25,14 @@ public class Gallery : MonoBehaviour
         }
     }
 
-    // update the gallery with photos with the selected categories from the category menu
     public void updatePhotos(){
+        /// <summary>
+        /// update the gallery with photos with the selected categories from the category and date menus
+        /// </summary>
 
         // get ids of the photos with selected categories
         List<string> selectedCategories = menu.GetComponent<CategoryMenu>().getSelectedCategories();
+        
         List<string> newPhotoIds = userPhotos.getPhotoIds(selectedCategories);
 
         // only update photos if the ids are different
