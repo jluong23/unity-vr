@@ -12,33 +12,28 @@ public class UserPhotos{
    static private string[] scopes = {
       "https://www.googleapis.com/auth/photoslibrary.readonly"
    };
-   static private string SAVE_PATH = "Assets/token/";
-
    // dictionary from id to mediaItem object
    public Dictionary<string, MediaItem> allPhotos;
    // dictionary from category to count in allPhotos
    public Dictionary<string, int> categoryCounts;
 
+   // the credential for user photos
    private UserCredential credential;
-   private string email;
-   private string username;
-   private string saveFilePath;
+   private User user;
    private bool categorisePhotos;
 
-   public UserPhotos(string email, bool categorisePhotos){
+   public UserPhotos(User user, bool categorisePhotos){
       /// <summary>
       /// Constructor for userPhotos, fetching from API.
-      /// categorisePhotos: If photos should be categorised. 
+      /// categorisePhotos: If photos should be categorised if local save does not exist
       /// allPhotos should be sorted by newest to oldest, assuming elements are not deleted.
       /// </summary>
-      this.email = email;
-      this.username = email.Split('@')[0];
+      this.user = user;
       this.categorisePhotos = categorisePhotos;
-      this.saveFilePath = SAVE_PATH + username + ".json";
-      if(File.Exists(saveFilePath)){
+      if(File.Exists(user.photosSavePath)){
          // read stored data file if it exists
-         Debug.Log("Loading data from " + saveFilePath);
-         StreamReader reader = new StreamReader(saveFilePath);
+         Debug.Log("Loading data from " + user.photosSavePath);
+         StreamReader reader = new StreamReader(user.photosSavePath);
          UserPhotos loadedData = JsonConvert.DeserializeObject<UserPhotos>(reader.ReadToEnd());
          reader.Close();
          this.allPhotos = loadedData.allPhotos;
@@ -47,7 +42,7 @@ public class UserPhotos{
          Debug.Log("Could not find an existing save, loading files via Google Photos API");
          categoryCounts = new Dictionary<string, int>();
          allPhotos = new Dictionary<string, MediaItem>();
-         credential = RestHelper.getCredential(email, scopes);
+         credential = RestHelper.getCredential(user.email, scopes);
          populateAllPhotos(); // updates categoryCounts and allPhotos
          this.saveData();
       }
@@ -71,10 +66,10 @@ public class UserPhotos{
    public void saveData()
    {
       /// <summary>
-      /// Saves user data in SAVE_PATH, does not overwrite. 
+      /// Saves user data in user.photosSavePath, does not overwrite. 
       /// </summary>
-      Debug.Log("Saving data to " + saveFilePath);
-      StreamWriter writer = new StreamWriter(saveFilePath);
+      Debug.Log("Saving data to " + user.photosSavePath);
+      StreamWriter writer = new StreamWriter(user.photosSavePath);
       writer.WriteLine(JsonConvert.SerializeObject(this));
       writer.Close();
    }

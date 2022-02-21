@@ -10,20 +10,18 @@ public class User{
 
    static private string PHOTOS_SAVE_PATH = "Assets/token/";
 
-   private string email;
+   public string email;
    private string username;
-   private string photosSavePath;
-   private UserCredential credential;
-   private UserPhotos photos;
+   public string photosSavePath;
+   public UserPhotos photos;
 
-   public User(string email, bool categorisePhotos){
+   public User(string email){
       /// <summary>
       /// Constructor for user
       /// </summary>
       this.email = email;
       this.username = email.Split('@')[0];
       this.photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
-      this.photos = null;
+      this.photos = new UserPhotos(this, true);
    }
-
 }
