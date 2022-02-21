@@ -23,7 +23,6 @@ public class User{
       this.email = email;
       this.username = email.Split('@')[0];
       this.photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
-      this.credential = RestHelper.getCredential(email, scopes);
       this.photos = null;
    }
 
