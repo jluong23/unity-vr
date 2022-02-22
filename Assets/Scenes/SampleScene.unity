@@ -5510,7 +5510,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990231340}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1136454535}
@@ -6610,7 +6610,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 25, y: 25}
+  m_CellSize: {x: 30, y: 30}
   m_Spacing: {x: 5, y: 5}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -9842,7 +9842,7 @@ MonoBehaviour:
   menu: {fileID: 1739814703}
   email: jluong1@sheffield.ac.uk
   categorisePhotos: 1
-  thumbnailPrefab: {fileID: 1389554794998578979, guid: 1ae002dbb1a51c843bc01c48db2114fd,
+  thumbnailPrefab: {fileID: 4552956596745213651, guid: 3718ace06b31b5b498ee23f1205f3bcc,
     type: 3}
   content: {fileID: 1136454534}
 --- !u!224 &1778115571 stripped

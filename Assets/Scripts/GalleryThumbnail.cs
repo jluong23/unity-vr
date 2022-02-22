@@ -8,6 +8,16 @@ public class GalleryThumbnail : MonoBehaviour
 {
     public MediaItem mediaItem;
 
+    private void Start() {
+        GetComponent<Button>().onClick.AddListener(logPhotoDetails);
+    }
+
+    private void logPhotoDetails(){
+        string output = string.Format("{0}, taken {1}, categories: {2}",
+        mediaItem.filename, mediaItem.mediaMetadata.creationTime, string.Join(",", mediaItem.categories));
+        
+        Debug.Log(output);
+    }
     public void displayTexture(MediaItem mediaItem){    
         // changes the image displayed on the frame
         this.mediaItem = mediaItem;
@@ -28,6 +38,5 @@ public class GalleryThumbnail : MonoBehaviour
             var texture = ((DownloadHandlerTexture) request.downloadHandler).texture;
             GetComponent<RawImage>().texture = texture;
         }
-            
     } 
 }

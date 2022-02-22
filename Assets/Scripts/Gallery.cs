@@ -10,10 +10,12 @@ public class Gallery : MonoBehaviour
     public GameObject menu;
     public string email = "jluong1@sheffield.ac.uk";
     public bool categorisePhotos = true;
-    public RawImage thumbnailPrefab;
+    public Selectable thumbnailPrefab;
+    private Selectable newThumbnail; // used to generate instances of thumbnail prefab
     public GameObject content;
     private User user;
     private List<MediaItem> currentPhotos;
+
     
     void Start()
     {
@@ -38,12 +40,11 @@ public class Gallery : MonoBehaviour
         /// </summary>
         /// <returns></returns>
         currentPhotos = user.photos.getPhotos();
-		RawImage newObj; // Create GameObject instance
 		foreach (var photo in currentPhotos)
 		{
 			 // Create new instances of our thumbnailPrefab until we've created as many as we specified
-			newObj = Instantiate(thumbnailPrefab, content.transform);
-			newObj.GetComponent<GalleryThumbnail>().displayTexture(photo);
+			newThumbnail = Instantiate(thumbnailPrefab, content.transform);
+			newThumbnail.GetComponent<GalleryThumbnail>().displayTexture(photo);
 		}
 	}
 
@@ -60,12 +61,11 @@ public class Gallery : MonoBehaviour
         if(!Enumerable.SequenceEqual(newPhotos, currentPhotos)) {
             clearGallery();
             currentPhotos = new List<MediaItem>(newPhotos);
-            RawImage newObj; // Create GameObject instance
             foreach (var photo in currentPhotos)
             {
                 // Create new instances of our thumbnailPrefab until we've created as many as we specified
-                newObj = Instantiate(thumbnailPrefab, content.transform);
-                newObj.GetComponent<GalleryThumbnail>().displayTexture(photo);
+                newThumbnail = Instantiate(thumbnailPrefab, content.transform);
+                newThumbnail.GetComponent<GalleryThumbnail>().displayTexture(photo);
             }
         }
     }
