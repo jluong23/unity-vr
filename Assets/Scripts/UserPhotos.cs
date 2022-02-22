@@ -13,8 +13,10 @@ public class UserPhotos{
       "https://www.googleapis.com/auth/photoslibrary.readonly"
    };
    // dictionary from id to mediaItem object, used for categorisation after retrieving media photos
+   [JsonProperty]
    private Dictionary<string, MediaItem> allPhotos;
    // dictionary from category to count in allPhotos
+   [JsonProperty]
    private Dictionary<string, int> categoryCounts;
 
    // the credential for user photos
