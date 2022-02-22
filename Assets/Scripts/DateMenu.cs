@@ -10,7 +10,7 @@ public class DateMenu : MonoBehaviour
     private Tuple<Transform, Transform> dateOptions;
     private Tuple<Dropdown, Dropdown> yearPanels;
     private Tuple<DateTime, DateTime> currentDateRange;
-    public GameObject gallery;
+    public Gallery gallery;
     void Start()
     {
         datePanel = transform.Find("Date Panel");
@@ -89,7 +89,7 @@ public class DateMenu : MonoBehaviour
         }
         currentDateRange = new Tuple<DateTime, DateTime>(currentStartDate, currentEndDate);
         // update gallery shown
-        gallery.GetComponent<Gallery>().updatePhotos();
+        gallery.GetComponent<Gallery>().updateGallery();
     }
 
 }

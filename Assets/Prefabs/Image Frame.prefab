@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 7067779317431145621}
   - component: {fileID: 4540585875406499547}
   - component: {fileID: 2062628274461480453}
-  - component: {fileID: 826313061634142831}
   m_Layer: 0
   m_Name: Image Frame
   m_TagString: Untagged
@@ -132,20 +131,6 @@ MonoBehaviour:
   selectObjectReference: {fileID: 4598672043302944868, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   speed: 0.2
---- !u!114 &826313061634142831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767163706062880629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e1322c7d5d596d4aa8a736f09967f15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectObjectReference: {fileID: 4598672043302944868, guid: c348712bda248c246b8c49b3db54643f,
-    type: 3}
 --- !u!1 &6591367573624374398
 GameObject:
   m_ObjectHideFlags: 0

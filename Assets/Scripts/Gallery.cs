@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Linq;
 
 public class Gallery : MonoBehaviour
 {
     public GameObject menu;
-    // array of mediaItem ids for currently shown photos on gallery
-    List<string> currentPhotoIds;
     public string email = "jluong1@sheffield.ac.uk";
     public bool categorisePhotos = true;
+    public RawImage thumbnailPrefab;
+    public GameObject content;
     private User user;
+    private List<MediaItem> currentPhotos;
     
     void Start()
     {
@@ -20,55 +22,58 @@ public class Gallery : MonoBehaviour
 
     // ran when the 'show photos data' button is pressed for the first time, updating category counts in category menu
     public void initPhotos(){
-        currentPhotoIds = new List<string>();
-        if(user.photos.allPhotos.Count > 0){
+        if(user.photos.getPhotos().Count > 0){
             // update category counts for each category
-            menu.GetComponent<CategoryMenu>().appendCategoryCounts(user.photos.categoryCounts);
+            menu.GetComponent<CategoryMenu>().appendCategoryCounts(user.photos.getCategoryCounts());
             // update the start and end date ranges
             menu.GetComponent<DateMenu>().setMaxDateRanges(user.photos);
+            populateGrid();
         }
     }
 
-    public void updatePhotos(){
+	void populateGrid()
+	{
+        /// <summary>
+        /// Populate gallery with all images
+        /// </summary>
+        /// <returns></returns>
+        currentPhotos = user.photos.getPhotos();
+		RawImage newObj; // Create GameObject instance
+		foreach (var photo in currentPhotos)
+		{
+			 // Create new instances of our thumbnailPrefab until we've created as many as we specified
+			newObj = Instantiate(thumbnailPrefab, content.transform);
+			newObj.GetComponent<GalleryThumbnail>().displayTexture(photo);
+		}
+	}
+
+    public void updateGallery(){
         /// <summary>
         /// update the gallery with photos with the selected categories and date ranges from the category and date menus
         /// </summary>
 
-        // get ids of the photos with selected categories
+        // get photos with selected categories and time
         List<string> selectedCategories = menu.GetComponent<CategoryMenu>().getSelectedCategories();
         Tuple<DateTime, DateTime> currentDateRange = menu.GetComponent<DateMenu>().getCurrentDateRange();
-
-        List<string> newPhotoIds = user.photos.getPhotoIds(selectedCategories, currentDateRange);
-
-        // only update photos if the ids are different
-        if(!Enumerable.SequenceEqual(newPhotoIds, currentPhotoIds)) {
-            // clear current gallery
+        List<MediaItem> newPhotos = user.photos.getPhotos(selectedCategories, currentDateRange);
+        // only update photos if the photos are different
+        if(!Enumerable.SequenceEqual(newPhotos, currentPhotos)) {
             clearGallery();
-            // update currentPhotoIds
-            currentPhotoIds = new List<string>(newPhotoIds);
-            int i = 0;
-
-            foreach (var photoId in currentPhotoIds)
+            currentPhotos = new List<MediaItem>(newPhotos);
+            RawImage newObj; // Create GameObject instance
+            foreach (var photo in currentPhotos)
             {
-                // start setting the media frames
-                MediaItem mediaItem = user.photos.allPhotos[photoId];
-                MediaFrame mediaFrameComponent = transform.GetChild(i).GetComponent<MediaFrame>();
-                // set the mediaItem attribute for the mediaFrame component
-                mediaFrameComponent.mediaItem = mediaItem;
-                // set the texture of frame, showing the image itself
-                mediaFrameComponent.displayTexture();
-                i+=1;
+                // Create new instances of our thumbnailPrefab until we've created as many as we specified
+                newObj = Instantiate(thumbnailPrefab, content.transform);
+                newObj.GetComponent<GalleryThumbnail>().displayTexture(photo);
             }
-            
         }
-
     }
 
     public void clearGallery(){
-        currentPhotoIds = new List<string>();
-        foreach (var mediaFrame in GetComponentsInChildren<MediaFrame>())
-        {
-            mediaFrame.restoreTexture();
+        currentPhotos = new List<MediaItem>();
+        foreach (Transform child in content.transform) {
+            Destroy(child.gameObject);
         }
     }
 }

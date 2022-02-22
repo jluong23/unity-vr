@@ -12,10 +12,10 @@ public class UserPhotos{
    static private string[] scopes = {
       "https://www.googleapis.com/auth/photoslibrary.readonly"
    };
-   // dictionary from id to mediaItem object
-   public Dictionary<string, MediaItem> allPhotos;
+   // dictionary from id to mediaItem object, used for categorisation after retrieving media photos
+   private Dictionary<string, MediaItem> allPhotos;
    // dictionary from category to count in allPhotos
-   public Dictionary<string, int> categoryCounts;
+   private Dictionary<string, int> categoryCounts;
 
    // the credential for user photos
    private UserCredential credential;
@@ -53,6 +53,45 @@ public class UserPhotos{
    private UserPhotos(Dictionary<string, MediaItem> allPhotos, Dictionary<string, int> categoryCounts){
       this.allPhotos = allPhotos;
       this.categoryCounts = categoryCounts;
+   }
+
+   public List<MediaItem> getPhotos(){
+      ///
+      /// Returns all photos
+      /// 
+      return new List<MediaItem>(allPhotos.Values);
+   } 
+
+   public Dictionary<string, int> getCategoryCounts(){
+      return categoryCounts;
+   }
+
+
+   public List<MediaItem> getPhotos(List<string> includedCategories, Tuple<DateTime, DateTime> dateRange){
+      /// <summary>
+      /// from all photos, retrieve subset which have the given categories 
+      /// and creation time attributes within the given date range
+      /// </summary>
+
+        List<MediaItem> foundPhotos = new List<MediaItem>();
+        List<MediaItem> allPhotosList = getPhotos();
+
+        if(includedCategories.Count == 0){
+         //   all photos have atleast the NONE category
+            return foundPhotos;
+        }
+
+        if(allPhotosList.Count > 0){
+            // count of intersection between photos categories and includedCategories == count of included categories
+            // ie. photo's categories contains all includedCategories
+            foundPhotos = new List<MediaItem>(allPhotosList.Where(i => 
+               i.categories.Intersect(includedCategories).ToList().Count == includedCategories.Count &&
+               // within the date range
+               Convert.ToDateTime(i.mediaMetadata.creationTime) >= dateRange.Item1 && 
+               Convert.ToDateTime(i.mediaMetadata.creationTime) <= dateRange.Item2
+            ));
+        }
+        return foundPhotos;    
    }
 
    public Tuple<DateTime, DateTime> getDateRange(){
@@ -121,34 +160,4 @@ public class UserPhotos{
       }
    }
 
-   // 
-   public List<string> getPhotoIds(List<string> includedCategories, Tuple<DateTime, DateTime> dateRange){
-      /// <summary>
-      /// from allPhotos, retrieve a subset of allPhotos.keys (photo ids) which have the given categories 
-      /// and creationTime attributes within the given dateRange
-      /// </summary>
-      /// <typeparam name="string"></typeparam>
-      /// <returns></returns>
-        List<string> foundPhotoIds = new List<string>();
-        
-        if(includedCategories.Count == 0){
-            return foundPhotoIds;
-        }
-
-        if(allPhotos.Count > 0){
-            // count of intersection between photos categories and includedCategories == count of included categories
-            // ie. photo's categories contains all includedCategories
-            var foundPhotos = allPhotos.Where(i => 
-               i.Value.categories.Intersect(includedCategories).ToList().Count == includedCategories.Count &&
-               // within the date range
-               Convert.ToDateTime(i.Value.mediaMetadata.creationTime) >= dateRange.Item1 && 
-               Convert.ToDateTime(i.Value.mediaMetadata.creationTime) <= dateRange.Item2
-            );
-            foreach (var photo in foundPhotos)
-            {
-               foundPhotoIds.Add(photo.Key);
-            }
-        }
-        return foundPhotoIds;    
-   }
 }

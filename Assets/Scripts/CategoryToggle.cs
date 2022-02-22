@@ -56,7 +56,7 @@ public class CategoryToggle : MonoBehaviour
     {
         setColour(isOn);
         // update the gallery with the newly selected categories
-        gallery.updatePhotos();
+        gallery.updateGallery();
 
     }
 }
