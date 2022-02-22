@@ -5,7 +5,6 @@ using System.Linq;
 using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
-
 public class UserPhotos{
 
    static private int MAX_PHOTOS = 12;
@@ -41,11 +40,15 @@ public class UserPhotos{
          this.allPhotos = loadedData.allPhotos;
          this.categoryCounts = loadedData.categoryCounts;
       }else{
-         Debug.Log("Could not find an existing save, loading files via Google Photos API");
+         Debug.Log("Could not find an existing save, loading files via Google Photos API...");
          categoryCounts = new Dictionary<string, int>();
          allPhotos = new Dictionary<string, MediaItem>();
          credential = RestHelper.getCredential(user.email, scopes);
+         
+         // time how long it takes to populate all photos
+         UnityStopwatch.start();
          populateAllPhotos(); // updates categoryCounts and allPhotos
+         Debug.Log("Populating photos runtime: " + UnityStopwatch.stop());
          this.saveData();
       }
    }
