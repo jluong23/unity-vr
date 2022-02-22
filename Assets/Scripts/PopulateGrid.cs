@@ -23,6 +23,7 @@ public class PopulateGrid : MonoBehaviour
 			
 			// Randomize the color of our image
 			newObj.GetComponent<Image>().color = Random.ColorHSV(); 
+
 		}
 
 	}
