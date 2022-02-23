@@ -26,7 +26,7 @@ public class Gallery : MonoBehaviour
     public void initPhotos(){
         if(user.photos.getPhotos().Count > 0){
             // update category counts for each category
-            menu.GetComponent<CategoryMenu>().appendCategoryCounts(user.photos.getCategoryCounts());
+            menu.GetComponent<CategoryMenu>().addToggles(user.photos.getCategoryCounts());
             // update the start and end date ranges
             menu.GetComponent<DateMenu>().setMaxDateRanges(user.photos);
             populateGrid();
@@ -52,21 +52,24 @@ public class Gallery : MonoBehaviour
         /// <summary>
         /// update the gallery with photos with the selected categories and date ranges from the category and date menus
         /// </summary>
-
-        // get photos with selected categories and time
-        List<string> selectedCategories = menu.GetComponent<CategoryMenu>().getSelectedCategories();
-        Tuple<DateTime, DateTime> currentDateRange = menu.GetComponent<DateMenu>().getCurrentDateRange();
-        List<MediaItem> newPhotos = user.photos.getPhotos(selectedCategories, currentDateRange);
-        // only update photos if the photos are different
-        if(!Enumerable.SequenceEqual(newPhotos, currentPhotos)) {
-            clearGallery();
-            currentPhotos = new List<MediaItem>(newPhotos);
-            foreach (var photo in currentPhotos)
-            {
-                // Create new instances of our thumbnailPrefab until we've created as many as we specified
-                newThumbnail = Instantiate(thumbnailPrefab, content.transform);
-                newThumbnail.GetComponent<GalleryThumbnail>().displayTexture(photo);
+        if(user != null && user.photos.getPhotos().Count > 0){
+            // get photos with selected categories and time
+            List<string> selectedCategories = menu.GetComponent<CategoryMenu>().getSelectedCategories();
+            Tuple<DateTime, DateTime> currentDateRange = menu.GetComponent<DateMenu>().getCurrentDateRange();
+            List<MediaItem> newPhotos = user.photos.getPhotos(selectedCategories, currentDateRange);
+            // only update photos if the photos are different
+            if(!Enumerable.SequenceEqual(newPhotos, currentPhotos)) {
+                clearGallery();
+                // load new photos into current
+                currentPhotos = new List<MediaItem>(newPhotos);
+                foreach (var photo in currentPhotos)
+                {
+                    // Create new instances of our thumbnailPrefab until we've created as many as we specified
+                    newThumbnail = Instantiate(thumbnailPrefab, content.transform);
+                    newThumbnail.GetComponent<GalleryThumbnail>().displayTexture(photo);
+                }
             }
+
         }
     }
 

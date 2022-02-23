@@ -77,26 +77,25 @@ public class UserPhotos{
       /// from all photos, retrieve subset which have the given categories 
       /// and creation time attributes within the given date range
       /// </summary>
+      List<MediaItem> foundPhotos = new List<MediaItem>();
+      List<MediaItem> allPhotosList = getPhotos();
 
-        List<MediaItem> foundPhotos = new List<MediaItem>();
-        List<MediaItem> allPhotosList = getPhotos();
+      if(includedCategories.Count == 0){
+      //   all photos have atleast the NONE category
+         return foundPhotos;
+      }
 
-        if(includedCategories.Count == 0){
-         //   all photos have atleast the NONE category
-            return foundPhotos;
-        }
-
-        if(allPhotosList.Count > 0){
-            // count of intersection between photos categories and includedCategories == count of included categories
-            // ie. photo's categories contains all includedCategories
-            foundPhotos = new List<MediaItem>(allPhotosList.Where(i => 
-               i.categories.Intersect(includedCategories).ToList().Count == includedCategories.Count &&
-               // within the date range
-               Convert.ToDateTime(i.mediaMetadata.creationTime) >= dateRange.Item1 && 
-               Convert.ToDateTime(i.mediaMetadata.creationTime) <= dateRange.Item2
-            ));
-        }
-        return foundPhotos;    
+      if(allPhotosList.Count > 0){
+         // count of intersection between photos categories and includedCategories == count of included categories
+         // ie. photo's categories contains all includedCategories
+         foundPhotos = new List<MediaItem>(allPhotosList.Where(i => 
+            i.categories.Intersect(includedCategories).ToList().Count == includedCategories.Count &&
+            // within the date range
+            Convert.ToDateTime(i.mediaMetadata.creationTime) >= dateRange.Item1 && 
+            Convert.ToDateTime(i.mediaMetadata.creationTime) <= dateRange.Item2
+         ));
+      }
+      return foundPhotos;    
    }
 
    public Tuple<DateTime, DateTime> getDateRange(){

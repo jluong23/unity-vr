@@ -7,19 +7,19 @@ using UnityEngine.UI;
 public class CategoryToggle : MonoBehaviour
 {
     private Toggle toggle;
-    public Gallery gallery; 
+    private Gallery gallery; 
     private Image toggleBackground;
     private string category;
     private Text textElement;
 
-    private void Start()
+    private void Awake()
     {
+
         category = "";
         textElement = GetComponentInChildren<Text>();
-
+        gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         toggle = GetComponent<Toggle>();
         toggle.isOn = false;
-        toggle.interactable = false;  // disabled until user has loaded their images 
         toggleBackground = GetComponentInChildren<Image>();
         toggle.onValueChanged.AddListener(OnToggleValueChanged);
     }

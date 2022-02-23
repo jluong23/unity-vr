@@ -9,35 +9,56 @@ public class CategoryMenu : MonoBehaviour
 {
     // different category buttons as children
     private CategoryToggle[] categoryToggles;
-    void Start()
+    public GameObject categoryTogglePrefab;
+    public GameObject content;
+    private Gallery gallery;
+
+    void Awake()
     {
-        categoryToggles = transform.Find("Category Panel").GetComponentsInChildren<CategoryToggle>();
-        updateCategoryButtonsText();
+        gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
+        addToggles();
     }
 
-    // update text on category buttons
-    void updateCategoryButtonsText(){
-        for (int i = 0; i < categoryToggles.Count(); i++)
-        {   
-            string category = ContentFilter.ALL_CATEGORIES[i];
-            categoryToggles[i].setCategory(category);
+    void addToggles(){
+        /// add toggle with category names, excluding the category counts
+        Clear();
+        foreach (var category in ContentFilter.ALL_CATEGORIES)
+        {
+            GameObject newCategoryObj = Instantiate(categoryTogglePrefab, content.transform);
+            // will also update button text element to the category
+            newCategoryObj.GetComponentInChildren<CategoryToggle>().setCategory(category);
         }
     }
-    // add category counts to each category button
-    public void appendCategoryCounts(Dictionary<string, int> categoryCounts){
 
-        foreach (var categoryToggle in categoryToggles)
+    public void addToggles(Dictionary<string, int> categoryCounts){
+        /// add toggle with category names and counts, ordering by highest category count
+        Clear();
+        List<string> orderedCategories = new List<string>(ContentFilter.ALL_CATEGORIES);
+        orderedCategories.Sort( 
+            (a,b) => categoryCounts[a].CompareTo(categoryCounts[b])
+        );
+        orderedCategories.Reverse();
+
+        foreach (var category in orderedCategories)
         {
-            string category = categoryToggle.getCategory();
-            // count is 0 if the category does not exist
+            GameObject newCategoryObj = Instantiate(categoryTogglePrefab, content.transform);
+            newCategoryObj.GetComponentInChildren<CategoryToggle>().setCategory(category);
+            // append category count
             int count = categoryCounts.ContainsKey(category) ? categoryCounts[category] : 0;
-            categoryToggle.appendCategoryCount(count);
+            newCategoryObj.GetComponent<CategoryToggle>().appendCategoryCount(count);
         }
     }
 
     // return a list of categories which are selected on the menu
     public List<string> getSelectedCategories(){
+        categoryToggles = transform.Find("Category Scroll Panel").GetComponentsInChildren<CategoryToggle>();
         return categoryToggles.Where(i => i.GetComponent<Toggle>().isOn).Select(i => i.getCategory()).ToList();
+    }
+
+    void Clear(){
+        foreach (Transform child in content.transform) {
+            Destroy(child.gameObject);
+        }
     }
 
 }
