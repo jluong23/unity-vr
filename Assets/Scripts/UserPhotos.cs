@@ -127,9 +127,7 @@ public class UserPhotos{
       if(categorisePhotos){
          // perform categorisation process
          link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-         // string[] includedCategories = {"None", "TRAVEL", "PEOPLE", "SPORT"};
          string[] includedCategories = ContentFilter.ALL_CATEGORIES;
-         // string[] includedCategories = {"None"};
          foreach (var category in includedCategories)
          {
             // perform post request for each category (api calls = num categories)

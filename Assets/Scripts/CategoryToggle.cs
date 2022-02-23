@@ -34,6 +34,9 @@ public class CategoryToggle : MonoBehaviour
         textElement.text = category;
     }
 
+    public void updateCategoryCount(int count){
+        textElement.text = string.Format(" {0} <b>({1})</b>", category, count);
+    }
     public void appendCategoryCount(int count){
         textElement.text += string.Format(" <b>({0})</b>", count);
     }
