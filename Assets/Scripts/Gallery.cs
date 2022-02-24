@@ -26,7 +26,7 @@ public class Gallery : MonoBehaviour
     public void initPhotos(){
         if(user.photos.getPhotos().Count > 0){
             // update category counts for each category
-            menu.GetComponent<CategoryMenu>().addToggles(user.photos.getCategoryCounts());
+            menu.GetComponent<CategoryMenu>().setToggles(user.photos.getInitialCategoryCounts());
             // update the start and end date ranges
             menu.GetComponent<DateMenu>().setMaxDateRanges(user.photos);
             populateGrid();
@@ -68,6 +68,9 @@ public class Gallery : MonoBehaviour
                     newThumbnail = Instantiate(thumbnailPrefab, content.transform);
                     newThumbnail.GetComponent<GalleryThumbnail>().displayTexture(photo);
                 }
+                // update category menu, reflecting new category counts
+                Dictionary<string, int> newCategoryCounts = user.photos.getCategoryCounts(selectedCategories, currentDateRange); 
+                menu.GetComponent<CategoryMenu>().setToggles(newCategoryCounts);
             }
 
         }

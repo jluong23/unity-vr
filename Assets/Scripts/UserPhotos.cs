@@ -16,7 +16,7 @@ public class UserPhotos{
    private Dictionary<string, MediaItem> allPhotos;
    // dictionary from category to count in allPhotos
    [JsonProperty]
-   private Dictionary<string, int> categoryCounts;
+   private Dictionary<string, int> initialCategoryCounts;
 
    // the credential for user photos
    private UserCredential credential;
@@ -38,16 +38,16 @@ public class UserPhotos{
          UserPhotos loadedData = JsonConvert.DeserializeObject<UserPhotos>(reader.ReadToEnd());
          reader.Close();
          this.allPhotos = loadedData.allPhotos;
-         this.categoryCounts = loadedData.categoryCounts;
+         this.initialCategoryCounts = loadedData.initialCategoryCounts;
       }else{
          Debug.Log("Could not find an existing save, loading files via Google Photos API...");
-         categoryCounts = new Dictionary<string, int>();
+         initialCategoryCounts = new Dictionary<string, int>();
          allPhotos = new Dictionary<string, MediaItem>();
          credential = RestHelper.getCredential(user.email, scopes);
          
          // time how long it takes to populate all photos
          UnityStopwatch.start();
-         populateAllPhotos(); // updates categoryCounts and allPhotos
+         populateAllPhotos(); // updates initialCategoryCounts and allPhotos
          Debug.Log("Populating photos runtime: " + UnityStopwatch.stop());
          this.saveData();
       }
@@ -55,9 +55,9 @@ public class UserPhotos{
 
    [JsonConstructor]
    // used when serialising an object, loading save data
-   private UserPhotos(Dictionary<string, MediaItem> allPhotos, Dictionary<string, int> categoryCounts){
+   private UserPhotos(Dictionary<string, MediaItem> allPhotos, Dictionary<string, int> initialCategoryCounts){
       this.allPhotos = allPhotos;
-      this.categoryCounts = categoryCounts;
+      this.initialCategoryCounts = initialCategoryCounts;
    }
 
    public List<MediaItem> getPhotos(){
@@ -67,10 +67,35 @@ public class UserPhotos{
       return new List<MediaItem>(allPhotos.Values);
    } 
 
-   public Dictionary<string, int> getCategoryCounts(){
-      return categoryCounts;
+   public Dictionary<string, int> getInitialCategoryCounts(){
+      return initialCategoryCounts;
    }
 
+   public Dictionary<string, int> getCategoryCounts(List<string> selectedCategories, Tuple<DateTime, DateTime> dateRange){
+      /// <summary>
+      /// Given a list of selected categories and date ranges from the UI menu,
+      /// return a subset of the initial category counts. The value for each category indicates
+      /// further images which contain the selectedCategories and an additional category.
+      /// 
+      /// If the entire dataset is currently being shown on menu, the initial category counts for the dataset is returned.
+      /// </summary>
+      /// 
+      
+      // original data set is shown, return initial counts
+      if(getPhotos(selectedCategories, dateRange).Count == allPhotos.Count) return getInitialCategoryCounts();
+      Dictionary<string, int> subCategoryCounts = new Dictionary<string, int>();
+      foreach (string category in ContentFilter.ALL_CATEGORIES)
+      {
+         // count the number of photos for the selected categories + the additional category
+         List<string> totalCategories = new List<string>(selectedCategories);
+         totalCategories.Add(category);
+         int count = getPhotos(totalCategories, dateRange).Count;
+         // add to subCategoryCount
+         subCategoryCounts.Add(category, count);
+      }
+      
+      return subCategoryCounts;
+   }
 
    public List<MediaItem> getPhotos(List<string> includedCategories, Tuple<DateTime, DateTime> dateRange){
       /// <summary>
@@ -143,10 +168,10 @@ public class UserPhotos{
                   allPhotos[mediaItem.id].categories.Add(category);
                }
                // set category counts for this category
-               categoryCounts[category] = categoryResponseObject.mediaItems.Count;
+               initialCategoryCounts[category] = categoryResponseObject.mediaItems.Count;
             }else{
                // set category counts to 0 for this category
-               categoryCounts[category] = 0; 
+               initialCategoryCounts[category] = 0; 
 
             }
          }
