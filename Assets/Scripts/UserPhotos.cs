@@ -81,8 +81,8 @@ public class UserPhotos{
       List<MediaItem> allPhotosList = getPhotos();
 
       if(includedCategories.Count == 0){
-      //   all photos have atleast the NONE category
-         return foundPhotos;
+         // no categories are selected, return all photos
+         return allPhotosList;
       }
 
       if(allPhotosList.Count > 0){
@@ -152,13 +152,11 @@ public class UserPhotos{
          }
       }
       else{
-         // categorise = false, all photos have 'None' category
+         // categorise = false, all photos have empty category list
          foreach (var mediaItem in allPhotos.Values)
          {
-            mediaItem.categories = new List<string> {"None"};
+            mediaItem.categories = new List<string> {};
          }
-         // set category counts 
-         categoryCounts["None"] = allPhotos.Count;
       }
    }
 
