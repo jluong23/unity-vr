@@ -90,7 +90,7 @@ public class DateMenu : MonoBehaviour
         }
         currentDateRange = new Tuple<DateTime, DateTime>(currentStartDate, currentEndDate);
         // update gallery shown
-        gallery.GetComponent<Gallery>().updateGallery();
+        gallery.updateGallery();
     }
 
 }

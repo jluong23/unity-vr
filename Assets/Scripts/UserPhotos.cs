@@ -105,11 +105,6 @@ public class UserPhotos{
       List<MediaItem> foundPhotos = new List<MediaItem>();
       List<MediaItem> allPhotosList = getPhotos();
 
-      if(includedCategories.Count == 0){
-         // no categories are selected, return all photos
-         return allPhotosList;
-      }
-
       if(allPhotosList.Count > 0){
          // count of intersection between photos categories and includedCategories == count of included categories
          // ie. photo's categories contains all includedCategories
