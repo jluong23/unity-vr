@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7067779317431145621}
   - component: {fileID: 4540585875406499547}
   - component: {fileID: -5104694664935048915}
+  - component: {fileID: -7141583920597381955}
   m_Layer: 0
   m_Name: Image Frame
   m_TagString: Untagged
@@ -230,6 +231,18 @@ MonoBehaviour:
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1
   m_AttachPointCompatibilityMode: 0
+--- !u!114 &-7141583920597381955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767163706062880629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959fda111d09dfa41babec2374e183e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5045493961439928313
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +350,7 @@ GameObject:
   - component: {fileID: 7410297145705777774}
   - component: {fileID: 5026005556082282036}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

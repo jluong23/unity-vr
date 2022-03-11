@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-// object which will follow the camera position at a given distance from the camera
-public class CameraFollower : MonoBehaviour
+// object which will be in front of the camera at a given distance
+public class Popup : MonoBehaviour
 {
     public Camera mainCamera;
     public float distanceFromCamera;
@@ -13,12 +13,7 @@ public class CameraFollower : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Transform camTrans= mainCamera.transform;
+        Transform camTrans = mainCamera.transform;
         Vector3 newPos = camTrans.position + camTrans.forward * distanceFromCamera;
         transform.position = newPos;
     }
