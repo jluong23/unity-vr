@@ -24,6 +24,8 @@ public class GalleryThumbnail : MonoBehaviour
         //spawn the image frame in front of the thumbnail
         Vector3 spawnPoint = transform.position + transform.forward * -2f;
         GameObject instantiatedImageFrame = Instantiate(imageFramePrefab, spawnPoint, Quaternion.identity);
+        //rotate the image frame in same direction as ui display direction
+        instantiatedImageFrame.transform.rotation = GameObject.Find("Main Display").transform.rotation;
 
         // set the texture of this thumbnails prefab
         instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);

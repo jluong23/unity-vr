@@ -16,5 +16,6 @@ public class Popup : MonoBehaviour
         Transform camTrans = mainCamera.transform;
         Vector3 newPos = camTrans.position + camTrans.forward * distanceFromCamera;
         transform.position = newPos;
+        transform.rotation = camTrans.rotation;
     }
 }
