@@ -3214,17 +3214,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 728460902}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -7.35}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 8.6}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 1781789665}
   m_Father: {fileID: 0}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7.48, y: 2.88}
+  m_AnchoredPosition: {x: -6.25, y: 2.88}
   m_SizeDelta: {x: 52.4728, y: 52.6834}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &761697361
@@ -5406,7 +5406,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1415509456}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1781789668}
+        m_TargetAssemblyTypeName: ImageInfoPanel, Assembly-CSharp
+        m_MethodName: Place
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1415509456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6566,6 +6578,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 726b3bbe2fbeddc4a8c87ca48370c39c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentCanvas: {fileID: 0}
+  imageFramePrefab: {fileID: 1767163706062880629, guid: 3f956b971c7d7424abae83b29bfd0c90,
+    type: 3}
 --- !u!1001 &1813857396
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7988,7 +8003,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2009333109}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1781789668}
+        m_TargetAssemblyTypeName: ImageInfoPanel, Assembly-CSharp
+        m_MethodName: Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2009333109
 MonoBehaviour:
   m_ObjectHideFlags: 0

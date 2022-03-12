@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 public class GalleryThumbnail : MonoBehaviour
 {
     public MediaItem mediaItem;
-    public GameObject imageFramePrefab;
     private GameObject imageInfoPanel;
     private ImageInfoPanel imageInfoComponent;
     private void Start() {
@@ -21,22 +20,14 @@ public class GalleryThumbnail : MonoBehaviour
         Debug.Log(output);
     }
 
-    private void spawnImageFrame()
-    {
-        GameObject instantiatedImageFrame = Popup.Show(imageFramePrefab, gameObject, true);
-        //rotate the image frame in same direction as ui display direction
-        instantiatedImageFrame.transform.rotation = GameObject.Find("Main Display").transform.rotation;
-
-        // set the texture of this thumbnails prefab
-        instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);
-    }
-
     private void showImageInfoPanel()
     {
-        GameObject imageInfoPanelCanvas = imageInfoPanel.transform.parent.gameObject;
-        GameObject infoPanel = Popup.Show(imageInfoPanelCanvas, gameObject, false);
+        GameObject parentCanvas = imageInfoComponent.parentCanvas;
+        imageInfoPanel = Popup.Show(parentCanvas, gameObject, false);
+        // pass on the mediaitem object
+        imageInfoComponent.mediaItem = mediaItem;
         //set rotation as main display
-        infoPanel.transform.rotation = GameObject.Find("Main Display").transform.rotation;
+        parentCanvas.transform.rotation = GameObject.Find("Main Display").transform.rotation;
         // update the text for the selected thumbnail
         imageInfoComponent.updateText(mediaItem);
     }
