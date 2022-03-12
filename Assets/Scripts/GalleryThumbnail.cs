@@ -8,11 +8,13 @@ public class GalleryThumbnail : MonoBehaviour
 {
     public MediaItem mediaItem;
     public GameObject imageFramePrefab;
+    private GameObject imageInfoPanel;
+    private ImageInfoPanel imageInfoComponent;
     private void Start() {
-        GetComponent<Button>().onClick.AddListener(spawnImageFrame);
-
+        imageInfoPanel = GameObject.Find("Image Info Panel");
+        imageInfoComponent = imageInfoPanel.GetComponent<ImageInfoPanel>();
+        GetComponent<Button>().onClick.AddListener(showImageInfoPanel);
     }
-
     private void logPhotoDetails(){
         string output = string.Format("{0}, taken {1}, categories: {2}",
         mediaItem.filename, mediaItem.mediaMetadata.creationTime, string.Join(",", mediaItem.categories));
@@ -21,15 +23,24 @@ public class GalleryThumbnail : MonoBehaviour
 
     private void spawnImageFrame()
     {
-        //spawn the image frame in front of the thumbnail
-        Vector3 spawnPoint = transform.position + transform.forward * -2f;
-        GameObject instantiatedImageFrame = Instantiate(imageFramePrefab, spawnPoint, Quaternion.identity);
+        GameObject instantiatedImageFrame = Popup.Show(imageFramePrefab, gameObject, true);
         //rotate the image frame in same direction as ui display direction
         instantiatedImageFrame.transform.rotation = GameObject.Find("Main Display").transform.rotation;
 
         // set the texture of this thumbnails prefab
         instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);
     }
+
+    private void showImageInfoPanel()
+    {
+        GameObject imageInfoPanelCanvas = imageInfoPanel.transform.parent.gameObject;
+        GameObject infoPanel = Popup.Show(imageInfoPanelCanvas, gameObject, false);
+        //set rotation as main display
+        infoPanel.transform.rotation = GameObject.Find("Main Display").transform.rotation;
+        // update the text for the selected thumbnail
+        imageInfoComponent.updateText(mediaItem);
+    }
+
 
     public void displayTexture(MediaItem mediaItem){    
         // changes the image displayed on the frame

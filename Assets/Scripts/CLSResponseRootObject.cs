@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 public class MediaItem
 {
    public string id;
+   public string description;
    public string productUrl;
    public string baseUrl;
    public string mimeType;
