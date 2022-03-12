@@ -23,7 +23,7 @@ public class GalleryThumbnail : MonoBehaviour
     private void showImageInfoPanel()
     {
         GameObject parentCanvas = imageInfoComponent.parentCanvas;
-        imageInfoPanel = Popup.Show(parentCanvas, gameObject, false);
+        imageInfoPanel = Popup.Show(parentCanvas, gameObject, false, 1f);
         // pass on the mediaitem object
         imageInfoComponent.mediaItem = mediaItem;
         //set rotation as main display

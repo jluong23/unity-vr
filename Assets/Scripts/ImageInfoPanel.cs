@@ -11,6 +11,8 @@ public class ImageInfoPanel : MonoBehaviour
     public GameObject imageFramePrefab;
     public MediaItem mediaItem;
 
+    public GameObject mainDisplay;
+
     // Start is called before the first frame update
     void Start()
     {   
@@ -38,8 +40,8 @@ public class ImageInfoPanel : MonoBehaviour
 
     public void Place()
     {
-        // spawn an image frame in front of the menu
-        GameObject instantiatedImageFrame = Popup.Show(imageFramePrefab, parentCanvas, true);
+        // spawn an image frame in front of the main display menu
+        GameObject instantiatedImageFrame = Popup.Show(imageFramePrefab, mainDisplay, true, 0.1f);
 
         // set the texture of this thumbnails prefab
         instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);

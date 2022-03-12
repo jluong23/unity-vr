@@ -25,10 +25,11 @@ public class Popup : MonoBehaviour
 /// <param name="a"></param>
 /// <param name="b"></param>
 /// <param name="createNewObject">To instantiate new object or translate an existing one</param>
+/// <param name="distance"></param>
 /// <returns></returns>
-    public static GameObject Show(GameObject a, GameObject b, bool createNewObject){
+    public static GameObject Show(GameObject a, GameObject b, bool createNewObject, float distance){
         GameObject aObj;
-        Vector3 spawnPoint = b.transform.position + b.transform.forward * -2f;
+        Vector3 spawnPoint = b.transform.position + b.transform.forward * -distance;
         if(createNewObject){
             aObj = Instantiate(a, spawnPoint, Quaternion.identity);
         }else{
