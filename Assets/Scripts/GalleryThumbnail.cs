@@ -23,10 +23,11 @@ public class GalleryThumbnail : MonoBehaviour
     private void showImageInfoPanel()
     {
         GameObject parentCanvas = imageInfoComponent.parentCanvas;
-        imageInfoPanel = Popup.Show(parentCanvas, gameObject, false, 1f);
-        // pass on the mediaitem object
+        // pass through media item object to info panel
         imageInfoComponent.mediaItem = mediaItem;
-        //set rotation as main display
+        // show info panel
+        imageInfoPanel = Popup.Show(parentCanvas, gameObject, false, 1f);
+        //set rotation of info panel, same as main display
         parentCanvas.transform.rotation = GameObject.Find("Main Display").transform.rotation;
         // update the text for the selected thumbnail
         imageInfoComponent.updateText(mediaItem);
