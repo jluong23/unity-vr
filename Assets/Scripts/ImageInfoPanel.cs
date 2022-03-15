@@ -7,7 +7,7 @@ public class ImageInfoPanel : MonoBehaviour
 {
     private Text fileNameText;
     private Text bodyText;
-    private GameObject parentCanvas;
+    public GameObject parentCanvas;
     public GameObject imageFramePrefab;
     public MediaItem mediaItem;
 
@@ -32,20 +32,26 @@ public class ImageInfoPanel : MonoBehaviour
         );
     }
 
+/// <summary>
+/// When the close button is clicked on the image info panel
+/// </summary>
     public void Close(){
         // gameObject.SetActive(false);
         // TODO: hide the element by moving it out of the scene
         parentCanvas.transform.position = new Vector3(0,200,0);
     }
 
+/// <summary>
+/// When the place button is clicked on the image info panel
+/// </summary>
     public void Place()
     {
-        // spawn an image frame in front of the main display menu
-        //GameObject instantiatedImageFrame = Popup.Show(imageFramePrefab, mainDisplay, true, 0.1f);
+        GameObject instantiatedImageFrame = Instantiate(imageFramePrefab, mainDisplay.transform.position, Quaternion.identity);
+        // rotate the image frame in direction of main display
+        instantiatedImageFrame.transform.rotation = mainDisplay.transform.rotation;
+        // set the texture of this thumbnails prefab
+        instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);
 
-        //// set the texture of this thumbnails prefab
-        //instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);
-
-        //Close();
+        Close();
     }
 }
