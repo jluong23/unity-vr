@@ -7,7 +7,7 @@ public class ImageInfoPanel : MonoBehaviour
 {
     private Text fileNameText;
     private Text bodyText;
-    public GameObject parentCanvas;
+    private GameObject parentCanvas;
     public GameObject imageFramePrefab;
     public MediaItem mediaItem;
 
@@ -41,11 +41,11 @@ public class ImageInfoPanel : MonoBehaviour
     public void Place()
     {
         // spawn an image frame in front of the main display menu
-        GameObject instantiatedImageFrame = Popup.Show(imageFramePrefab, mainDisplay, true, 0.1f);
+        //GameObject instantiatedImageFrame = Popup.Show(imageFramePrefab, mainDisplay, true, 0.1f);
 
-        // set the texture of this thumbnails prefab
-        instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);
+        //// set the texture of this thumbnails prefab
+        //instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);
 
-        Close();
+        //Close();
     }
 }

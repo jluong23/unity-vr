@@ -3,42 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-// object which will be in front of the camera at a given distance
+// object which will be in front of another object at a given distance
 public class Popup : MonoBehaviour
 {
-    public Camera mainCamera;
-    public float distanceFromCamera;
+    public GameObject coveredObject;
+    public float distance;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        Transform camTrans = mainCamera.transform;
-        Vector3 newPos = camTrans.position + camTrans.forward * distanceFromCamera;
+        Transform coveredObjectTrans = coveredObject.transform;
+        Vector3 newPos = coveredObjectTrans.position + coveredObjectTrans.forward * distance;
         transform.position = newPos;
-        transform.rotation = camTrans.rotation;
+        transform.rotation = coveredObjectTrans.rotation;
     }
 
 /// <summary>
-/// Spawns object a in front of b with same orientation
+/// Spawns object in front of covered object with same orientation.
 /// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
 /// <param name="createNewObject">To instantiate new object or translate an existing one</param>
-/// <param name="distance"></param>
 /// <returns></returns>
-    public static GameObject Show(GameObject a, GameObject b, bool createNewObject, float distance){
-        GameObject aObj;
-        Vector3 spawnPoint = b.transform.position + b.transform.forward * -distance;
+    public GameObject Show(bool createNewObject){
+        GameObject obj;
+        Vector3 spawnPoint = transform.position + coveredObject.transform.forward * -distance;
         if(createNewObject){
-            aObj = Instantiate(a, spawnPoint, Quaternion.identity);
+            obj = Instantiate(gameObject, spawnPoint, Quaternion.identity);
         }else{
-            // a already exists, translate in front of b
-            a.transform.position = spawnPoint;
-            aObj = a; //set aObj to a for return value
+            // this game object already exists, translate instead
+            transform.position = spawnPoint;
+            obj = gameObject;
         }
-        // orient aObj, same as b rotation
-        aObj.transform.rotation = b.transform.rotation;
-        return aObj;
+        // orient obj, same as coveredObject rotation
+        obj.transform.rotation = coveredObject.transform.rotation;
+        return obj;
     }
 }

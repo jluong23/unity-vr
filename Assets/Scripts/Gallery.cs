@@ -7,7 +7,8 @@ using System.Linq;
 
 public class Gallery : MonoBehaviour
 {
-    public GameObject menu;
+    public DateMenu dateMenu;
+    public CategoryMenu categoryMenu;
     public string email = "jluong1@sheffield.ac.uk";
     public bool categorisePhotos = true;
     public Selectable thumbnailPrefab;
@@ -26,9 +27,9 @@ public class Gallery : MonoBehaviour
     public void initPhotos(){
         if(user.photos.getPhotos().Count > 0){
             // update category counts for each category
-            menu.GetComponent<CategoryMenu>().setToggles(user.photos.getInitialCategoryCounts());
+            categoryMenu.setToggles(user.photos.getInitialCategoryCounts());
             // update the start and end date ranges
-            menu.GetComponent<DateMenu>().setMaxDateRanges(user.photos);
+            dateMenu.setMaxDateRanges(user.photos);
             populateGrid();
         }
     }
@@ -54,8 +55,8 @@ public class Gallery : MonoBehaviour
         /// </summary>
         if(user != null && user.photos.getPhotos().Count > 0){
             // get photos with selected categories and time
-            List<string> selectedCategories = menu.GetComponent<CategoryMenu>().getSelectedCategories();
-            Tuple<DateTime, DateTime> currentDateRange = menu.GetComponent<DateMenu>().getCurrentDateRange();
+            List<string> selectedCategories = categoryMenu.getSelectedCategories();
+            Tuple<DateTime, DateTime> currentDateRange = dateMenu.getCurrentDateRange();
             List<MediaItem> newPhotos = user.photos.getPhotos(selectedCategories, currentDateRange);
             // only update photos if the photos are different
             if(!Enumerable.SequenceEqual(newPhotos, currentPhotos)) {
@@ -70,7 +71,7 @@ public class Gallery : MonoBehaviour
                 }
                 // update category menu, reflecting new category counts
                 Dictionary<string, int> newCategoryCounts = user.photos.getCategoryCounts(selectedCategories, currentDateRange); 
-                menu.GetComponent<CategoryMenu>().setToggles(newCategoryCounts);
+                categoryMenu.setToggles(newCategoryCounts);
             }
 
         }

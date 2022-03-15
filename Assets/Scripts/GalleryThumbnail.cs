@@ -9,26 +9,23 @@ public class GalleryThumbnail : MonoBehaviour
     public MediaItem mediaItem;
     private GameObject imageInfoPanel;
     private ImageInfoPanel imageInfoComponent;
+    private Popup imageInfoPopup;
+
     private void Start() {
         imageInfoPanel = GameObject.Find("Image Info Panel");
+        imageInfoPopup = imageInfoPanel.GetComponentInParent<Popup>();
         imageInfoComponent = imageInfoPanel.GetComponent<ImageInfoPanel>();
         GetComponent<Button>().onClick.AddListener(showImageInfoPanel);
     }
-    private void logPhotoDetails(){
-        string output = string.Format("{0}, taken {1}, categories: {2}",
-        mediaItem.filename, mediaItem.mediaMetadata.creationTime, string.Join(",", mediaItem.categories));
-        Debug.Log(output);
-    }
-
     private void showImageInfoPanel()
     {
-        GameObject parentCanvas = imageInfoComponent.parentCanvas;
         // pass through media item object to info panel
         imageInfoComponent.mediaItem = mediaItem;
-        // show info panel
-        imageInfoPanel = Popup.Show(parentCanvas, gameObject, false, 1f);
-        //set rotation of info panel, same as main display
-        parentCanvas.transform.rotation = GameObject.Find("Main Display").transform.rotation;
+        // show info panel in front of this gallery thumbnail
+        imageInfoPopup.coveredObject = gameObject;
+        imageInfoPopup.Show(false);
+        ////set rotation of info panel, same as main display
+        //parentCanvas.transform.rotation = GameObject.Find("Main Display").transform.rotation;
         // update the text for the selected thumbnail
         imageInfoComponent.updateText(mediaItem);
     }
