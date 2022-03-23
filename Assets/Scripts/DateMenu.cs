@@ -4,16 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class DateMenu : MonoBehaviour
+public class DateMenu : SideMenu
 {
     private Transform datePanel;
     private Tuple<Transform, Transform> dateOptions;
     private Tuple<Dropdown, Dropdown> yearPanels;
     private Tuple<DateTime, DateTime> currentDateRange;
-    private Gallery gallery;
-    void Start()
+    void Awake()
     {
-        gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         datePanel = transform.Find("Date Panel");
         dateOptions = new Tuple<Transform, Transform>(datePanel.Find("Start Date Panel"), datePanel.Find("End Date Panel")); 
         yearPanels = new Tuple<Dropdown, Dropdown>(dateOptions.Item1.GetComponentInChildren<Dropdown>(), dateOptions.Item2.GetComponentInChildren<Dropdown>());

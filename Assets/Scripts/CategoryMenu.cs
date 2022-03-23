@@ -5,13 +5,12 @@ using UnityEngine.UI;
 using System.Linq;
 
 
-public class CategoryMenu : MonoBehaviour
+public class CategoryMenu : SideMenu
 {
     // different category buttons as children
     private CategoryToggle[] categoryToggles;
     public GameObject categoryTogglePrefab;
     public GameObject content;
-    private Gallery gallery;
 
     void Awake()
     {
