@@ -31,6 +31,7 @@ public class UserPhotos{
       /// </summary>
       this.user = user;
       this.categorisePhotos = categorisePhotos;
+      credential = RestHelper.getCredential(user.email, scopes);
       if(File.Exists(user.photosSavePath)){
          // read stored data file if it exists
          Debug.Log("Loading data from " + user.photosSavePath);
@@ -43,7 +44,6 @@ public class UserPhotos{
          Debug.Log("Could not find an existing save, loading files via Google Photos API...");
          initialCategoryCounts = new Dictionary<string, int>();
          allPhotos = new Dictionary<string, MediaItem>();
-         credential = RestHelper.getCredential(user.email, scopes);
          
          // time how long it takes to populate all photos
          UnityStopwatch.start();
