@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine.Networking;
+using System.Collections;
 
 public class RestHelper : MonoBehaviour {
    
@@ -64,6 +66,7 @@ public class RestHelper : MonoBehaviour {
       return responseObject;
    }
 
+
    public static MediaItemRequestResponse performPostRequest(UserCredential credential, String link, String jsonBody){
       MediaItemRequestResponse responseObject = new MediaItemRequestResponse();
 
@@ -87,5 +90,19 @@ public class RestHelper : MonoBehaviour {
       }
 
       return responseObject;
+   }
+   // unity method
+   public static IEnumerator createUnityWebRequest(UserCredential credential, string link, string method, string body){
+      UnityWebRequest unityWebRequest = new UnityWebRequest(link);
+      unityWebRequest.SetRequestHeader("Authorization", string.Format("{0} {1}", credential.Token.TokenType, credential.Token.AccessToken));
+      unityWebRequest.SetRequestHeader("Accept", "application/json");
+      unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
+   
+      yield return unityWebRequest.SendWebRequest();
+      if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
+         Debug.Log(unityWebRequest.error);
+      }else{
+         Debug.Log(unityWebRequest.downloadHandler.text);
+      }
    }
 }

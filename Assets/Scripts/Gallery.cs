@@ -25,6 +25,7 @@ public class Gallery : MonoBehaviour
 
     // ran when the 'show photos data' button is pressed for the first time, updating category counts in category menu
     public void initPhotos(){
+        populateAllPhotos();
         if(user.photos.getPhotos().Count > 0){
             // update category counts for each category
             categoryMenu.setToggles(user.photos.getInitialCategoryCounts());
@@ -32,6 +33,18 @@ public class Gallery : MonoBehaviour
             dateMenu.setMaxDateRanges(user.photos);
             populateGrid();
         }
+    }
+    private void populateAllPhotos(){
+        string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
+        // Debug.Log("Populating photos...");
+        StartCoroutine(RestHelper.createUnityWebRequest(user.photos.credential, link, "GET", ""));
+
+        // string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
+        // MediaItemSearchRequest searchReq = new MediaItemSearchRequest(10, new string[]{"TRAVEL"}, new string[] {}); //no excluded categories
+        // string jsonBody = searchReq.getJson();
+        // Debug.Log(jsonBody);
+        // StartCoroutine(RestHelper.createUnityWebRequest(user.photos.credential, link, "POST", jsonBody));
+        
     }
 
 	void populateGrid()

@@ -9,7 +9,9 @@ public class UserPhotos{
 
    static private int MAX_PHOTOS = 12;
    static private string[] scopes = {
-      "https://www.googleapis.com/auth/photoslibrary.readonly"
+      "https://www.googleapis.com/auth/photoslibrary.readonly",
+      "https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata",
+      "https://www.googleapis.com/auth/photoslibrary"
    };
    // dictionary from id to mediaItem object, used for categorisation after retrieving media photos
    [JsonProperty]
@@ -19,7 +21,7 @@ public class UserPhotos{
    private Dictionary<string, int> initialCategoryCounts;
 
    // the credential for user photos
-   private UserCredential credential;
+   public UserCredential credential;
    private User user;
    private bool categorisePhotos;
 
@@ -32,25 +34,25 @@ public class UserPhotos{
       this.user = user;
       this.categorisePhotos = categorisePhotos;
       credential = RestHelper.getCredential(user.email, scopes);
-      if(File.Exists(user.photosSavePath)){
-         // read stored data file if it exists
-         Debug.Log("Loading data from " + user.photosSavePath);
-         StreamReader reader = new StreamReader(user.photosSavePath);
-         UserPhotos loadedData = JsonConvert.DeserializeObject<UserPhotos>(reader.ReadToEnd());
-         reader.Close();
-         this.allPhotos = loadedData.allPhotos;
-         this.initialCategoryCounts = loadedData.initialCategoryCounts;
-      }else{
-         Debug.Log("Could not find an existing save, loading files via Google Photos API...");
-         initialCategoryCounts = new Dictionary<string, int>();
-         allPhotos = new Dictionary<string, MediaItem>();
+      // if(File.Exists(user.photosSavePath)){
+      //    // read stored data file if it exists
+      //    Debug.Log("Loading data from " + user.photosSavePath);
+      //    StreamReader reader = new StreamReader(user.photosSavePath);
+      //    UserPhotos loadedData = JsonConvert.DeserializeObject<UserPhotos>(reader.ReadToEnd());
+      //    reader.Close();
+      //    this.allPhotos = loadedData.allPhotos;
+      //    this.initialCategoryCounts = loadedData.initialCategoryCounts;
+      // }else{
+      //    Debug.Log("Could not find an existing save, loading files via Google Photos API...");
+      initialCategoryCounts = new Dictionary<string, int>();
+      allPhotos = new Dictionary<string, MediaItem>();
          
          // time how long it takes to populate all photos
-         UnityStopwatch.start();
-         populateAllPhotos(); // updates initialCategoryCounts and allPhotos
-         Debug.Log("Populating photos runtime: " + UnityStopwatch.stop());
-         this.saveData();
-      }
+         // UnityStopwatch.start();
+      populateAllPhotos(); // updates initialCategoryCounts and allPhotos
+         // Debug.Log("Populating photos runtime: " + UnityStopwatch.stop());
+         // this.saveData();
+      // }
    }
 
    [JsonConstructor]
@@ -139,45 +141,47 @@ public class UserPhotos{
 
    // function which updates the dictionaries categoryCounts and allPhotos
    private void populateAllPhotos(){
-      string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
-      MediaItemRequestResponse responseObject = RestHelper.performGetRequest(credential, link);
-      // turn list of MediaItems into dictionary from ids to MediaItem
-      allPhotos = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
-      
-      if(categorisePhotos){
-         // perform categorisation process
-         link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-         string[] includedCategories = ContentFilter.ALL_CATEGORIES;
-         foreach (var category in includedCategories)
-         {
-            // perform post request for each category (api calls = num categories)
-            MediaItemSearchRequest searchReq = new MediaItemSearchRequest(MAX_PHOTOS, new string[]{category}, new string[] {}); //no excluded categories
-            string jsonBody = searchReq.getJson();
-            // perform post request
-            MediaItemRequestResponse categoryResponseObject = RestHelper.performPostRequest(credential, link, jsonBody);
-               // if photos exist for this category
-            if(categoryResponseObject.mediaItems != null && categoryResponseObject.mediaItems.Count > 0){
-               foreach (var mediaItem in categoryResponseObject.mediaItems)
-               {
-                  // add category to according photo in allPhotos by id
-                  allPhotos[mediaItem.id].categories.Add(category);
-               }
-               // set category counts for this category
-               initialCategoryCounts[category] = categoryResponseObject.mediaItems.Count;
-            }else{
-               // set category counts to 0 for this category
-               initialCategoryCounts[category] = 0; 
-
-            }
-         }
-      }
-      else{
-         // categorise = false, all photos have empty category list
-         foreach (var mediaItem in allPhotos.Values)
-         {
-            mediaItem.categories = new List<string> {};
-         }
-      }
+   
    }
+   //    string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
+   //    MediaItemRequestResponse responseObject = RestHelper.performGetRequest(credential, link);
+   //    // turn list of MediaItems into dictionary from ids to MediaItem
+   //    allPhotos = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
+      
+   //    if(categorisePhotos){
+   //       // perform categorisation process
+   //       link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
+   //       string[] includedCategories = ContentFilter.ALL_CATEGORIES;
+   //       foreach (var category in includedCategories)
+   //       {
+   //          // perform post request for each category (api calls = num categories)
+   //          MediaItemSearchRequest searchReq = new MediaItemSearchRequest(MAX_PHOTOS, new string[]{category}, new string[] {}); //no excluded categories
+   //          string jsonBody = searchReq.getJson();
+   //          // perform post request
+   //          MediaItemRequestResponse categoryResponseObject = RestHelper.performPostRequest(credential, link, jsonBody);
+   //             // if photos exist for this category
+   //          if(categoryResponseObject.mediaItems != null && categoryResponseObject.mediaItems.Count > 0){
+   //             foreach (var mediaItem in categoryResponseObject.mediaItems)
+   //             {
+   //                // add category to according photo in allPhotos by id
+   //                allPhotos[mediaItem.id].categories.Add(category);
+   //             }
+   //             // set category counts for this category
+   //             initialCategoryCounts[category] = categoryResponseObject.mediaItems.Count;
+   //          }else{
+   //             // set category counts to 0 for this category
+   //             initialCategoryCounts[category] = 0; 
+
+   //          }
+   //       }
+   //    }
+   //    else{
+   //       // categorise = false, all photos have empty category list
+   //       foreach (var mediaItem in allPhotos.Values)
+   //       {
+   //          mediaItem.categories = new List<string> {};
+   //       }
+   //    }
+   // }
 
 }
