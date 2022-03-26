@@ -4,47 +4,49 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using System.IO;
 
 public class Gallery : MonoBehaviour
 {
     public DateMenu dateMenu;
     public CategoryMenu categoryMenu;
-    public string email = "jluong1@sheffield.ac.uk";
-    public bool categorisePhotos = true;
     public Selectable thumbnailPrefab;
     private Selectable newThumbnail; // used to generate instances of thumbnail prefab
     public GameObject content;
-    private User user;
+    public User user;
     private List<MediaItem> currentPhotos;
 
-    
-    void Start()
+    /// <summary>
+    /// Check if photo variables have finished loading with categorisation every .5 seconds. Once loaded,
+    /// update category and date menus and content grid on main display to reflect the loaded data.
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator photosLoadedCheck()
     {
-        user = new User(email);
-    }
+        while(!user.photos.loaded){
+            // keep waiting until all photos have loaded
+            yield return new WaitForSeconds(.5f);
+        }
+        // update category menu with initial category counts
+        categoryMenu.setToggles(user.photos.initialCategoryCounts);
+        // update the start and end date ranges
+        dateMenu.setMaxDateRanges(user.photos);
+        populateGrid();
+        // save the user data if a save does not exist
+        if(!File.Exists(user.photos.savePath)){
+            // wait a second, coroutines are funky at times
+            yield return new WaitForSeconds(1f);
+            user.photos.saveData();
 
-    // ran when the 'show photos data' button is pressed for the first time, updating category counts in category menu
-    public void initPhotos(){
-        populateAllPhotos();
-        if(user.photos.getPhotos().Count > 0){
-            // update category counts for each category
-            categoryMenu.setToggles(user.photos.getInitialCategoryCounts());
-            // update the start and end date ranges
-            dateMenu.setMaxDateRanges(user.photos);
-            populateGrid();
         }
     }
-    private void populateAllPhotos(){
-        string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
-        // Debug.Log("Populating photos...");
-        StartCoroutine(RestHelper.createUnityWebRequest(user.photos.credential, link, "GET", ""));
 
-        // string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-        // MediaItemSearchRequest searchReq = new MediaItemSearchRequest(10, new string[]{"TRAVEL"}, new string[] {}); //no excluded categories
-        // string jsonBody = searchReq.getJson();
-        // Debug.Log(jsonBody);
-        // StartCoroutine(RestHelper.createUnityWebRequest(user.photos.credential, link, "POST", jsonBody));
-        
+    // ran when the 'show photos data' button is pressed for the first time
+    public void initPhotos(){
+        if(!user.photos.hasSave){
+            user.populatePhotosByAPI();
+        }
+        StartCoroutine(photosLoadedCheck());
     }
 
 	void populateGrid()

@@ -831,11 +831,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dateMenu: {fileID: 1739814710}
   categoryMenu: {fileID: 1404291185}
-  email: jluong1@sheffield.ac.uk
-  categorisePhotos: 1
   thumbnailPrefab: {fileID: 4552956596745213651, guid: 3718ace06b31b5b498ee23f1205f3bcc,
     type: 3}
   content: {fileID: 1136454534}
+  user: {fileID: 1453126921}
 --- !u!1 &72309959
 GameObject:
   m_ObjectHideFlags: 0
@@ -6493,6 +6492,7 @@ GameObject:
   - component: {fileID: 1453126919}
   - component: {fileID: 1453126918}
   - component: {fileID: 1453126917}
+  - component: {fileID: 1453126921}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -6583,13 +6583,28 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453126916}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -14.97, y: 1.93, z: -3.91}
+  m_LocalPosition: {x: -15.309, y: 1.93, z: -3.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 761697362}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1453126921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1453126916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c6f81d60af0cd44800b075fe5cd81b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  email: jluong1@sheffield.ac.uk
+  categorisePhotos: 1
+  username: 
 --- !u!1 &1489623352
 GameObject:
   m_ObjectHideFlags: 0
@@ -7701,7 +7716,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1744282175}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.7509}
+  m_LocalPosition: {x: 0, y: 0, z: -1.87}
   m_LocalScale: {x: 0.044085, y: 0.082089, z: 0.1}
   m_Children:
   - {fileID: 57971859}
@@ -7711,7 +7726,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7.44, y: 4.9199}
+  m_AnchoredPosition: {x: -7.44, y: 4.01}
   m_SizeDelta: {x: 197.3065, y: 68.5835}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1781789664

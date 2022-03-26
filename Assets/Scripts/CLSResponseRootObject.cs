@@ -15,6 +15,7 @@ public class MediaItem
    public MediaMetadata mediaMetadata;
    public string filename;
    public List<string> categories = new List<string>();
+   [JsonIgnore]
    public Texture texture;
 }
 

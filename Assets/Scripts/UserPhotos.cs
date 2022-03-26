@@ -5,54 +5,77 @@ using System.Linq;
 using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
-public class UserPhotos{
+using Google.Apis.Util.Store;
+using System.Threading;
+[JsonObject(MemberSerialization.OptIn)] // only serialize fields with jsonProperty. In this case, allPhotos and initialCateogryCounts are stored
 
-   static private int MAX_PHOTOS = 12;
+public class UserPhotos{
    static private string[] scopes = {
-      "https://www.googleapis.com/auth/photoslibrary.readonly",
-      "https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata",
-      "https://www.googleapis.com/auth/photoslibrary"
+      "https://www.googleapis.com/auth/photoslibrary.readonly"
    };
    // dictionary from id to mediaItem object, used for categorisation after retrieving media photos
    [JsonProperty]
-   private Dictionary<string, MediaItem> allPhotos;
-   // dictionary from category to count in allPhotos
+   public Dictionary<string, MediaItem> allPhotos;
    [JsonProperty]
-   private Dictionary<string, int> initialCategoryCounts;
+   // dictionary from category to count in allPhotos
+   public Dictionary<string, int> initialCategoryCounts;
 
    // the credential for user photos
    public UserCredential credential;
+   // if the user photo variables (allPhotos and initialCategoryCounts) are fully loaded in with all albums, useful for unity coroutine conditions
+   public bool loaded;
+   // if there exists a json save for the user
+   public bool hasSave;
    private User user;
    private bool categorisePhotos;
+   public string savePath;
 
-   public UserPhotos(User user, bool categorisePhotos){
+   public static UserCredential getCredential(String user, String[] scopes){
+      UserCredential credential;
+      using (var stream = new FileStream("Assets/credentials.json", FileMode.Open, FileAccess.Read))
+      {
+         // The file token.json stores the user's access and refresh tokens, and is created
+         // automatically when the authorization flow completes for the first time.
+         string credPath = "Assets/token";
+         ClientSecrets clientSecrets = GoogleClientSecrets.FromStream(stream).Secrets; 
+
+         credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+               clientSecrets,
+               scopes,
+               user,
+               CancellationToken.None,
+               new FileDataStore(credPath, true))
+               .Result;
+      }
+      return credential;
+   }
+
+   public UserPhotos(User user, string savePath){
       /// <summary>
-      /// Constructor for userPhotos, fetching from API.
-      /// categorisePhotos: If photos should be categorised if local save does not exist
-      /// allPhotos should be sorted by newest to oldest, assuming elements are not deleted.
+      /// Constructor for userPhotos
       /// </summary>
       this.user = user;
-      this.categorisePhotos = categorisePhotos;
-      credential = RestHelper.getCredential(user.email, scopes);
-      // if(File.Exists(user.photosSavePath)){
-      //    // read stored data file if it exists
-      //    Debug.Log("Loading data from " + user.photosSavePath);
-      //    StreamReader reader = new StreamReader(user.photosSavePath);
-      //    UserPhotos loadedData = JsonConvert.DeserializeObject<UserPhotos>(reader.ReadToEnd());
-      //    reader.Close();
-      //    this.allPhotos = loadedData.allPhotos;
-      //    this.initialCategoryCounts = loadedData.initialCategoryCounts;
-      // }else{
-      //    Debug.Log("Could not find an existing save, loading files via Google Photos API...");
-      initialCategoryCounts = new Dictionary<string, int>();
-      allPhotos = new Dictionary<string, MediaItem>();
-         
-         // time how long it takes to populate all photos
-         // UnityStopwatch.start();
-      populateAllPhotos(); // updates initialCategoryCounts and allPhotos
-         // Debug.Log("Populating photos runtime: " + UnityStopwatch.stop());
-         // this.saveData();
-      // }
+      this.savePath = savePath;
+      credential = UserPhotos.getCredential(user.email, scopes);
+      if(File.Exists(savePath)){
+         // read stored data file if it exists
+         // save exists and variables will be fully loaded in
+         this.loaded = true;
+         this.hasSave = true; 
+         Debug.Log("Loading data from " + savePath);
+         StreamReader reader = new StreamReader(savePath);
+         UserPhotos loadedData = JsonConvert.DeserializeObject<UserPhotos>(reader.ReadToEnd());
+         reader.Close();
+         this.allPhotos = loadedData.allPhotos;
+         this.initialCategoryCounts = loadedData.initialCategoryCounts;
+      }else{
+         Debug.Log("Could not find an existing save for " + user.username);
+         initialCategoryCounts = new Dictionary<string, int>();
+         allPhotos = new Dictionary<string, MediaItem>();
+         this.loaded = false; // not loaded, initialises as empty photos and category counts
+         this.hasSave = false;
+      }
+
    }
 
    [JsonConstructor]
@@ -69,10 +92,6 @@ public class UserPhotos{
       return new List<MediaItem>(allPhotos.Values);
    } 
 
-   public Dictionary<string, int> getInitialCategoryCounts(){
-      return initialCategoryCounts;
-   }
-
    public Dictionary<string, int> getCategoryCounts(List<string> selectedCategories, Tuple<DateTime, DateTime> dateRange){
       /// <summary>
       /// Given a list of selected categories and date ranges from the UI menu,
@@ -84,7 +103,7 @@ public class UserPhotos{
       /// 
       
       // original data set is shown, return initial counts
-      if(getPhotos(selectedCategories, dateRange).Count == allPhotos.Count) return getInitialCategoryCounts();
+      if(getPhotos(selectedCategories, dateRange).Count == allPhotos.Count) return initialCategoryCounts;
       Dictionary<string, int> subCategoryCounts = new Dictionary<string, int>();
       foreach (string category in ContentFilter.ALL_CATEGORIES)
       {
@@ -131,57 +150,11 @@ public class UserPhotos{
    public void saveData()
    {
       /// <summary>
-      /// Saves user data in user.photosSavePath, does not overwrite. 
+      /// Saves user data in savePath, does not overwrite. 
       /// </summary>
-      Debug.Log("Saving data to " + user.photosSavePath);
-      StreamWriter writer = new StreamWriter(user.photosSavePath);
+      Debug.Log("Saving data to " + savePath);
+      StreamWriter writer = new StreamWriter(savePath);
       writer.WriteLine(JsonConvert.SerializeObject(this));
       writer.Close();
    }
-
-   // function which updates the dictionaries categoryCounts and allPhotos
-   private void populateAllPhotos(){
-   
-   }
-   //    string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
-   //    MediaItemRequestResponse responseObject = RestHelper.performGetRequest(credential, link);
-   //    // turn list of MediaItems into dictionary from ids to MediaItem
-   //    allPhotos = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
-      
-   //    if(categorisePhotos){
-   //       // perform categorisation process
-   //       link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-   //       string[] includedCategories = ContentFilter.ALL_CATEGORIES;
-   //       foreach (var category in includedCategories)
-   //       {
-   //          // perform post request for each category (api calls = num categories)
-   //          MediaItemSearchRequest searchReq = new MediaItemSearchRequest(MAX_PHOTOS, new string[]{category}, new string[] {}); //no excluded categories
-   //          string jsonBody = searchReq.getJson();
-   //          // perform post request
-   //          MediaItemRequestResponse categoryResponseObject = RestHelper.performPostRequest(credential, link, jsonBody);
-   //             // if photos exist for this category
-   //          if(categoryResponseObject.mediaItems != null && categoryResponseObject.mediaItems.Count > 0){
-   //             foreach (var mediaItem in categoryResponseObject.mediaItems)
-   //             {
-   //                // add category to according photo in allPhotos by id
-   //                allPhotos[mediaItem.id].categories.Add(category);
-   //             }
-   //             // set category counts for this category
-   //             initialCategoryCounts[category] = categoryResponseObject.mediaItems.Count;
-   //          }else{
-   //             // set category counts to 0 for this category
-   //             initialCategoryCounts[category] = 0; 
-
-   //          }
-   //       }
-   //    }
-   //    else{
-   //       // categorise = false, all photos have empty category list
-   //       foreach (var mediaItem in allPhotos.Values)
-   //       {
-   //          mediaItem.categories = new List<string> {};
-   //       }
-   //    }
-   // }
-
 }
