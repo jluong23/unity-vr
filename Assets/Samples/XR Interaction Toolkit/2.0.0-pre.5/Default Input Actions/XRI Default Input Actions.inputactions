@@ -1080,27 +1080,9 @@
             "id": "c34b81da-52c1-49cb-b8a1-b38514a937db",
             "actions": [
                 {
-                    "name": "Colour",
-                    "type": "Value",
-                    "id": "d37975af-1b55-4605-9311-b5084d30ea32",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Translate Object",
-                    "type": "Value",
-                    "id": "e6e06677-9915-465a-b20e-8849872f4f8c",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Select Object",
+                    "name": "Open Menu",
                     "type": "Button",
-                    "id": "211b0730-838f-4016-a2e8-a79c0c6b757c",
+                    "id": "394cf56a-deee-439b-964c-275838b0f472",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1110,45 +1092,23 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "ed1c60a9-e628-4f97-9971-088e9c6cce33",
-                    "path": "<OculusTouchController>/trigger",
+                    "id": "dcbf8b52-95b1-4231-aef8-97b1ad383dd0",
+                    "path": "<XRController>{RightHand}/menuButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Colour",
+                    "action": "Open Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "142c68a1-47ee-4c11-846a-120f5d42cf5d",
-                    "path": "<Pointer>/position",
+                    "id": "b7cc796f-d34f-49f3-b47b-4376029eff4a",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Translate Object",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "658802f5-1755-48e2-83cd-9e345811fa3d",
-                    "path": "<OculusTouchController>/gripPressed",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Select Object",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b7e97597-af42-46b6-be8a-e6ca788e5fa7",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Select Object",
+                    "action": "Open Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
