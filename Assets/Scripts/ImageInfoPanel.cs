@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class ImageInfoPanel : MonoBehaviour
 {
@@ -23,10 +24,11 @@ public class ImageInfoPanel : MonoBehaviour
     }
     public void updateText(MediaItem mediaItem){
         fileNameText.text = mediaItem.filename;
+        DateTime dateTime = Convert.ToDateTime(mediaItem.mediaMetadata.creationTime);
         string bodyFormat = "Categories: {0}\nDate: {1}\nLocation: {2}\nDescription: {3}"; 
         bodyText.text = string.Format(bodyFormat, 
             string.Join(",", mediaItem.categories), 
-            mediaItem.mediaMetadata.creationTime,
+            dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString(),
             "Test",
             mediaItem.description
         );
