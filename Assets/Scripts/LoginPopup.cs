@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class LoginPopup : MonoBehaviour
 {
     private Button button;
-    public GameObject selectAlbumsPopup; 
+    public GameObject loadPhotosPopup; 
     public InputField emailInput;
     public User user;
     // Start is called before the first frame update
@@ -16,10 +16,12 @@ public class LoginPopup : MonoBehaviour
         button = GetComponentInChildren<Button>();
         button.interactable = false;
         button.onClick.AddListener(buttonClicked);
+        // TODO: default login for testing
+        emailInput.text = "jluong1@sheffield.ac.uk";
     }
 
     void buttonClicked(){
-        selectAlbumsPopup.transform.position = gameObject.transform.position;
+        loadPhotosPopup.transform.position = gameObject.transform.position;
         user.Login(emailInput.text);
     }
 

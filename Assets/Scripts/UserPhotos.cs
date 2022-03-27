@@ -29,6 +29,8 @@ public class UserPhotos{
    private User user;
    private bool categorisePhotos;
    public string savePath;
+   // used for User.performCategorisation coroutine, incrementing after categorisation has completed for the given category
+   public int categoriesLoaded;
 
    public static UserCredential getCredential(String user, String[] scopes){
       UserCredential credential;
@@ -68,12 +70,15 @@ public class UserPhotos{
          reader.Close();
          this.allPhotos = loadedData.allPhotos;
          this.initialCategoryCounts = loadedData.initialCategoryCounts;
+         this.categoriesLoaded = initialCategoryCounts.Count;
+
       }else{
          Debug.Log("Could not find an existing save for " + user.username);
          initialCategoryCounts = new Dictionary<string, int>();
          allPhotos = new Dictionary<string, MediaItem>();
          this.loaded = false; // not loaded, initialises as empty photos and category counts
          this.hasSave = false;
+         this.categoriesLoaded = 0;
       }
 
    }

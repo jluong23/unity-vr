@@ -33,7 +33,7 @@ public class Gallery : MonoBehaviour
         dateMenu.setMaxDateRanges(user.photos);
         populateGrid();
         // save the user data if a save does not exist
-        if(!File.Exists(user.photos.savePath)){
+        if(!user.photos.hasSave){
             // wait a second, coroutines are funky at times
             yield return new WaitForSeconds(1f);
             user.photos.saveData();

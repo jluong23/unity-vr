@@ -105,6 +105,9 @@ public class User : MonoBehaviour{
                   // set category counts to 0 for this category
                   photos.initialCategoryCounts[category] = 0; 
                }
+               // categorisation has finished for this category, increment counter
+               photos.categoriesLoaded++;
+
             }
          }
          // finished categorising after all categories have been enumerated
