@@ -19,8 +19,9 @@ public class User : MonoBehaviour{
    private string photosSavePath;
    public UserPhotos photos;
 
-   void Start()
+   public void Login(string email)
    {
+      this.email = email; 
       username = email.Split('@')[0];
       photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
       photos = new UserPhotos(this, photosSavePath); // initialise photos as empty
