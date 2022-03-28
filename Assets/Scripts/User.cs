@@ -54,8 +54,9 @@ public class User : MonoBehaviour{
       unityWebRequest.downloadHandler = new DownloadHandlerBuffer();     
       return unityWebRequest;
    }
-   private IEnumerator loadPhotos(){ 
-      string link = "https://photoslibrary.googleapis.com/v1/mediaItems";
+   private IEnumerator loadPhotos(){
+      //load up to max photos
+      string link = "https://photoslibrary.googleapis.com/v1/mediaItems?pageSize=" + UserPhotos.MAX_PHOTOS;
       UnityWebRequest unityWebRequest = createUnityWebRequest(link, "GET", "");
 
       yield return unityWebRequest.SendWebRequest();
@@ -74,7 +75,7 @@ public class User : MonoBehaviour{
 
    private IEnumerator performCategorisation(){ 
       string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-      int maxPhotos = 10;
+      int maxPhotos = 50; //per category
       if(categorisePhotos){
          // perform categorisation process
          string[] includedCategories = ContentFilter.ALL_CATEGORIES;

@@ -14,7 +14,7 @@ public class SideMenu : MonoBehaviour
     }
 
     public void Show(){
-        this.transform.position = navigationMenu.transform.position + 4*navigationMenu.transform.right;
+        this.transform.position = navigationMenu.transform.position + 1.5f*navigationMenu.transform.right;
     }
     public void Close(){
         // TODO: hide the element by moving it out of the scene

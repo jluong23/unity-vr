@@ -48,7 +48,7 @@ public class ImageInfoPanel : MonoBehaviour
 /// </summary>
     public void Place()
     {
-        GameObject instantiatedImageFrame = Instantiate(imageFramePrefab, mainDisplay.transform.position, Quaternion.identity);
+        GameObject instantiatedImageFrame = Instantiate(imageFramePrefab, mainDisplay.transform.position - 0.2f*mainDisplay.transform.forward, Quaternion.identity);
         // rotate the image frame in direction of main display
         instantiatedImageFrame.transform.rotation = mainDisplay.transform.rotation;
         // set the texture of this thumbnails prefab

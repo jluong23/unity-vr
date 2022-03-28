@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2.Mvc;
 using System.Linq;
 using System.IO;
 using UnityEngine;
@@ -19,7 +21,7 @@ public class UserPhotos{
    [JsonProperty]
    // dictionary from category to count in allPhotos
    public Dictionary<string, int> initialCategoryCounts;
-
+   public static int MAX_PHOTOS = 100;
    // the credential for user photos
    public UserCredential credential;
    // if the user photo variables (allPhotos and initialCategoryCounts) are fully loaded in with all albums, useful for unity coroutine conditions
@@ -39,15 +41,29 @@ public class UserPhotos{
          // The file token.json stores the user's access and refresh tokens, and is created
          // automatically when the authorization flow completes for the first time.
          string credPath = "Assets/token";
-         ClientSecrets clientSecrets = GoogleClientSecrets.FromStream(stream).Secrets; 
+         ClientSecrets clientSecrets = GoogleClientSecrets.FromStream(stream).Secrets;
 
-         credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-               clientSecrets,
-               scopes,
-               user,
-               CancellationToken.None,
-               new FileDataStore(credPath, true))
-               .Result;
+        credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            clientSecrets,
+            scopes,
+            user,
+            CancellationToken.None,
+            new FileDataStore(credPath, true))
+            .Result;
+
+        //TODO: AuthorizationCodeFlow for async token request (and to deal with changing ports in google cloud platform)
+        //IAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
+        //        {
+        //            ClientSecrets = clientSecrets,
+        //            Scopes = scopes,
+        //            DataStore = new FileDataStore(credPath, true)
+        //});
+        //var result = await new AuthorizationCodeMvcApp(this, new FlowMetadata()).AuthorizeAsync(cancellationToken);
+
+        //if (result.Credential != null)
+        //    {
+
+        //    }
       }
       return credential;
    }

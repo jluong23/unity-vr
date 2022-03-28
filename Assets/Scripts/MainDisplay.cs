@@ -41,7 +41,7 @@ public class MainDisplay : MonoBehaviour
         {
             toggle.isOn = false;
         }
-        transform.position = mainCamera.transform.position + 5f * mainCamera.transform.forward + new Vector3(0,1f,0);
+        transform.position = mainCamera.transform.position + 3f * mainCamera.transform.forward - new Vector3(0,0.7f,0);
         foreach (SideMenu sideMenu in sideMenus)
         {
             sideMenu.Close();

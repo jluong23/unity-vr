@@ -9,15 +9,22 @@ public class LoginPopup : MonoBehaviour
     public GameObject loadPhotosPopup; 
     public InputField emailInput;
     public User user;
+    public GameObject mainCamera;
     // Start is called before the first frame update
     void Start()
     {
+        //move to front of camera
+        transform.position = mainCamera.transform.position + mainCamera.transform.forward * 3f + new Vector3(0,1f,0);
         emailInput.onValueChanged.AddListener(emailInputChanged);
         button = GetComponentInChildren<Button>();
         button.interactable = false;
         button.onClick.AddListener(buttonClicked);
         // TODO: default login for testing
         emailInput.text = "jluong1@sheffield.ac.uk";
+        //emailInput.text = "jamesluong@hotmail.co.uk";
+
+        //TODO: hide loadPhotos popup (which should be after clicking logging in)
+        loadPhotosPopup.transform.position = new Vector3(0,200,0);
     }
 
     void buttonClicked(){
