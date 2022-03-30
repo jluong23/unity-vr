@@ -18,8 +18,12 @@ public class CategoryMenu : SideMenu
         setToggles();
     }
 
+    /// <summary>
+        /// add toggles with category names, excluding the category counts.
+        /// Used temporarily before user logs in, showing all categories.
+    /// </summary>
     void setToggles(){
-        /// add toggle with category names, excluding the category counts
+        // used
         Clear();
         foreach (var category in ContentFilter.ALL_CATEGORIES)
         {
@@ -29,24 +33,31 @@ public class CategoryMenu : SideMenu
         }
     }
 
+    /// <summary>
+    /// add toggles with category names and counts, ordering by highest category count.
+    /// Used when a different category selection has been made.
+    /// </summary>
+    /// <param name="categoryCounts"></param>
     public void setToggles(Dictionary<string, int> categoryCounts){
-        /// add toggle with category names and counts, ordering by highest category count
         Clean();
-        List<string> orderedCategories = new List<string>(ContentFilter.ALL_CATEGORIES);
-        // filter out categories with count = 0
-        orderedCategories = new List<string>(orderedCategories.Where(
-            i => categoryCounts[i] > 0 
+        List<string> selectedCategories = getSelectedCategories(); 
+        // initialise new categories, starting with all categories
+        List<string> newCategories = new List<string>(ContentFilter.ALL_CATEGORIES);
+        // filter out categories with count = 0 or categories which are currently selected
+        newCategories = new List<string>(newCategories.Where(
+            i => categoryCounts[i] > 0 &&
+            !selectedCategories.Contains(i)
         ));
         // sort categories by order
-        orderedCategories.Sort( 
+        newCategories.Sort( 
             (a,b) => categoryCounts[a].CompareTo(categoryCounts[b])
         );
         // reverse order, categories with lowest counts are pushed to bottom
         // of category selection menu and vice versa
-        orderedCategories.Reverse();
+        newCategories.Reverse();
 
         // start placing category toggles
-        foreach (var category in orderedCategories)
+        foreach (var category in newCategories)
         {
             GameObject newCategoryObj = Instantiate(categoryTogglePrefab, content.transform);
             newCategoryObj.GetComponentInChildren<CategoryToggle>().setCategory(category);
@@ -71,6 +82,7 @@ public class CategoryMenu : SideMenu
         /// Clear all category toggles apart from the selected ones
         List<string> selectedCategories = getSelectedCategories(); 
         foreach (Transform toggle in content.transform) {
+            // iterate over dropdown list options, remove options which aren't selected
             string toggleCategory = toggle.GetComponent<CategoryToggle>().getCategory();
             if(!selectedCategories.Contains(toggleCategory)){
                 Destroy(toggle.gameObject);

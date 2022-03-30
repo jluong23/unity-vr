@@ -72,6 +72,7 @@ public class Gallery : MonoBehaviour
             // get photos with selected categories and time
             List<string> selectedCategories = categoryMenu.getSelectedCategories();
             Tuple<DateTime, DateTime> currentDateRange = dateMenu.getCurrentDateRange();
+            // find the new photos given the current category and date selection
             List<MediaItem> newPhotos = user.photos.getPhotos(selectedCategories, currentDateRange);
             // only update photos if the photos are different
             if(!Enumerable.SequenceEqual(newPhotos, currentPhotos)) {
