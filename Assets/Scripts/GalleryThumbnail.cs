@@ -37,8 +37,10 @@ public class GalleryThumbnail : MonoBehaviour
     private IEnumerator SetTextureCoroutine()
     {
         if(mediaItem.texture == null){
-            // append =d to the request to download the image
-            UnityWebRequest request = UnityWebRequestTexture.GetTexture(mediaItem.baseUrl + "=d");
+            // append =d to the request to download the image.
+            // width and height constraints for thumbnail also requested
+            
+            UnityWebRequest request = UnityWebRequestTexture.GetTexture(mediaItem.baseUrl + string.Format("=w{0}-h{1}-c-d", MediaItem.THUMBNAIL_WIDTH, MediaItem.THUMBNAIL_HEIGHT));
             // yield return: returns to main thread whilst sending the request
             yield return request.SendWebRequest();
             if(request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)

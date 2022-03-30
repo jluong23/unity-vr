@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 
 public class MediaItem
 {
+   public static int THUMBNAIL_WIDTH = 200;
+   public static int THUMBNAIL_HEIGHT = 200;
    public string id;
    public string description;
    public string productUrl;
