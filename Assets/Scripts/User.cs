@@ -8,23 +8,50 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System.Text;
-
+using Google.Apis.Util.Store;
+using System.Threading;
 public class User : MonoBehaviour{
 
    static private string PHOTOS_SAVE_PATH = "Assets/token/";
+   static private string[] scopes = {
+      "https://www.googleapis.com/auth/photoslibrary.readonly", "https://www.googleapis.com/auth/gmail.readonly"
+   };
 
    public string email;
    public bool categorisePhotos;
    public string username;
    private string photosSavePath;
    public UserPhotos photos;
-
+   // the credential for user
+   public UserCredential credential;
    public void Login(string email)
    {
       this.email = email; 
       username = email.Split('@')[0];
       photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
       photos = new UserPhotos(this, photosSavePath); // initialise photos as empty
+      setCredential();
+      StartCoroutine(findEmail());
+   }
+
+   private void setCredential(){
+      using (var stream = new FileStream("Assets/credentials.json", FileMode.Open, FileAccess.Read))
+      {
+         // The file token.json stores the user's access and refresh tokens, and is created
+         // automatically when the authorization flow completes for the first time.
+         string credPath = "Assets/token";
+         ClientSecrets clientSecrets = GoogleClientSecrets.FromStream(stream).Secrets;
+         CancellationTokenSource cts = new CancellationTokenSource();
+         cts.CancelAfter(TimeSpan.FromSeconds(60)); //60 seconds to complete login
+
+         credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+               clientSecrets,
+               scopes,
+               "user",
+               cts.Token,
+               new FileDataStore(credPath, true))
+               .Result;
+      }
    }
 
    // function which populates user.photos 
@@ -40,7 +67,6 @@ public class User : MonoBehaviour{
    /// <param name="jsonBody"></param>
    /// <returns></returns>
    private UnityWebRequest createUnityWebRequest(string link, string method, string jsonBody){
-      UserCredential credential = photos.credential;
       UnityWebRequest unityWebRequest = null;
       if(method == "POST"){
          unityWebRequest = UnityWebRequest.Post(link, "");
@@ -128,4 +154,19 @@ public class User : MonoBehaviour{
          yield return null;
       }
    }
+   private IEnumerator findEmail(){
+      //load up to max photos
+      string link = "https://gmail.googleapis.com/gmail/v1/users/me/profile";
+      UnityWebRequest unityWebRequest = createUnityWebRequest(link, "GET", "");
+
+      yield return unityWebRequest.SendWebRequest();
+      if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
+         Debug.Log(unityWebRequest.error);
+      }else{
+         // successful
+         string responseString = unityWebRequest.downloadHandler.text;
+         Debug.Log(responseString);
+      }
+   }         
+
 }
