@@ -21,7 +21,10 @@ public class UserPhotos{
    [JsonProperty]
    // dictionary from category to count in allPhotos
    public Dictionary<string, int> initialCategoryCounts;
+   // max number of photos in library to load
    public static int MAX_PHOTOS = 100;
+   // max number in each category 
+   public static int MAX_PHOTOS_PER_CATEGORY = 50;
    // the credential for user photos
    public UserCredential credential;
    // if the user photo variables (allPhotos and initialCategoryCounts) are fully loaded in with all albums, useful for unity coroutine conditions
@@ -50,20 +53,6 @@ public class UserPhotos{
             CancellationToken.None,
             new FileDataStore(credPath, true))
             .Result;
-
-        //TODO: AuthorizationCodeFlow for async token request (and to deal with changing ports in google cloud platform)
-        //IAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
-        //        {
-        //            ClientSecrets = clientSecrets,
-        //            Scopes = scopes,
-        //            DataStore = new FileDataStore(credPath, true)
-        //});
-        //var result = await new AuthorizationCodeMvcApp(this, new FlowMetadata()).AuthorizeAsync(cancellationToken);
-
-        //if (result.Credential != null)
-        //    {
-
-        //    }
       }
       return credential;
    }
@@ -90,7 +79,9 @@ public class UserPhotos{
 
       }else{
          Debug.Log("Could not find an existing save for " + user.username);
-         initialCategoryCounts = new Dictionary<string, int>();
+         // initialise category counts, all categories to a count of 0 images
+         initialCategoryCounts = ContentFilter.ALL_CATEGORIES.ToDictionary(x => x, x => 0);
+         Debug.Log(string.Join(", ", initialCategoryCounts.Keys.ToList()));
          allPhotos = new Dictionary<string, MediaItem>();
          this.loaded = false; // not loaded, initialises as empty photos and category counts
          this.hasSave = false;

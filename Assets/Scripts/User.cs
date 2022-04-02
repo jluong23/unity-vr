@@ -75,14 +75,13 @@ public class User : MonoBehaviour{
 
    private IEnumerator performCategorisation(){ 
       string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-      int maxPhotos = 50; //per category
       if(categorisePhotos){
          // perform categorisation process
          string[] includedCategories = ContentFilter.ALL_CATEGORIES;
          foreach (var category in includedCategories)
          {
             // perform post request for each category (api calls = num categories)
-            MediaItemSearchRequest searchReq = new MediaItemSearchRequest(maxPhotos, new string[]{category}, new string[] {}); //no excluded categories
+            MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_CATEGORY, new string[]{category}, new string[] {}); //no excluded categories
             string jsonBody = searchReq.getJson(); 
             // perform post request
             UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", jsonBody);
@@ -97,11 +96,15 @@ public class User : MonoBehaviour{
                if(responseObject.mediaItems != null && responseObject.mediaItems.Count > 0){
                   foreach (var mediaItem in responseObject.mediaItems)
                   {
-                     // add category to according photo in allPhotos by id
-                     photos.allPhotos[mediaItem.id].categories.Add(category);
+                     // categorisation may retrieve images which are not part of photos.allPhotos due to the 
+                     // UserPhotos.MAX_PHOTOS limit. Only use the loaded images in photos.allPhotos
+                     if(photos.allPhotos.ContainsKey(mediaItem.id)){
+                        // add category to according photo in allPhotos by id
+                        photos.allPhotos[mediaItem.id].categories.Add(category);
+                        // increment category count for this category
+                        photos.initialCategoryCounts[category]++;
+                     }
                   }
-                  // set category counts for this category
-                  photos.initialCategoryCounts[category] = responseObject.mediaItems.Count;
                }else{
                   // set category counts to 0 for this category
                   photos.initialCategoryCounts[category] = 0; 

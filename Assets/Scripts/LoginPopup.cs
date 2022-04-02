@@ -20,8 +20,8 @@ public class LoginPopup : MonoBehaviour
         button.interactable = false;
         button.onClick.AddListener(buttonClicked);
         // TODO: default login for testing
-        emailInput.text = "jluong1@sheffield.ac.uk";
-        //emailInput.text = "jamesluong@hotmail.co.uk";
+        // emailInput.text = "jluong1@sheffield.ac.uk";
+        emailInput.text = "jamesluong@hotmail.co.uk";
 
         //TODO: hide loadPhotos popup (which should be after clicking logging in)
         loadPhotosPopup.transform.position = new Vector3(0,200,0);
