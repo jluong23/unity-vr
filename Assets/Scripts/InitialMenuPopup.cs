@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InitialPopup : MonoBehaviour
+public class InitialMenuPopup : MonoBehaviour
 {
     private Button startButton;
-    public GameObject loadPhotosPopup; 
-    public User user;
+    public GameObject nextPopup; 
     public GameObject mainCamera;
+    public User user;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,12 +17,14 @@ public class InitialPopup : MonoBehaviour
         startButton = GetComponentInChildren<Button>();
         startButton.onClick.AddListener(buttonClicked);
 
-        //TODO: hide loadPhotos popup (which should be after clicking logging in)
-        loadPhotosPopup.transform.position = new Vector3(0,200,0);
+        //TODO: hide nextPopup (which should be after clicking logging in)
+        nextPopup.transform.position = new Vector3(0,200,0);
     }
 
     void buttonClicked(){
-        loadPhotosPopup.transform.position = gameObject.transform.position;
+        // replace next popup with this popup
+        nextPopup.transform.position = gameObject.transform.position;
+        gameObject.SetActive(false);
         user.Login();
     }
 }

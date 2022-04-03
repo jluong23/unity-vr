@@ -25,6 +25,8 @@ public class User : MonoBehaviour{
    public UserPhotos photos;
    // the credential for user
    public UserCredential credential;
+   public AuthorizationPopup authorizationMenuPopup;
+
    public void Login()
    {
       setCredential();
@@ -154,8 +156,8 @@ public class User : MonoBehaviour{
       }
    }
    /// <summary>
-   /// find user email from oauth token and initialise a new, empty UserPhotos 
-
+   /// find user email from oauth token and initialise a new, empty UserPhotos.
+   /// Allow the user to progress the authorization page after completed.
    /// </summary>
    /// <returns></returns>
    private IEnumerator setUserData(){
@@ -168,13 +170,14 @@ public class User : MonoBehaviour{
       }else{
          // successful, token data found
          string tokenDataJson = unityWebRequest.downloadHandler.text;
+         Debug.Log(tokenDataJson);
          Dictionary<string, string> tokenData = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenDataJson);
          this.email = tokenData["email"]; 
          this.username = email.Split('@')[0];
          photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
-         Debug.Log("Email found, username is " + username);
-         
          photos = new UserPhotos(this, photosSavePath); // initialise photos as empty
+         // allow user to progress the auth menu popup
+         authorizationMenuPopup.allowProgress(this.email);
       }
    }         
 

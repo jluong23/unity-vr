@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class loadPhotosPopup : MonoBehaviour
+public class LoadPhotosPopup : MonoBehaviour
 {    
     public Button closeButton;
     public Button loadPhotosButton;
@@ -49,5 +49,6 @@ public class loadPhotosPopup : MonoBehaviour
 
     void closeButtonClicked(){
         mainDisplay.Show();
+        gameObject.SetActive(false);
     }
 }
