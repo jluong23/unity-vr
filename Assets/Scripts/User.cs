@@ -10,11 +10,12 @@ using Newtonsoft.Json;
 using System.Text;
 using Google.Apis.Util.Store;
 using System.Threading;
+using System.Threading.Tasks;
 public class User : MonoBehaviour{
 
    static private string PHOTOS_SAVE_PATH = "Assets/token/";
    static private string[] scopes = {
-      "https://www.googleapis.com/auth/photoslibrary.readonly", "https://www.googleapis.com/auth/gmail.readonly"
+      "https://www.googleapis.com/auth/photoslibrary.readonly", "https://www.googleapis.com/auth/userinfo.email"
    };
 
    public string email;
@@ -24,17 +25,17 @@ public class User : MonoBehaviour{
    public UserPhotos photos;
    // the credential for user
    public UserCredential credential;
-   public void Login(string email)
+   public void Login()
    {
-      this.email = email; 
-      username = email.Split('@')[0];
-      photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
-      photos = new UserPhotos(this, photosSavePath); // initialise photos as empty
       setCredential();
-      StartCoroutine(findEmail());
    }
 
-   private void setCredential(){
+   /// <summary>
+   /// Using Assets/credential.json data, creates an oauth2 token asynchronously, storing in credPath.
+   /// After credential has been made, sets user data.
+   /// </summary>
+   /// <returns></returns>
+   private async void setCredential(){
       using (var stream = new FileStream("Assets/credentials.json", FileMode.Open, FileAccess.Read))
       {
          // The file token.json stores the user's access and refresh tokens, and is created
@@ -44,14 +45,12 @@ public class User : MonoBehaviour{
          CancellationTokenSource cts = new CancellationTokenSource();
          cts.CancelAfter(TimeSpan.FromSeconds(60)); //60 seconds to complete login
 
-         credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-               clientSecrets,
-               scopes,
-               "user",
-               cts.Token,
-               new FileDataStore(credPath, true))
-               .Result;
+         credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+            clientSecrets,scopes,"user",cts.Token,new FileDataStore(credPath, true));
       }
+      // credential found, set user email and photos
+      Debug.Log("Oauth credential created for user, finding email...");
+      StartCoroutine(setUserData());
    }
 
    // function which populates user.photos 
@@ -154,18 +153,28 @@ public class User : MonoBehaviour{
          yield return null;
       }
    }
-   private IEnumerator findEmail(){
-      //load up to max photos
-      string link = "https://gmail.googleapis.com/gmail/v1/users/me/profile";
+   /// <summary>
+   /// find user email from oauth token and initialise a new, empty UserPhotos 
+
+   /// </summary>
+   /// <returns></returns>
+   private IEnumerator setUserData(){
+      string link = "https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=" + credential.Token.AccessToken;
       UnityWebRequest unityWebRequest = createUnityWebRequest(link, "GET", "");
 
       yield return unityWebRequest.SendWebRequest();
       if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
          Debug.Log(unityWebRequest.error);
       }else{
-         // successful
-         string responseString = unityWebRequest.downloadHandler.text;
-         Debug.Log(responseString);
+         // successful, token data found
+         string tokenDataJson = unityWebRequest.downloadHandler.text;
+         Dictionary<string, string> tokenData = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenDataJson);
+         this.email = tokenData["email"]; 
+         this.username = email.Split('@')[0];
+         photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
+         Debug.Log("Email found, username is " + username);
+         
+         photos = new UserPhotos(this, photosSavePath); // initialise photos as empty
       }
    }         
 

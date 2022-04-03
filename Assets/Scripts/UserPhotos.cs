@@ -45,7 +45,7 @@ public class UserPhotos{
          // save exists and variables will be fully loaded in
          this.loaded = true;
          this.hasSave = true; 
-         Debug.Log("Loading data from " + savePath);
+         Debug.Log("Loading user photos data from " + savePath);
          StreamReader reader = new StreamReader(savePath);
          UserPhotos loadedData = JsonConvert.DeserializeObject<UserPhotos>(reader.ReadToEnd());
          reader.Close();
@@ -54,7 +54,7 @@ public class UserPhotos{
          this.categoriesLoaded = initialCategoryCounts.Count;
 
       }else{
-         Debug.Log("Could not find an existing save for " + user.username);
+         Debug.Log("Could not find an existing user photos save for " + user.username);
          // initialise category counts, all categories to a count of 0 images
          initialCategoryCounts = ContentFilter.ALL_CATEGORIES.ToDictionary(x => x, x => 0);
          allPhotos = new Dictionary<string, MediaItem>();
