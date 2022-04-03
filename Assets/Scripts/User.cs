@@ -57,7 +57,7 @@ public class User : MonoBehaviour{
 
    // function which populates user.photos 
    public void populatePhotosByAPI(){
-      StartCoroutine(loadPhotos());
+      StartCoroutine(loadPhotos(""));
    }
 
    /// <summary>
@@ -81,11 +81,15 @@ public class User : MonoBehaviour{
       unityWebRequest.downloadHandler = new DownloadHandlerBuffer();     
       return unityWebRequest;
    }
-   private IEnumerator loadPhotos(){
-      //load up to max photos
-      string link = "https://photoslibrary.googleapis.com/v1/mediaItems?pageSize=" + UserPhotos.MAX_PHOTOS;
+   /// <summary>
+   /// Used to populate user photos via the photos api.
+   /// </summary>
+   /// <param name="nextPageToken"></param>
+   /// <returns></returns>
+   private IEnumerator loadPhotos(string nextPageToken){
+      string link = string.Format("https://photoslibrary.googleapis.com/v1/mediaItems?pageSize={0}&pageToken={1}", UserPhotos.MAX_PHOTOS_PER_REQUEST, nextPageToken);
+      // Debug.Log(numPhotosToRetrieve);
       UnityWebRequest unityWebRequest = createUnityWebRequest(link, "GET", "");
-
       yield return unityWebRequest.SendWebRequest();
       if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
          Debug.Log(unityWebRequest.error);
@@ -93,10 +97,23 @@ public class User : MonoBehaviour{
          // successful
          string responseString = unityWebRequest.downloadHandler.text;
          MediaItemRequestResponse responseObject = JsonConvert.DeserializeObject<MediaItemRequestResponse>(responseString);
+         Debug.Log(responseString);
          // turn list of MediaItems into dictionary from ids to MediaItem
-         photos.allPhotos = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
-         // start categorising images in photos.allPhotos once they have all loaded in
-         StartCoroutine(performCategorisation());
+         Dictionary<string, MediaItem> responseDict = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
+         if(responseDict.Count + photos.allPhotos.Count > UserPhotos.MAX_PHOTOS){
+            // the next response dictionary will take us over the limit, reduce by necessary amount to match UserPhotos.MAX_PHOTOS
+            responseDict = responseDict.Take(UserPhotos.MAX_PHOTOS - photos.allPhotos.Count).ToDictionary(x => x.Key, x => x.Value);
+         }
+         // concatenate new photos from request with allPhotos, ignoring duplicate entries
+         photos.allPhotos = photos.allPhotos.Concat(responseDict.Where(x => !photos.allPhotos.Keys.Contains(x.Key))).ToDictionary(x => x.Key, x => x.Value);
+
+         if(responseObject.nextPageToken == null || photos.allPhotos.Count >= UserPhotos.MAX_PHOTOS){
+            // all photos loaded or maximum reached, start categorising images in photos.allPhotos
+            StartCoroutine(performCategorisation());
+         }else{
+            // keep loading photos, not all have loaded yet
+            StartCoroutine(loadPhotos(responseObject.nextPageToken));
+         }
       }
    }
 
@@ -170,7 +187,6 @@ public class User : MonoBehaviour{
       }else{
          // successful, token data found
          string tokenDataJson = unityWebRequest.downloadHandler.text;
-         Debug.Log(tokenDataJson);
          Dictionary<string, string> tokenData = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenDataJson);
          this.email = tokenData["email"]; 
          this.username = email.Split('@')[0];
