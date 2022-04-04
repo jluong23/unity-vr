@@ -55,7 +55,7 @@ public class User : MonoBehaviour{
       StartCoroutine(setUserData());
    }
 
-   // function which populates user.photos 
+   // function which populates photos 
    public void populatePhotosByAPI(){
       StartCoroutine(loadPhotos(""));
    }
@@ -88,7 +88,6 @@ public class User : MonoBehaviour{
    /// <returns></returns>
    private IEnumerator loadPhotos(string nextPageToken){
       string link = string.Format("https://photoslibrary.googleapis.com/v1/mediaItems?pageSize={0}&pageToken={1}", UserPhotos.MAX_PHOTOS_PER_REQUEST, nextPageToken);
-      // Debug.Log(numPhotosToRetrieve);
       UnityWebRequest unityWebRequest = createUnityWebRequest(link, "GET", "");
       yield return unityWebRequest.SendWebRequest();
       if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
@@ -97,17 +96,16 @@ public class User : MonoBehaviour{
          // successful
          string responseString = unityWebRequest.downloadHandler.text;
          MediaItemRequestResponse responseObject = JsonConvert.DeserializeObject<MediaItemRequestResponse>(responseString);
-         Debug.Log(responseString);
          // turn list of MediaItems into dictionary from ids to MediaItem
          Dictionary<string, MediaItem> responseDict = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
-         if(responseDict.Count + photos.allPhotos.Count > UserPhotos.MAX_PHOTOS){
-            // the next response dictionary will take us over the limit, reduce by necessary amount to match UserPhotos.MAX_PHOTOS
-            responseDict = responseDict.Take(UserPhotos.MAX_PHOTOS - photos.allPhotos.Count).ToDictionary(x => x.Key, x => x.Value);
+         if(responseDict.Count + photos.allPhotos.Count > photos.maxPhotos){
+            // the next response dictionary will take us over the limit, reduce by necessary amount to match photos.maxPhotos
+            responseDict = responseDict.Take(photos.maxPhotos - photos.allPhotos.Count).ToDictionary(x => x.Key, x => x.Value);
          }
          // concatenate new photos from request with allPhotos, ignoring duplicate entries
          photos.allPhotos = photos.allPhotos.Concat(responseDict.Where(x => !photos.allPhotos.Keys.Contains(x.Key))).ToDictionary(x => x.Key, x => x.Value);
 
-         if(responseObject.nextPageToken == null || photos.allPhotos.Count >= UserPhotos.MAX_PHOTOS){
+         if(responseObject.nextPageToken == null || photos.allPhotos.Count >= photos.maxPhotos){
             // all photos loaded or maximum reached, start categorising images in photos.allPhotos
             StartCoroutine(performCategorisation());
          }else{
@@ -141,7 +139,7 @@ public class User : MonoBehaviour{
                   foreach (var mediaItem in responseObject.mediaItems)
                   {
                      // categorisation may retrieve images which are not part of photos.allPhotos due to the 
-                     // UserPhotos.MAX_PHOTOS limit. Only use the loaded images in photos.allPhotos
+                     // UserPhotos.maxPhotos limit. Only use the loaded images in photos.allPhotos
                      if(photos.allPhotos.ContainsKey(mediaItem.id)){
                         // add category to according photo in allPhotos by id
                         photos.allPhotos[mediaItem.id].categories.Add(category);

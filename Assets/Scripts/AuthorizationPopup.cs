@@ -32,7 +32,7 @@ public class AuthorizationPopup : MonoBehaviour
     /// </summary>
     /// <param name="email"></param>
     public void allowProgress(string email){
-        progressText.text = string.Format("Progress: Completed\nEmail: {0}", email);
+        progressText.text = string.Format("Status: Completed\nEmail: {0}", email);
         startButton.interactable = true;
     }
 }

@@ -53,7 +53,8 @@ public class ImageInfoPanel : MonoBehaviour
         instantiatedImageFrame.transform.rotation = mainDisplay.transform.rotation;
         // set the texture of this thumbnails prefab
         instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);
-
         Close();
+        //close the main display when a frame is spawned in
+        mainDisplay.GetComponent<MainDisplay>().Close();
     }
 }

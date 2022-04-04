@@ -19,12 +19,12 @@ public class UserPhotos{
    [JsonProperty]
    // dictionary from category to count in allPhotos
    public Dictionary<string, int> initialCategoryCounts;
-   // max number of photos in library to load
-   public static int MAX_PHOTOS = 1000;
    //max photos per request when loading images, max is 100
    public static int MAX_PHOTOS_PER_REQUEST = 100;
    // max number in each category. max is 100 
    public static int MAX_PHOTOS_PER_CATEGORY = 100;
+   // max number of photos in library to load
+   public int maxPhotos;
    // if the user photo variables (allPhotos and initialCategoryCounts) are fully loaded in with all albums, useful for unity coroutine conditions
    public bool loaded;
    // if there exists a json save for the user
@@ -41,6 +41,7 @@ public class UserPhotos{
       /// </summary>
       this.user = user;
       this.savePath = savePath;
+      this.maxPhotos = 500;
 
       if(File.Exists(savePath)){
          // read stored data file if it exists
