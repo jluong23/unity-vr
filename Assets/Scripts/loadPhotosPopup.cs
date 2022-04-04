@@ -31,7 +31,9 @@ public class LoadPhotosPopup : MonoBehaviour
 
     void onDisplay()
     {
+        // set default value
         // skip the load button and max slider if a save exists
+        maxPhotosSliderChanged(); //run this once to update the starting handle value
         if (user.photos.hasSave)
         {
             loadPhotosButtonClicked();
