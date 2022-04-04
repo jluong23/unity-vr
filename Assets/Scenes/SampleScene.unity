@@ -4023,7 +4023,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 728460902}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -24.958}
   m_LocalScale: {x: 0.026976509, y: 0.030055331, z: 0.1}
   m_Children:
   - {fileID: 1781789665}
@@ -4032,7 +4032,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4.9799995, y: 2.04}
+  m_AnchoredPosition: {x: 3.2, y: 2.562}
   m_SizeDelta: {x: 52.4728, y: 52.6834}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &745520489
@@ -7388,7 +7388,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1404291183}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 44.4}
+  m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 2.2683454, y: 1.2181901, z: 1}
   m_Children:
   - {fileID: 847362368}
@@ -7397,7 +7397,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 367.35, y: 3.477}
+  m_AnchoredPosition: {x: 186.8, y: 4.9}
   m_SizeDelta: {x: 53.55, y: 59.908}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1415509453
@@ -8740,7 +8740,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1739814703}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 44.4}
+  m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 2.2683454, y: 1.2181901, z: 1}
   m_Children:
   - {fileID: 1622367893}
@@ -8749,7 +8749,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 516.07, y: 3.667}
+  m_AnchoredPosition: {x: 335.8, y: 5.1}
   m_SizeDelta: {x: 50.38, y: 60.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1739814710
@@ -10886,6 +10886,7 @@ MonoBehaviour:
   user: {fileID: 1453126921}
   bodyText: {fileID: 1058909324}
   sliderHandleValue: {fileID: 2097397504}
+  previousPanelButton: {fileID: 500111352}
 --- !u!114 &2008491713
 MonoBehaviour:
   m_ObjectHideFlags: 0
