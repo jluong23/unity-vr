@@ -116,44 +116,51 @@ public class User : MonoBehaviour{
    }
 
    private IEnumerator performCategorisation(){ 
-      string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
       if(categorisePhotos){
          // perform categorisation process
          string[] includedCategories = ContentFilter.ALL_CATEGORIES;
          foreach (var category in includedCategories)
          {
-            // perform post request for each category (api calls = num categories)
-            MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_CATEGORY, new string[]{category}, new string[] {}); //no excluded categories
-            string jsonBody = searchReq.getJson(); 
-            // perform post request
-            UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", jsonBody);
-            yield return unityWebRequest.SendWebRequest();
-            if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
-               Debug.Log(unityWebRequest.error);
-            }else{
-               // successful
-               string responseString = unityWebRequest.downloadHandler.text;
-               MediaItemRequestResponse responseObject = JsonConvert.DeserializeObject<MediaItemRequestResponse>(responseString);
-               // if photos exist for this category
-               if(responseObject.mediaItems != null && responseObject.mediaItems.Count > 0){
-                  foreach (var mediaItem in responseObject.mediaItems)
-                  {
-                     // categorisation may retrieve images which are not part of photos.allPhotos due to the 
-                     // UserPhotos.maxPhotos limit. Only use the loaded images in photos.allPhotos
-                     if(photos.allPhotos.ContainsKey(mediaItem.id)){
-                        // add category to according photo in allPhotos by id
-                        photos.allPhotos[mediaItem.id].categories.Add(category);
-                        // increment category count for this category
-                        photos.initialCategoryCounts[category]++;
+            bool categoryLoaded = false;
+            string nextPageToken = "";
+
+            while(!categoryLoaded){
+               string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
+               // perform post request for each category (api calls = num categories)
+               MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_CATEGORY, nextPageToken, new string[]{category}, new string[] {}); //no excluded categories
+               string jsonBody = searchReq.getJson(); 
+               // perform post request
+               UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", jsonBody);
+               yield return unityWebRequest.SendWebRequest();
+               if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
+                  Debug.Log(unityWebRequest.error);
+               }else{
+                  // successful
+                  string responseString = unityWebRequest.downloadHandler.text;
+                  MediaItemRequestResponse responseObject = JsonConvert.DeserializeObject<MediaItemRequestResponse>(responseString);
+                  // if photos exist for this category
+                  if(responseObject.mediaItems != null && responseObject.mediaItems.Count > 0){
+                     foreach (var mediaItem in responseObject.mediaItems)
+                     {
+                        // categorisation may retrieve images which are not part of photos.allPhotos due to the 
+                        // UserPhotos.maxPhotos limit. Only use the loaded images in photos.allPhotos
+                        if(photos.allPhotos.ContainsKey(mediaItem.id)){
+                           // add category to according photo in allPhotos by id
+                           photos.allPhotos[mediaItem.id].categories.Add(category);
+                           // increment category count for this category
+                           photos.initialCategoryCounts[category]++;
+                        }
                      }
                   }
-               }else{
-                  // set category counts to 0 for this category
-                  photos.initialCategoryCounts[category] = 0; 
+                  if(responseObject.nextPageToken == null){
+                     // should be last page of mediaItems for this category, therefore last iteration of while loop
+                     categoryLoaded = true;
+                     // categorisation has finished for this category, increment counter
+                     photos.categoriesLoaded++;
+                  }else{
+                     nextPageToken = responseObject.nextPageToken;
+                  }
                }
-               // categorisation has finished for this category, increment counter
-               photos.categoriesLoaded++;
-
             }
          }
          // finished categorising after all categories have been enumerated
@@ -162,7 +169,7 @@ public class User : MonoBehaviour{
 
       }
       else{
-         // categorise = false, all photos have empty category list
+         // categorisePhotos = false, all photos have empty category list
          foreach (var mediaItem in photos.allPhotos.Values)
          {
             mediaItem.categories = new List<string> {};

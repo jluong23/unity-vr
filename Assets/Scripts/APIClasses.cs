@@ -140,9 +140,10 @@ public class MediaItemSearchRequest
       this.pageSize = pageSize;
    }
 
-   public MediaItemSearchRequest(int pageSize, string[] includedCategories, string[] excludedCategories){
+   public MediaItemSearchRequest(int pageSize, string pageToken, string[] includedCategories, string[] excludedCategories){
       this.mediaFilter = new MediaFilter(includedCategories, excludedCategories);
       this.pageSize = pageSize;
+      this.pageToken = pageToken;
    }
 
    public string getJson(){
