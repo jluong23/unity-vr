@@ -45,10 +45,14 @@ public class User : MonoBehaviour{
          string credPath = "Assets/token";
          ClientSecrets clientSecrets = GoogleClientSecrets.FromStream(stream).Secrets;
          CancellationTokenSource cts = new CancellationTokenSource();
-         cts.CancelAfter(TimeSpan.FromSeconds(60)); //60 seconds to complete login
+         // cts.CancelAfter(TimeSpan.FromSeconds(60)); //60 seconds to complete login
 
          credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
             clientSecrets,scopes,"user",cts.Token,new FileDataStore(credPath, true));
+
+         //TODO: Refresh OAuth token if possible. Need to test this
+         // await credential.RefreshTokenAsync(new CancellationToken());
+         // await credential.GetAccessTokenForRequestAsync();
       }
       // credential found, set user email and photos
       Debug.Log("Oauth credential created for user, finding email...");
