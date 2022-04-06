@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6190879120755820313}
   - component: {fileID: 4552956596745213651}
   - component: {fileID: 1340555895162190225}
+  - component: {fileID: 3046278053045633762}
   m_Layer: 5
   m_Name: Gallery Thumbnail
   m_TagString: Untagged
@@ -130,3 +131,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8632bc8ff8bc7604c9b5a64a401dd602, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3046278053045633762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834709829531730453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 20
+  m_PreferredHeight: 20
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
