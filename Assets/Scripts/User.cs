@@ -50,9 +50,8 @@ public class User : MonoBehaviour{
          credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
             clientSecrets,scopes,"user",cts.Token,new FileDataStore(credPath, true));
 
-         //TODO: Refresh OAuth token if possible. Need to test this
-         // await credential.RefreshTokenAsync(new CancellationToken());
-         // await credential.GetAccessTokenForRequestAsync();
+         //Refresh OAuth token
+          await credential.GetAccessTokenForRequestAsync();
       }
       // credential found, set user email and photos
       Debug.Log("Oauth credential created for user, finding email...");

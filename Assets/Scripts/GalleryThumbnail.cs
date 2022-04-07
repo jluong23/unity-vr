@@ -7,24 +7,12 @@ using UnityEngine.Networking;
 public class GalleryThumbnail : MonoBehaviour
 {
     public MediaItem mediaItem;
-    private GameObject imageInfoPanel;
-    private void Start() {
-        imageInfoPanel = GameObject.Find("Image Info Panel");
-        GetComponent<Button>().onClick.AddListener(showImageInfoPanel);
-    }
-    private void showImageInfoPanel()
-    {
-        ImageInfoPanel imageInfoComponent = imageInfoPanel.GetComponent<ImageInfoPanel>();
-        // pass through media item object to info panel
-        imageInfoComponent.mediaItem = mediaItem;
-        // show info panel in front of this gallery thumbnail
-        Transform infoPanelParentTransform = imageInfoComponent.parentCanvas.transform;
-        infoPanelParentTransform.position = transform.position;
-        infoPanelParentTransform.rotation = transform.rotation;
-        // update the text for the selected thumbnail
-        imageInfoComponent.updateText(mediaItem);
-    }
+    private ImageInfoPanel imageInfoPanel;
 
+    private void Start() {
+        imageInfoPanel = GameObject.Find("Image Info Panel").GetComponent<ImageInfoPanel>();
+        GetComponent<Button>().onClick.AddListener(() => imageInfoPanel.Show(gameObject));
+    }
 
     public void displayTexture(MediaItem mediaItem){    
         // changes the image displayed on the frame

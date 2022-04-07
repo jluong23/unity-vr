@@ -8,53 +8,101 @@ public class ImageInfoPanel : MonoBehaviour
 {
     private Text fileNameText;
     private Text bodyText;
+    private GameObject instantiatedImageFrame;
     public GameObject parentCanvas;
     public GameObject imageFramePrefab;
     public MediaItem mediaItem;
+    public Button placeImageFrameButton;
+    public Button removeImageFrameButton;
+    public Button closeButton;
 
     public GameObject mainDisplay;
 
     // Start is called before the first frame update
     void Start()
-    {   
+    {
         parentCanvas = transform.parent.gameObject;
         fileNameText = transform.Find("File Name Text").GetComponent<Text>();
         bodyText = transform.Find("Body Text").GetComponent<Text>();
+        // buttons 
+        placeImageFrameButton.onClick.AddListener(placeButtonClicked);
+        removeImageFrameButton.onClick.AddListener(removeButtonClicked);
+        closeButton.onClick.AddListener(Close);
+        //Start closed
         Close();
     }
-    public void updateText(MediaItem mediaItem){
+    public void updateText(MediaItem mediaItem) {
         fileNameText.text = mediaItem.filename;
         DateTime dateTime = Convert.ToDateTime(mediaItem.mediaMetadata.creationTime);
-        string bodyFormat = "Categories: {0}\nDate: {1}\nLocation: {2}\nDescription: {3}"; 
-        bodyText.text = string.Format(bodyFormat, 
-            string.Join(",", mediaItem.categories), 
+        string bodyFormat = "Categories: {0}\nDate: {1}\nLocation: {2}\nDescription: {3}";
+        bodyText.text = string.Format(bodyFormat,
+            string.Join(",", mediaItem.categories),
             dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString(),
             "Test",
             mediaItem.description
         );
     }
 
-/// <summary>
-/// When the close button is clicked on the image info panel
-/// </summary>
-    public void Close(){
+    /// <summary>
+    /// When the close button is clicked on the image info panel
+    /// </summary>
+    public void Close() {
         // gameObject.SetActive(false);
         // TODO: hide the element by moving it out of the scene
-        parentCanvas.transform.position = new Vector3(0,200,0);
+        parentCanvas.transform.position = new Vector3(0, 200, 0);
     }
 
-/// <summary>
-/// When the place button is clicked on the image info panel
-/// </summary>
-    public void Place()
+    /// <summary>
+    /// When the place button is clicked on the image info panel
+    /// </summary>
+    public void placeButtonClicked()
     {
-        GameObject instantiatedImageFrame = Instantiate(imageFramePrefab, mainDisplay.transform.position - 0.2f*mainDisplay.transform.forward, Quaternion.identity);
+        instantiatedImageFrame = Instantiate(imageFramePrefab, mainDisplay.transform.position - 0.2f * mainDisplay.transform.forward, Quaternion.identity);
         // rotate the image frame in direction of main display
         instantiatedImageFrame.transform.rotation = mainDisplay.transform.rotation;
-        // set the texture of this thumbnails prefab
-        instantiatedImageFrame.GetComponent<ImageFrame>().setTexture(mediaItem);
+        // set the texture of this image frame prefab
+        ImageFrame imageFrameComponent = instantiatedImageFrame.GetComponent<ImageFrame>();
+        imageFrameComponent.setTexture(mediaItem);
+        imageFrameComponent.mediaItem = mediaItem;
         Close();
         //close the main display when a frame is spawned in
         mainDisplay.GetComponent<MainDisplay>().Close();
+    }
+
+    public void removeButtonClicked()
+    {
+        Close();
+        //remove the associated image frame
+        GameObject.Destroy(instantiatedImageFrame);
+    }
+
+    public void Show(GameObject objectClicked)
+    {
+        ImageFrame imageFrameComponent = objectClicked.GetComponent<ImageFrame>();
+        GalleryThumbnail galleryThumbnailComponent = objectClicked.GetComponent<GalleryThumbnail>();
+        
+        if (imageFrameComponent != null)
+        {
+            this.mediaItem = imageFrameComponent.mediaItem;
+            //Show the remove button, hide the place button
+            removeImageFrameButton.gameObject.SetActive(true);
+            placeImageFrameButton.gameObject.SetActive(false);
+        }
+        else if(galleryThumbnailComponent != null)
+        {
+            this.mediaItem = galleryThumbnailComponent.mediaItem;
+            //Show the place button, hide the remove button
+            placeImageFrameButton.gameObject.SetActive(true);
+            removeImageFrameButton.gameObject.SetActive(false);
+        }
+        if(this.mediaItem != null)
+        {
+            //spawn the image info panel in front of the object
+            Transform parentTransform = parentCanvas.transform;
+            parentTransform.position = objectClicked.transform.position + objectClicked.transform.forward*-1f;
+            parentTransform.rotation = objectClicked.transform.rotation;
+            // update the text for the selected thumbnail
+            updateText(mediaItem);
+        }
     }
 }
