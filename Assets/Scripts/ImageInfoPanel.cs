@@ -12,9 +12,9 @@ public class ImageInfoPanel : MonoBehaviour
     public GameObject parentCanvas;
     public GameObject imageFramePrefab;
     public MediaItem mediaItem;
-    public Button placeImageFrameButton;
-    public Button removeImageFrameButton;
-    public Button closeButton;
+    public GameObject placeImageFrameButton;
+    public GameObject removeImageFrameButton;
+    public GameObject closeButton;
 
     public GameObject mainDisplay;
 
@@ -24,10 +24,10 @@ public class ImageInfoPanel : MonoBehaviour
         parentCanvas = transform.parent.gameObject;
         fileNameText = transform.Find("File Name Text").GetComponent<Text>();
         bodyText = transform.Find("Body Text").GetComponent<Text>();
-        // buttons 
-        placeImageFrameButton.onClick.AddListener(placeButtonClicked);
-        removeImageFrameButton.onClick.AddListener(removeButtonClicked);
-        closeButton.onClick.AddListener(Close);
+        // button objects
+        placeImageFrameButton.GetComponent<Button>().onClick.AddListener(placeButtonClicked);
+        removeImageFrameButton.GetComponent<Button>().onClick.AddListener(removeButtonClicked);
+        closeButton.GetComponent<Button>().onClick.AddListener(Close);
         //Start closed
         Close();
     }
@@ -63,7 +63,6 @@ public class ImageInfoPanel : MonoBehaviour
         // set the texture of this image frame prefab
         ImageFrame imageFrameComponent = instantiatedImageFrame.GetComponent<ImageFrame>();
         imageFrameComponent.setTexture(mediaItem);
-        imageFrameComponent.mediaItem = mediaItem;
         Close();
         //close the main display when a frame is spawned in
         mainDisplay.GetComponent<MainDisplay>().Close();
@@ -83,19 +82,19 @@ public class ImageInfoPanel : MonoBehaviour
         
         if (imageFrameComponent != null)
         {
-            this.mediaItem = imageFrameComponent.mediaItem;
+            mediaItem = imageFrameComponent.mediaItem;
             //Show the remove button, hide the place button
-            removeImageFrameButton.gameObject.SetActive(true);
-            placeImageFrameButton.gameObject.SetActive(false);
+            removeImageFrameButton.SetActive(true);
+            placeImageFrameButton.SetActive(false);
         }
         else if(galleryThumbnailComponent != null)
         {
-            this.mediaItem = galleryThumbnailComponent.mediaItem;
+            mediaItem = galleryThumbnailComponent.mediaItem;
             //Show the place button, hide the remove button
-            placeImageFrameButton.gameObject.SetActive(true);
-            removeImageFrameButton.gameObject.SetActive(false);
+            placeImageFrameButton.SetActive(true);
+            removeImageFrameButton.SetActive(false);
         }
-        if(this.mediaItem != null)
+        if(mediaItem != null)
         {
             //spawn the image info panel in front of the object
             Transform parentTransform = parentCanvas.transform;

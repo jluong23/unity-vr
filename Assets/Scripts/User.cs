@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System.Text;
 using Google.Apis.Util.Store;
+using UnityEngine.XR.Interaction.Toolkit;
 using System.Threading;
 using System.Threading.Tasks;
 public class User : MonoBehaviour{
@@ -27,7 +28,7 @@ public class User : MonoBehaviour{
    public UserCredential credential;
    public AuthorizationPopup authorizationMenuPopup;
 
-   public void Login()
+    public void Login()
    {
       setCredential();
    }
@@ -48,7 +49,7 @@ public class User : MonoBehaviour{
          // cts.CancelAfter(TimeSpan.FromSeconds(60)); //60 seconds to complete login
 
          credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-            clientSecrets,scopes,"user",cts.Token,new FileDataStore(credPath, true));
+            clientSecrets,scopes,"user1",cts.Token,new FileDataStore(credPath, true));
 
          //Refresh OAuth token
           await credential.GetAccessTokenForRequestAsync();

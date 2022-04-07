@@ -1190,7 +1190,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectActionTrigger: 0
   m_HideControllerOnSelect: 0
-  m_AllowHoveredActivate: 0
+  m_AllowHoveredActivate: 1
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
@@ -1938,6 +1938,21 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1846461913}
+    - target: {fileID: -5104694664935048915, guid: 3f956b971c7d7424abae83b29bfd0c90,
+        type: 3}
+      propertyPath: m_FirstHoverEntered.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5104694664935048915, guid: 3f956b971c7d7424abae83b29bfd0c90,
+        type: 3}
+      propertyPath: m_FirstHoverEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5104694664935048915, guid: 3f956b971c7d7424abae83b29bfd0c90,
+        type: 3}
+      propertyPath: m_FirstHoverEntered.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1167771109445528143, guid: 3f956b971c7d7424abae83b29bfd0c90,
         type: 3}
       propertyPath: m_InteractionManager
@@ -4995,7 +5010,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Content: {fileID: 189361971}
   m_Horizontal: 0
-  m_Vertical: 1
+  m_Vertical: 0
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
@@ -8158,7 +8173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1415509454
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10573,9 +10588,9 @@ MonoBehaviour:
   parentCanvas: {fileID: 728460902}
   imageFramePrefab: {fileID: 1767163706062880629, guid: 3f956b971c7d7424abae83b29bfd0c90,
     type: 3}
-  placeImageFrameButton: {fileID: 1415509455}
-  removeImageFrameButton: {fileID: 1183534269}
-  closeButton: {fileID: 2009333108}
+  placeImageFrameButton: {fileID: 1415509453}
+  removeImageFrameButton: {fileID: 1183534267}
+  closeButton: {fileID: 2009333106}
   mainDisplay: {fileID: 1744282175}
 --- !u!1001 &1813857396
 PrefabInstance:
@@ -11271,7 +11286,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectActionTrigger: 0
   m_HideControllerOnSelect: 0
-  m_AllowHoveredActivate: 0
+  m_AllowHoveredActivate: 1
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0

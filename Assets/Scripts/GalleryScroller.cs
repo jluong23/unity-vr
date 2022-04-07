@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GalleryScroller : MonoBehaviour
 {
@@ -32,7 +33,10 @@ public class GalleryScroller : MonoBehaviour
         float rowHeight = contentLayout.cellSize.y + 1.667f*contentLayout.padding.top;
         Vector3 scrollDownRow = new Vector3(0,rowHeight,0);
         Vector3 topPosition = Vector3.zero;
-        Vector3 bottomPosition = topPosition + (scrollDownRow*(getGridRows()-2));
+        float bottomY =  content.transform.GetComponentsInChildren<Transform>().
+            Select(delegate (Transform t) { return t.localPosition.y; })
+            .ToList<float>().Min(); //the smallest y value out of content elements
+        Vector3 bottomPosition = new Vector3(0, -bottomY ,0); //
 
         switch (scrollDirection)
         {
@@ -40,14 +44,10 @@ public class GalleryScroller : MonoBehaviour
                 content.transform.localPosition = topPosition;
                 break;
             case ScrollDirection.UP_ROW: 
-                if(content.transform.localPosition != topPosition){
-                    content.transform.localPosition -= scrollDownRow;
-                }
+                content.transform.localPosition -= scrollDownRow;
                 break;
             case ScrollDirection.DOWN_ROW: 
-                if(content.transform.localPosition != bottomPosition){
-                    content.transform.localPosition += scrollDownRow;
-                }
+                content.transform.localPosition += scrollDownRow;
                 break;
             case ScrollDirection.BOTTOM: 
                 content.transform.localPosition = bottomPosition; 
