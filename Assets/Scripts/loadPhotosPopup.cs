@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadPhotosPopup : MonoBehaviour
+public class LoadPhotosPopup : MenuPopup
 {    
-    public Button closeButton;
     public Button loadPhotosButton;
     private Gallery gallery;
-    public MainDisplay mainDisplay;
     public User user;
     public Text bodyText;
     public Text sliderHandleValue;
@@ -16,13 +14,13 @@ public class LoadPhotosPopup : MonoBehaviour
     public Button previousPanelButton;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        closeButton.interactable = false;
+        base.Start();
+        continueButton.interactable = false;
         gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         //buttons
         loadPhotosButton.onClick.AddListener(loadPhotosButtonClicked);
-        closeButton.onClick.AddListener(closeButtonClicked);
         previousPanelButton.onClick.AddListener(onDisplay); //when this panel is shown (previous panel moves to this one)
         //slider for max userphotos
         slider = GetComponentInChildren<Slider>();
@@ -32,10 +30,10 @@ public class LoadPhotosPopup : MonoBehaviour
     void onDisplay()
     {
         // set default value
-        // skip the load button and max slider if a save exists
         maxPhotosSliderChanged(); //run this once to update the starting handle value
         if (user.photos.hasSave)
         {
+            // skip the load button and max slider if a save exists
             loadPhotosButtonClicked();
         }
     }
@@ -53,10 +51,10 @@ public class LoadPhotosPopup : MonoBehaviour
         slider.gameObject.SetActive(false);
         gallery.initPhotos();
         loadPhotosButton.interactable = false;
-        StartCoroutine(activateCloseButton());
+        StartCoroutine(activateContinueButton());
     }
 
-    IEnumerator activateCloseButton()
+    IEnumerator activateContinueButton()
     {
         while(!user.photos.loaded){
             // wait until photos have loaded, updating progress on categories and photos loaded
@@ -64,18 +62,13 @@ public class LoadPhotosPopup : MonoBehaviour
             yield return new WaitForSeconds(.5f);
         }
         updateBodyText();
-        // activate close button after all photos have loaded
-        closeButton.interactable = true;
+        // activate continue button after all photos have loaded
+        continueButton.interactable = true;
     }
 
     void updateBodyText(){
         int numTotalCategories = ContentFilter.ALL_CATEGORIES.Length;
         bodyText.text = string.Format("Photos loaded: {0}\nCategorisation: {1}/{2}", user.photos.allPhotos.Count, user.photos.categoriesLoaded, numTotalCategories);
 
-    }
-
-    void closeButtonClicked(){
-        mainDisplay.Show();
-        gameObject.SetActive(false);
     }
 }

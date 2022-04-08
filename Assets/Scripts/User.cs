@@ -14,7 +14,10 @@ using System.Threading;
 using System.Threading.Tasks;
 public class User : MonoBehaviour{
 
-   static private string PHOTOS_SAVE_PATH = "Assets/token/";
+   // where photos data is stored in json files
+   static public string PHOTOS_SAVE_PATH = "Assets/photos_data/";
+   // where oauth tokens are stored
+   static public string OAUTH_SAVE_PATH = PHOTOS_SAVE_PATH + "oauth/";
    static private string[] scopes = {
       "https://www.googleapis.com/auth/photoslibrary.readonly", "https://www.googleapis.com/auth/userinfo.email"
    };
@@ -28,9 +31,9 @@ public class User : MonoBehaviour{
    public UserCredential credential;
    public AuthorizationPopup authorizationMenuPopup;
 
-    public void Login()
+    public void Login(string username)
    {
-      setCredential();
+      setCredential(username);
    }
 
    /// <summary>
@@ -38,24 +41,22 @@ public class User : MonoBehaviour{
    /// After credential has been made, sets user data.
    /// </summary>
    /// <returns></returns>
-   private async void setCredential(){
+   private async void setCredential(string username){
+      this.username = username;
       using (var stream = new FileStream("Assets/credentials.json", FileMode.Open, FileAccess.Read))
       {
-         // The file token.json stores the user's access and refresh tokens, and is created
-         // automatically when the authorization flow completes for the first time.
-         string credPath = "Assets/token";
          ClientSecrets clientSecrets = GoogleClientSecrets.FromStream(stream).Secrets;
          CancellationTokenSource cts = new CancellationTokenSource();
          // cts.CancelAfter(TimeSpan.FromSeconds(60)); //60 seconds to complete login
 
          credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-            clientSecrets,scopes,"user1",cts.Token,new FileDataStore(credPath, true));
+            clientSecrets,scopes,username,cts.Token,new FileDataStore(OAUTH_SAVE_PATH, true));
 
          //Refresh OAuth token
           await credential.GetAccessTokenForRequestAsync();
       }
       // credential found, set user email and photos
-      Debug.Log("Oauth credential created for user, finding email...");
+      Debug.Log("Oauth credential created for " + username);
       StartCoroutine(setUserData());
    }
 
@@ -198,7 +199,6 @@ public class User : MonoBehaviour{
          string tokenDataJson = unityWebRequest.downloadHandler.text;
          Dictionary<string, string> tokenData = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenDataJson);
          this.email = tokenData["email"]; 
-         this.username = email.Split('@')[0];
          photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
          photos = new UserPhotos(this, photosSavePath); // initialise photos as empty
          // allow user to progress the auth menu popup
