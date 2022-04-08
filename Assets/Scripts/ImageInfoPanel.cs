@@ -32,15 +32,27 @@ public class ImageInfoPanel : MonoBehaviour
         Close();
     }
     public void updateText(MediaItem mediaItem) {
+        // Show file name in header
         fileNameText.text = mediaItem.filename;
+        // create body info of panel
         DateTime dateTime = Convert.ToDateTime(mediaItem.mediaMetadata.creationTime);
-        string bodyFormat = "Categories: {0}\nDate: {1}\nLocation: {2}\nDescription: {3}";
-        bodyText.text = string.Format(bodyFormat,
-            string.Join(",", mediaItem.categories),
-            dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString(),
-            "Test",
-            mediaItem.description
-        );
+        // dictionary from field string (date, albums...) to value string (the date taken, albums attached to...)
+        Dictionary<string, string> bodyDict = new Dictionary<string, string>();
+        bodyDict.Add("Categories", string.Join(",", mediaItem.categories));
+        bodyDict.Add("Date Taken", dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString());
+        // TODO: albums if exists
+        // if(mediaItem.albums.Count > 0){
+        //     bodyDict.Add("Albums", string.Format("Albums: {0}\n", string.Join(",", mediaItem.albums))); 
+        // }
+        if(mediaItem.description != null && mediaItem.description != ""){
+            bodyDict.Add("Description", mediaItem.description);
+        }
+        string output = "";
+        foreach (var item in bodyDict)
+        {
+            output += item.Key + ": " + item.Value + "\n";
+        }
+        bodyText.text = output;
     }
 
     /// <summary>
