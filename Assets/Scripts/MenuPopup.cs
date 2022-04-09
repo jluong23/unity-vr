@@ -11,7 +11,8 @@ public class MenuPopup : MonoBehaviour
 
     protected virtual void Start()
     {
-        Close();
+        gameObject.SetActive(false);
+
         if(continueButton != null){
             continueButton.onClick.AddListener(continueButtonClicked);
         }
@@ -21,8 +22,9 @@ public class MenuPopup : MonoBehaviour
         if(nextPopup != null){
             // replace next popup with this popup
             nextPopup.transform.position = gameObject.transform.position; 
+            nextPopup.SetActive(true);
         }
-        Close();
+        gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -32,12 +34,5 @@ public class MenuPopup : MonoBehaviour
     protected virtual void continueButtonClicked(GameObject nextPopup){
         this.nextPopup = nextPopup;
         continueButtonClicked();
-    }
-
-
-    public void Close() {
-        // gameObject.SetActive(false);
-        // TODO: hide the element by moving it out of the scene
-        transform.position = new Vector3(0, 200, 0);
     }
 }

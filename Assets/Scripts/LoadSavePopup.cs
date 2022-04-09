@@ -15,7 +15,7 @@ public class LoadSavePopup : MenuPopup
     protected override void Start()
     {
         //dont call base.Start()
-        Close();
+        gameObject.SetActive(false);
         saveButtons = GetComponentsInChildren<Button>();
 
         // find usernames in oauth folder

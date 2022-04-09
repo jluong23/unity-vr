@@ -13,6 +13,7 @@ public class InitialMenuPopup : MenuPopup
         //move to front of camera
         base.Start();
         transform.position = mainCamera.transform.position + mainCamera.transform.forward * 3f + new Vector3(0,1f,0);
+        gameObject.SetActive(true);
     }
 }
 

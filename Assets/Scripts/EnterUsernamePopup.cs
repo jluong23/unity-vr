@@ -10,7 +10,7 @@ public class EnterUsernamePopup : MenuPopup
     protected override void Start()
     {
         // don't use base.Start()
-        Close();
+        gameObject.SetActive(false);
         continueButton.onClick.AddListener(Login);
     }
 
