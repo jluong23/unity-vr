@@ -8,14 +8,19 @@ public class MenuPopup : MonoBehaviour
 
     public Button continueButton;
     public GameObject nextPopup;
+    public GameObject previousPopup;
+    public Button backButton;
 
     protected virtual void Start()
     {
-        gameObject.SetActive(false);
 
         if(continueButton != null){
             continueButton.onClick.AddListener(continueButtonClicked);
         }
+        if(backButton != null){
+            backButton.onClick.AddListener(backButtonClicked);
+        }
+        gameObject.SetActive(false);
     }
 
     protected virtual void continueButtonClicked(){
@@ -26,13 +31,12 @@ public class MenuPopup : MonoBehaviour
         }
         gameObject.SetActive(false);
     }
-
-    /// <summary>
-    /// Set and show the next popup, hiding this popup.
-    /// </summary>
-    /// <param name="nextPopup"></param>
-    protected virtual void continueButtonClicked(GameObject nextPopup){
-        this.nextPopup = nextPopup;
-        continueButtonClicked();
+    protected virtual void backButtonClicked(){
+        if(previousPopup != null){
+            // replace next popup with this popup
+            previousPopup.transform.position = gameObject.transform.position; 
+            previousPopup.SetActive(true);
+        }
+        gameObject.SetActive(false);
     }
 }

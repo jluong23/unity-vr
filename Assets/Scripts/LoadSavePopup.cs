@@ -7,7 +7,7 @@ using System.Linq;
 
 public class LoadSavePopup : MenuPopup
 {
-    private Button[] saveButtons;
+    private GameObject[] saveButtons;
     public GameObject newSavePopup;
     public GameObject existingSavePopup;
     public User user;
@@ -15,9 +15,9 @@ public class LoadSavePopup : MenuPopup
     protected override void Start()
     {
         //dont call base.Start()
-        gameObject.SetActive(false);
-        saveButtons = GetComponentsInChildren<Button>();
-
+        // assign back button
+        backButton.onClick.AddListener(backButtonClicked);
+        saveButtons = GameObject.FindGameObjectsWithTag("Save Button");
         // find usernames in oauth folder
         usernames = new List<string>();
         // exclude meta files
@@ -30,7 +30,7 @@ public class LoadSavePopup : MenuPopup
         // map event listeners to save buttons
         for (int i = 0; i < saveButtons.Length; i++)
         {
-            Button saveButton = saveButtons[i];
+            Button saveButton = saveButtons[i].GetComponent<Button>();
             string username = i < usernames.Count ? usernames[i] : null;
             if(username == null){
                 saveButton.onClick.AddListener(newSave);
@@ -39,6 +39,8 @@ public class LoadSavePopup : MenuPopup
                 saveButton.onClick.AddListener(delegate {loadSave(username);});
             }
         }
+        gameObject.SetActive(false);
+
     }
 
     void loadSave(string username){

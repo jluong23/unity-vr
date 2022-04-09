@@ -10,12 +10,19 @@ public class EnterUsernamePopup : MenuPopup
     protected override void Start()
     {
         // don't use base.Start()
-        gameObject.SetActive(false);
+        base.Start();
         continueButton.onClick.AddListener(Login);
     }
 
+    void Update()
+    {
+        if(usernameInputText.text == ""){
+            continueButton.interactable = false;
+        }else{
+            continueButton.interactable = true;
+        }
+    }
     void Login(){
         user.Login(usernameInputText.text);
-        base.continueButtonClicked(); //close this menu and open the next page
     }
 }
