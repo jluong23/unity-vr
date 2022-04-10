@@ -53,16 +53,15 @@ public class LoadSavePopup : MenuPopup
 
     IEnumerator loadSave(string username){
         user.Login(username);
-        if(user.oauthRefreshRequired){
-            // would need to reload the image set if the oauth expired (base links will return FORBIDDEN 403 error), 
-            // delete the previous image set, prompt user to load a new set
-
+        while(user.loggedIn == false){
+            // wait until user has logged in 
+            yield return new WaitForSeconds(.1f);
+        }
+        if(user.oauthRefreshRequired || !user.photos.hasSave){
+            // two cases, user does not has a save, or the oauth expired
+            // with expired oauth, would need to reload the image set download links for images will return FORBIDDEN 403 error.
             nextPopup = loadPhotosPopup;
         }else{
-            while(user.photos == null){
-                // wait until user has logged in 
-                yield return new WaitForSeconds(.1f);
-            }
             // open the main display right away
             gallery.initPhotos();
             nextPopup = mainDisplay;

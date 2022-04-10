@@ -28,6 +28,8 @@ public class User : MonoBehaviour{
 
    public string email;
    public bool categorisePhotos;
+   // when the logged in process has completed
+   public bool loggedIn;
    public string username;
    private string photosSavePath;
    public UserPhotos photos;
@@ -39,6 +41,7 @@ public class User : MonoBehaviour{
 
     public void Login(string username)
    {
+      loggedIn = false;
       setCredential(username);
    }
 
@@ -216,6 +219,8 @@ public class User : MonoBehaviour{
          // allow user to progress the auth menu popup
          authorizationMenuPopup.allowProgress(this.email);
       }
+
+      loggedIn = true;
    }         
 
 }
