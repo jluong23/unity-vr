@@ -16,7 +16,6 @@ public class LoadPhotosPopup : MenuPopup
     protected override void Start()
     {
         base.Start();
-        continueButton.interactable = false;
         gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         //buttons
         loadPhotosButton.onClick.AddListener(loadPhotosButtonClicked);
@@ -27,7 +26,7 @@ public class LoadPhotosPopup : MenuPopup
     }
     void maxPhotosSliderChanged()
     {
-        //Slider is currently 1-40, multiply by 100 for 100-4000 with steps of 100
+        //Slider is currently 1 to x scale, multiply by 100 for 100-100*x scale, with steps of 100
         int newValue = (int)slider.value * 100;
         sliderHandleValue.text = newValue.ToString();
         if(user.photos != null){
@@ -37,23 +36,27 @@ public class LoadPhotosPopup : MenuPopup
 
     void loadPhotosButtonClicked()
     {
+        // load button pressed, swap slider with bodyText with load progress
         slider.gameObject.SetActive(false);
+        updateBodyText();
+        backButton.interactable = false;
+        // start loading gallery images
         gallery.initPhotos();
         loadPhotosButton.interactable = false;
-        StartCoroutine(activateContinueButton());
+        StartCoroutine(whilstImagesLoading());
     }
 
-    IEnumerator activateContinueButton()
+    IEnumerator whilstImagesLoading()
     {
         while(!user.photos.loaded){
             // wait until photos have loaded, updating progress on categories and photos loaded
             updateBodyText();
             yield return new WaitForSeconds(.5f);
         }
-        updateBodyText();
-        // activate continue button after all photos have loaded
-        continueButton.interactable = true;
-    }
+        // although this panel has no continue button, simulate pressing continue from MenuPopup parent class,
+        // moving on to main display
+        continueButtonClicked();
+    }   
 
     void updateBodyText(){
         int numTotalCategories = ContentFilter.ALL_CATEGORIES.Length;
