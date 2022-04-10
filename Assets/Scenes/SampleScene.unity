@@ -1783,7 +1783,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Close
+  m_Text: Back
 --- !u!222 &140851927
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10169,6 +10169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   email: jluong1@sheffield.ac.uk
   categorisePhotos: 1
+  loggedIn: 0
   username: 
   authorizationMenuPopup: {fileID: 969416974}
   oauthRefreshRequired: 0
@@ -12237,7 +12238,7 @@ GameObject:
   - component: {fileID: 1772335957}
   - component: {fileID: 1772335956}
   m_Layer: 5
-  m_Name: Close Button
+  m_Name: Back Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12922,7 +12923,7 @@ MonoBehaviour:
   m_MinValue: 1
   m_MaxValue: 40
   m_WholeNumbers: 1
-  m_Value: 2
+  m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14681,9 +14682,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec7aeca04133c094eaa6e61b697fba7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continueButton: {fileID: 1772335956}
+  continueButton: {fileID: 0}
   nextPopup: {fileID: 1744282175}
-  backButton: {fileID: 0}
+  backButton: {fileID: 1772335956}
   loadPhotosButton: {fileID: 1402026881}
   user: {fileID: 1453126921}
   bodyText: {fileID: 1058909324}
