@@ -12,12 +12,16 @@ using Google.Apis.Util.Store;
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Threading;
 using System.Threading.Tasks;
+using Google.Apis.Auth.OAuth2.Responses;
 public class User : MonoBehaviour{
 
    // where photos data is stored in json files
    static public string PHOTOS_SAVE_PATH = "Assets/photos_data/";
    // where oauth tokens are stored
    static public string OAUTH_SAVE_PATH = PHOTOS_SAVE_PATH + "oauth/";
+   // in minutes. default is 60mins (1h)
+   public static int DEFAULT_OAUTH_EXPIRY_TIME = 60;
+
    static private string[] scopes = {
       "https://www.googleapis.com/auth/photoslibrary.readonly", "https://www.googleapis.com/auth/userinfo.email"
    };
@@ -30,6 +34,8 @@ public class User : MonoBehaviour{
    // the credential for user
    public UserCredential credential;
    public AuthorizationPopup authorizationMenuPopup;
+   // if the user needed to refresh their oauth token, as previous expired, record if refresh took place
+   public bool oauthRefreshRequired;
 
     public void Login(string username)
    {
@@ -52,8 +58,14 @@ public class User : MonoBehaviour{
          credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
             clientSecrets,scopes,username,cts.Token,new FileDataStore(OAUTH_SAVE_PATH, true));
 
-         //Refresh OAuth token
-          await credential.GetAccessTokenForRequestAsync();
+         //Refresh OAuth token if necessary. Record if an oauth refresh was required
+         TimeSpan diff = DateTime.UtcNow.Subtract(credential.Token.IssuedUtc);
+         if(diff.Minutes > DEFAULT_OAUTH_EXPIRY_TIME){
+            oauthRefreshRequired = true;
+            await credential.GetAccessTokenForRequestAsync();
+         }else{
+            oauthRefreshRequired = false;
+         }
       }
       // credential found, set user email and photos
       Debug.Log("Oauth credential created for " + username);

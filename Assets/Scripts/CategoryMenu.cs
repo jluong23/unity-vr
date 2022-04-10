@@ -14,7 +14,6 @@ public class CategoryMenu : SideMenu
 
     void Awake()
     {
-        gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         setToggles();
     }
 

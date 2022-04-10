@@ -1,4 +1,4 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +11,6 @@ public class LoadPhotosPopup : MenuPopup
     public Text bodyText;
     public Text sliderHandleValue;
     private Slider slider;
-    public Button previousPanelButton;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -21,29 +20,19 @@ public class LoadPhotosPopup : MenuPopup
         gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         //buttons
         loadPhotosButton.onClick.AddListener(loadPhotosButtonClicked);
-        previousPanelButton.onClick.AddListener(onDisplay); //when this panel is shown (previous panel moves to this one)
         //slider for max userphotos
         slider = GetComponentInChildren<Slider>();
         slider.onValueChanged.AddListener(delegate { maxPhotosSliderChanged(); });
+        maxPhotosSliderChanged(); // run once to update slider value
     }
-
-    void onDisplay()
-    {
-        // set default value
-        maxPhotosSliderChanged(); //run this once to update the starting handle value
-        if (user.photos.hasSave)
-        {
-            // skip the load button and max slider if a save exists
-            loadPhotosButtonClicked();
-        }
-    }
-
     void maxPhotosSliderChanged()
     {
-        //want 0 from 2000 in steps of 20. Multiply value from 0 to 20 by 100
+        //Slider is currently 1-40, multiply by 100 for 100-4000 with steps of 100
         int newValue = (int)slider.value * 100;
-        user.photos.maxPhotos = newValue;
         sliderHandleValue.text = newValue.ToString();
+        if(user.photos != null){
+            user.photos.maxPhotos = (int)newValue; // update maxphotos variable in user.photos
+        }
     }
 
     void loadPhotosButtonClicked()

@@ -6521,7 +6521,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   continueButton: {fileID: 500111352}
   nextPopup: {fileID: 2008491711}
-  previousPopup: {fileID: 971451748}
   backButton: {fileID: 1288338980}
   progressText: {fileID: 817196292}
 --- !u!114 &969416975
@@ -6875,7 +6874,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   continueButton: {fileID: 699495002}
   nextPopup: {fileID: 969416972}
-  previousPopup: {fileID: 1709229423}
   backButton: {fileID: 1219003262}
   user: {fileID: 1453126921}
   usernameInputText: {fileID: 2045785729}
@@ -10173,6 +10171,7 @@ MonoBehaviour:
   categorisePhotos: 1
   username: 
   authorizationMenuPopup: {fileID: 969416974}
+  oauthRefreshRequired: 0
 --- !u!1 &1463722314
 GameObject:
   m_ObjectHideFlags: 0
@@ -10483,7 +10482,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   continueButton: {fileID: 316288880}
   nextPopup: {fileID: 1709229423}
-  previousPopup: {fileID: 0}
   backButton: {fileID: 0}
   mainCamera: {fileID: 427299811}
 --- !u!114 &1505015227
@@ -11263,7 +11261,6 @@ GameObject:
   - component: {fileID: 1632458245}
   - component: {fileID: 1632458244}
   - component: {fileID: 1632458247}
-  - component: {fileID: 1632458248}
   m_Layer: 5
   m_Name: Gallery Scroll Options
   m_TagString: Untagged
@@ -11375,19 +11372,6 @@ MonoBehaviour:
   rowUpButton: {fileID: 827935078}
   rowDownButton: {fileID: 1431371072}
   toBottomButton: {fileID: 1202615518}
---- !u!114 &1632458248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1632458242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1d3892a8cfde4a46bdf910e04856d7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activateButton: {fileID: 1772335956}
 --- !u!1 &1676563200
 GameObject:
   m_ObjectHideFlags: 0
@@ -11802,11 +11786,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   continueButton: {fileID: 0}
-  nextPopup: {fileID: 0}
-  previousPopup: {fileID: 1505015225}
+  nextPopup: {fileID: 971451748}
   backButton: {fileID: 119659415}
-  newSavePopup: {fileID: 971451748}
-  existingSavePopup: {fileID: 969416972}
+  loadPhotosPopup: {fileID: 2008491711}
+  mainDisplay: {fileID: 1744282175}
   user: {fileID: 1453126921}
 --- !u!1 &1714589291
 GameObject:
@@ -12936,10 +12919,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1124157428}
   m_HandleRect: {fileID: 1832697177}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 20
+  m_MinValue: 1
+  m_MaxValue: 40
   m_WholeNumbers: 1
-  m_Value: 20
+  m_Value: 2
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14700,13 +14683,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   continueButton: {fileID: 1772335956}
   nextPopup: {fileID: 1744282175}
-  previousPopup: {fileID: 0}
   backButton: {fileID: 0}
   loadPhotosButton: {fileID: 1402026881}
   user: {fileID: 1453126921}
   bodyText: {fileID: 1058909324}
   sliderHandleValue: {fileID: 2097397504}
-  previousPanelButton: {fileID: 500111352}
 --- !u!114 &2008491713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15706,7 +15687,6 @@ GameObject:
   - component: {fileID: 2082667217}
   - component: {fileID: 2082667219}
   - component: {fileID: 2082667218}
-  - component: {fileID: 2082667220}
   m_Layer: 5
   m_Name: Navigation Panel
   m_TagString: Untagged
@@ -15776,19 +15756,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082667216}
   m_CullTransparentMesh: 1
---- !u!114 &2082667220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2082667216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1d3892a8cfde4a46bdf910e04856d7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activateButton: {fileID: 1772335956}
 --- !u!1 &2097397502
 GameObject:
   m_ObjectHideFlags: 0

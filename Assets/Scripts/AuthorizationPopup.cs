@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class AuthorizationPopup : MenuPopup
 {
-    private Button startButton;
     public Text progressText;
 
     // Start is called before the first frame update
@@ -13,8 +12,7 @@ public class AuthorizationPopup : MenuPopup
     {
         base.Start();
         // transform of popup is positioned by MenuPopup
-        startButton = GetComponentInChildren<Button>();
-        startButton.interactable = false;
+        continueButton.interactable = false;
     }
 
     /// <summary>
@@ -23,6 +21,6 @@ public class AuthorizationPopup : MenuPopup
     /// <param name="email"></param>
     public void allowProgress(string email){
         progressText.text = string.Format("Status: Completed\nEmail: {0}", email);
-        startButton.interactable = true;
+        continueButton.interactable = true;
     }
 }

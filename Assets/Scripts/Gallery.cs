@@ -33,17 +33,14 @@ public class Gallery : MonoBehaviour
         // update the start and end date ranges
         dateMenu.setMaxDateRanges(user.photos);
         populateGrid();
-        // save the user data if a save does not exist
-        if(!user.photos.hasSave){
-            // wait a second, coroutines are funky at times
-            yield return new WaitForSeconds(1f);
-            user.photos.saveData();
+        // save the user data
+        user.photos.saveData();
 
-        }
     }
 
     // ran when the 'show photos data' button is pressed for the first time
     public void initPhotos(){
+        // load the user data if a save does not exist
         if(!user.photos.hasSave){
             user.populatePhotosByAPI();
         }
