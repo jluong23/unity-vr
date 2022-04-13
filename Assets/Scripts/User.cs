@@ -32,7 +32,7 @@ public class User : MonoBehaviour{
    public bool loggedIn;
    public string username;
    private string photosSavePath;
-   public UserPhotos photos;
+   public UserPhotos libraryPhotos;
    // the credential for user
    public UserCredential credential;
    public AuthorizationPopup authorizationMenuPopup;
@@ -63,13 +63,13 @@ public class User : MonoBehaviour{
 
          //Refresh OAuth token if necessary. Record if an oauth refresh was required
          TimeSpan diff = DateTime.UtcNow.Subtract(credential.Token.IssuedUtc);
-         if(diff.Minutes > DEFAULT_OAUTH_EXPIRY_TIME){
+         if(diff.TotalMinutes > DEFAULT_OAUTH_EXPIRY_TIME){
             oauthRefreshRequired = true;
             await credential.GetAccessTokenForRequestAsync();
          }else{
             oauthRefreshRequired = false;
          }
-      }
+      }  
       // credential found, set user email and photos
       Debug.Log("Oauth credential created for " + username);
       StartCoroutine(setUserData());
@@ -107,8 +107,11 @@ public class User : MonoBehaviour{
    /// <param name="nextPageToken"></param>
    /// <returns></returns>
    private IEnumerator loadPhotos(string nextPageToken){
-      string link = string.Format("https://photoslibrary.googleapis.com/v1/mediaItems?pageSize={0}&pageToken={1}", UserPhotos.MAX_PHOTOS_PER_REQUEST, nextPageToken);
-      UnityWebRequest unityWebRequest = createUnityWebRequest(link, "GET", "");
+      string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
+      // perform post request to get all photos for the given album
+      MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_REQUEST, nextPageToken, new string[]{}, new string[] {}); //no categories
+      // perform post request
+      UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", searchReq.getJson());
       yield return unityWebRequest.SendWebRequest();
       if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
          Debug.Log(unityWebRequest.error);
@@ -118,14 +121,14 @@ public class User : MonoBehaviour{
          MediaItemRequestResponse responseObject = JsonConvert.DeserializeObject<MediaItemRequestResponse>(responseString);
          // turn list of MediaItems into dictionary from ids to MediaItem
          Dictionary<string, MediaItem> responseDict = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
-         if(responseDict.Count + photos.allPhotos.Count > photos.maxPhotos){
+         if(responseDict.Count + libraryPhotos.allPhotos.Count > libraryPhotos.maxPhotos){
             // the next response dictionary will take us over the limit, reduce by necessary amount to match photos.maxPhotos
-            responseDict = responseDict.Take(photos.maxPhotos - photos.allPhotos.Count).ToDictionary(x => x.Key, x => x.Value);
+            responseDict = responseDict.Take(libraryPhotos.maxPhotos - libraryPhotos.allPhotos.Count).ToDictionary(x => x.Key, x => x.Value);
          }
          // concatenate new photos from request with allPhotos, ignoring duplicate entries
-         photos.allPhotos = photos.allPhotos.Concat(responseDict.Where(x => !photos.allPhotos.Keys.Contains(x.Key))).ToDictionary(x => x.Key, x => x.Value);
+         libraryPhotos.allPhotos = libraryPhotos.allPhotos.Concat(responseDict.Where(x => !libraryPhotos.allPhotos.Keys.Contains(x.Key))).ToDictionary(x => x.Key, x => x.Value);
 
-         if(responseObject.nextPageToken == null || photos.allPhotos.Count >= photos.maxPhotos){
+         if(responseObject.nextPageToken == null || libraryPhotos.allPhotos.Count >= libraryPhotos.maxPhotos){
             // all photos loaded or maximum reached, start categorising images in photos.allPhotos
             StartCoroutine(performCategorisation());
          }else{
@@ -139,18 +142,17 @@ public class User : MonoBehaviour{
       if(categorisePhotos){
          // perform categorisation process
          string[] includedCategories = ContentFilter.ALL_CATEGORIES;
+         string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
          foreach (var category in includedCategories)
          {
             bool categoryLoaded = false;
             string nextPageToken = "";
 
             while(!categoryLoaded){
-               string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
                // perform post request for each category (api calls = num categories)
                MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_CATEGORY, nextPageToken, new string[]{category}, new string[] {}); //no excluded categories
-               string jsonBody = searchReq.getJson(); 
                // perform post request
-               UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", jsonBody);
+               UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", searchReq.getJson());
                yield return unityWebRequest.SendWebRequest();
                if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
                   Debug.Log(unityWebRequest.error);
@@ -164,11 +166,11 @@ public class User : MonoBehaviour{
                      {
                         // categorisation may retrieve images which are not part of photos.allPhotos due to the 
                         // UserPhotos.maxPhotos limit. Only use the loaded images in photos.allPhotos
-                        if(photos.allPhotos.ContainsKey(mediaItem.id)){
+                        if(libraryPhotos.allPhotos.ContainsKey(mediaItem.id)){
                            // add category to according photo in allPhotos by id
-                           photos.allPhotos[mediaItem.id].categories.Add(category);
+                           libraryPhotos.allPhotos[mediaItem.id].categories.Add(category);
                            // increment category count for this category
-                           photos.initialCategoryCounts[category]++;
+                           libraryPhotos.initialCategoryCounts[category]++;
                         }
                      }
                   }
@@ -176,7 +178,7 @@ public class User : MonoBehaviour{
                      // should be last page of mediaItems for this category, therefore last iteration of while loop
                      categoryLoaded = true;
                      // categorisation has finished for this category, increment counter
-                     photos.categoriesLoaded++;
+                     libraryPhotos.categoriesLoaded++;
                   }else{
                      nextPageToken = responseObject.nextPageToken;
                   }
@@ -184,13 +186,13 @@ public class User : MonoBehaviour{
             }
          }
          // finished categorising after all categories have been enumerated
-         photos.loaded = true;
+         libraryPhotos.loaded = true;
 
 
       }
       else{
          // categorisePhotos = false, all photos have empty category list
-         foreach (var mediaItem in photos.allPhotos.Values)
+         foreach (var mediaItem in libraryPhotos.allPhotos.Values)
          {
             mediaItem.categories = new List<string> {};
          }
@@ -215,7 +217,7 @@ public class User : MonoBehaviour{
          Dictionary<string, string> tokenData = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenDataJson);
          this.email = tokenData["email"]; 
          photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
-         photos = new UserPhotos(this, photosSavePath); // initialise photos as empty
+         libraryPhotos = new UserPhotos(this, photosSavePath); // initialise photos as empty
          // allow user to progress the auth menu popup
          authorizationMenuPopup.allowProgress(this.email);
       }

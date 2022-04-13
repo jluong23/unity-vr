@@ -29,8 +29,8 @@ public class LoadPhotosPopup : MenuPopup
         //Slider is currently 1 to x scale, multiply by 100 for 100-100*x scale, with steps of 100
         int newValue = (int)slider.value * 100;
         sliderHandleValue.text = newValue.ToString();
-        if(user.photos != null){
-            user.photos.maxPhotos = (int)newValue; // update maxphotos variable in user.photos
+        if(user.libraryPhotos != null){
+            user.libraryPhotos.maxPhotos = (int)newValue; // update maxphotos variable in user.libraryPhotos
         }
     }
 
@@ -48,7 +48,7 @@ public class LoadPhotosPopup : MenuPopup
 
     IEnumerator whilstImagesLoading()
     {
-        while(!user.photos.loaded){
+        while(!user.libraryPhotos.loaded){
             // wait until photos have loaded, updating progress on categories and photos loaded
             updateBodyText();
             yield return new WaitForSeconds(.5f);
@@ -60,7 +60,7 @@ public class LoadPhotosPopup : MenuPopup
 
     void updateBodyText(){
         int numTotalCategories = ContentFilter.ALL_CATEGORIES.Length;
-        bodyText.text = string.Format("Photos loaded: {0}\nCategorisation: {1}/{2}", user.photos.allPhotos.Count, user.photos.categoriesLoaded, numTotalCategories);
+        bodyText.text = string.Format("Photos loaded: {0}\nCategorisation: {1}/{2}", user.libraryPhotos.allPhotos.Count, user.libraryPhotos.categoriesLoaded, numTotalCategories);
 
     }
 }

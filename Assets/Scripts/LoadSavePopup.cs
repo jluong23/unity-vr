@@ -24,6 +24,9 @@ public class LoadSavePopup : MenuPopup
         saveButtons = GameObject.FindGameObjectsWithTag("Save Button");
         // find usernames in oauth folder
         usernames = new List<string>();
+
+        // create save directories if does not exist
+        createSaveDirectories();
         // exclude meta files when looking for oauth files
         FileInfo[] oauthFiles = new DirectoryInfo(User.OAUTH_SAVE_PATH).GetFiles().Where(f => !f.Name.EndsWith(".meta")).ToArray();
 
@@ -37,7 +40,7 @@ public class LoadSavePopup : MenuPopup
         for (int i = 0; i < saveButtons.Length; i++)
         {
             Button saveButton = saveButtons[i].GetComponent<Button>();
-            string username = i < usernames.Count ? usernames[i] : null;
+            string username = i < usernames.Count ? usernames[i] : null; 
             if(username == null){
                 // this button should default to next panel, create a new user
                 saveButton.onClick.AddListener(continueButtonClicked);
@@ -51,13 +54,20 @@ public class LoadSavePopup : MenuPopup
 
     }
 
+    void createSaveDirectories(){
+        if(!Directory.Exists(User.PHOTOS_SAVE_PATH)){
+            Directory.CreateDirectory(User.PHOTOS_SAVE_PATH);
+            Directory.CreateDirectory(User.OAUTH_SAVE_PATH);
+        }
+    }
+
     IEnumerator loadSave(string username){
         user.Login(username);
         while(user.loggedIn == false){
             // wait until user has logged in 
             yield return new WaitForSeconds(.1f);
         }
-        if(user.oauthRefreshRequired || !user.photos.hasSave){
+        if(user.oauthRefreshRequired || !user.libraryPhotos.hasSave){
             // two cases, user does not has a save, or the oauth expired
             // with expired oauth, would need to reload the image set download links for images will return FORBIDDEN 403 error.
             nextPopup = loadPhotosPopup;

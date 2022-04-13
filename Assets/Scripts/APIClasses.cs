@@ -135,11 +135,6 @@ public class MediaItemSearchRequest
    public MediaFilter mediaFilter;
    public string orderBy;
 
-   public MediaItemSearchRequest(int pageSize){
-      this.mediaFilter = new MediaFilter();
-      this.pageSize = pageSize;
-   }
-
    public MediaItemSearchRequest(int pageSize, string pageToken, string[] includedCategories, string[] excludedCategories){
       this.mediaFilter = new MediaFilter(includedCategories, excludedCategories);
       this.pageSize = pageSize;
