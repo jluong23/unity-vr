@@ -10,8 +10,8 @@ public class Gallery : MonoBehaviour
 {
     public DateMenu dateMenu;
     public CategoryMenu categoryMenu;
-    public Selectable thumbnailPrefab;
-    private Selectable newThumbnail; // used to generate instances of thumbnail prefab
+    public GameObject thumbnailPrefab;
+    private GameObject newThumbnail; // used to generate instances of thumbnail prefab
     public GameObject content;
     public User user;
     public GalleryScroller galleryScroller;

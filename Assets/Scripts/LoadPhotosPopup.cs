@@ -11,7 +11,7 @@ public class LoadPhotosPopup : MenuPopup
     public Text bodyText;
     public Text sliderHandleValue;
     private Slider slider;
-
+    private bool defaultSliderValueSet = false;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -24,6 +24,18 @@ public class LoadPhotosPopup : MenuPopup
         slider.onValueChanged.AddListener(delegate { maxPhotosSliderChanged(); });
         maxPhotosSliderChanged(); // run once to update slider value
     }
+
+    private void Update()
+    {
+        if(!defaultSliderValueSet && user.loggedIn)
+        {
+            //used set user.libraryPhotos.maxPhotos to the default slider value
+
+            defaultSliderValueSet = true;
+            maxPhotosSliderChanged();
+        }
+    }
+
     void maxPhotosSliderChanged()
     {
         //Slider is currently 1 to x scale, multiply by 100 for 100-100*x scale, with steps of 100

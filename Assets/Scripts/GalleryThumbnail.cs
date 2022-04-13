@@ -11,7 +11,7 @@ public class GalleryThumbnail : MonoBehaviour
 
     private void Start() {
         imageInfoPanel = GameObject.Find("Image Info Panel").GetComponent<ImageInfoPanel>();
-        GetComponent<Button>().onClick.AddListener(() => imageInfoPanel.Show(gameObject));
+        GetComponentInChildren<Button>().onClick.AddListener(() => imageInfoPanel.Show(gameObject));
     }
 
     public void displayTexture(MediaItem mediaItem){    
@@ -36,7 +36,7 @@ public class GalleryThumbnail : MonoBehaviour
             else{
                 var texture = ((DownloadHandlerTexture) request.downloadHandler).texture;
                 mediaItem.texture = texture;
-                GetComponent<RawImage>().texture = texture;
+                GetComponentInChildren<RawImage>().texture = texture;
 
             }
         }else{
