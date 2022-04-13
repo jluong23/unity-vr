@@ -120,13 +120,15 @@ public class User : MonoBehaviour{
          string responseString = unityWebRequest.downloadHandler.text;
          MediaItemRequestResponse responseObject = JsonConvert.DeserializeObject<MediaItemRequestResponse>(responseString);
          // turn list of MediaItems into dictionary from ids to MediaItem
-         Dictionary<string, MediaItem> responseDict = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
-         if(responseDict.Count + libraryPhotos.allPhotos.Count > libraryPhotos.maxPhotos){
-            // the next response dictionary will take us over the limit, reduce by necessary amount to match photos.maxPhotos
-            responseDict = responseDict.Take(libraryPhotos.maxPhotos - libraryPhotos.allPhotos.Count).ToDictionary(x => x.Key, x => x.Value);
+         if(responseObject.mediaItems != null){
+            Dictionary<string, MediaItem> responseDict = responseObject.mediaItems.ToDictionary(x => x.id, x => x);
+            if(responseDict.Count + libraryPhotos.allPhotos.Count > libraryPhotos.maxPhotos){
+               // the next response dictionary will take us over the limit, reduce by necessary amount to match photos.maxPhotos
+               responseDict = responseDict.Take(libraryPhotos.maxPhotos - libraryPhotos.allPhotos.Count).ToDictionary(x => x.Key, x => x.Value);
+            }
+            // concatenate new photos from request with allPhotos, ignoring duplicate entries
+            libraryPhotos.allPhotos = libraryPhotos.allPhotos.Concat(responseDict.Where(x => !libraryPhotos.allPhotos.Keys.Contains(x.Key))).ToDictionary(x => x.Key, x => x.Value);
          }
-         // concatenate new photos from request with allPhotos, ignoring duplicate entries
-         libraryPhotos.allPhotos = libraryPhotos.allPhotos.Concat(responseDict.Where(x => !libraryPhotos.allPhotos.Keys.Contains(x.Key))).ToDictionary(x => x.Key, x => x.Value);
 
          if(responseObject.nextPageToken == null || libraryPhotos.allPhotos.Count >= libraryPhotos.maxPhotos){
             // all photos loaded or maximum reached, start categorising images in photos.allPhotos
