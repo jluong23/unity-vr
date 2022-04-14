@@ -16,7 +16,6 @@ public class Gallery : MonoBehaviour
     private GameObject newThumbnail; // used to generate instances of thumbnail prefab
     public GameObject content;
     public User user;
-    public GalleryScroller galleryScroller;
     private List<MediaItem> currentPhotos;
 
     /// <summary>
@@ -96,7 +95,7 @@ public class Gallery : MonoBehaviour
                 Dictionary<string, int> newCategoryCounts = user.libraryPhotos.getCategoryCounts(selectedCategories, currentDateRange); 
                 categoryMenu.setToggles(newCategoryCounts);
                 // scroll to top of gallery
-                galleryScroller.scrollToTop();
+                GetComponentInChildren<GalleryScroller>().scrollToTop();
             }
         }
     }

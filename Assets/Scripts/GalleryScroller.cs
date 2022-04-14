@@ -4,57 +4,42 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public class GalleryScroller : MonoBehaviour
+public class GalleryScroller : ContentScroller
 {
-    enum ScrollDirection {TOP, UP_ROW, DOWN_ROW, BOTTOM};
-    public LayoutGroup contentLayout;
-    public Button toTopButton;
-    public Button rowUpButton;
-    public Button rowDownButton;
-    public Button toBottomButton;
-    private GameObject content;
-    private int numCols;
-    // Start is called before the first frame update
     void Start()
     {
         content = contentLayout.gameObject;
-        toTopButton.onClick.AddListener(delegate{scrollButtonClicked(ScrollDirection.TOP);});
         rowUpButton.onClick.AddListener(delegate{scrollButtonClicked(ScrollDirection.UP_ROW);});
         rowDownButton.onClick.AddListener(delegate{scrollButtonClicked(ScrollDirection.DOWN_ROW);});
-        toBottomButton.onClick.AddListener(delegate{scrollButtonClicked(ScrollDirection.BOTTOM);});
-    }
+        toTopButton.onClick.AddListener(delegate{moveMonth(false);});
+        toBottomButton.onClick.AddListener(delegate{moveMonth(true);});
+    }   
 
-    void scrollButtonClicked(ScrollDirection scrollDirection){
-        float childHeight = content.transform.GetChild(0).GetComponent<RectTransform>().rect.height;
-        float rowHeight = childHeight + 1.667f*contentLayout.padding.top;
-        Vector3 scrollDownRow = new Vector3(0,rowHeight,0);
-        Vector3 topPosition = Vector3.zero;
-        float bottomY =  content.transform.GetComponentsInChildren<Transform>().
-            Select(delegate (Transform t) { return t.localPosition.y; })
-            .ToList<float>().Min(); //the smallest y value out of content elements
-        Vector3 bottomPosition = new Vector3(0, -bottomY ,0); //
-
-        switch (scrollDirection)
+    /// <summary>
+    /// to top and bottom buttons are remapped to moving up and down months
+    /// </summary>
+    /// <param name="moveDown"></param>
+    void moveMonth(bool moveDown){
+        float newYPos = 0;
+        List<float> headerYPositions = content.GetComponentsInChildren<Text>()
+            .Select(i => -i.GetComponent<Transform>().localPosition.y - i.GetComponent<RectTransform>().rect.height)
+            .ToList();
+        try
         {
-            case ScrollDirection.TOP: 
-                content.transform.localPosition = topPosition;
-                break;
-            case ScrollDirection.UP_ROW: 
-                content.transform.localPosition -= scrollDownRow;
-                break;
-            case ScrollDirection.DOWN_ROW: 
-                content.transform.localPosition += scrollDownRow;
-                break;
-            case ScrollDirection.BOTTOM: 
-                content.transform.localPosition = bottomPosition; 
-                break;
-        }        
+            if(moveDown){
+                //find the next y pos for the content panel, which is the next header after the currently visible one (computed by comparing y values)
+                newYPos = headerYPositions.Where(x => x > content.transform.localPosition.y).Min(); 
+            }else{
+                //find the previous y pos for the content panel
+                newYPos = headerYPositions.Where(x => x < content.transform.localPosition.y).Max(); 
+            }
+            content.transform.localPosition = new Vector3(0,newYPos,0);
+        }
+        catch (System.InvalidOperationException)
+        {
+            // max or min will throw an exception when the streams from .Where() are empty
+            // this means the user is trying to leave the extremities of the scroll. return with no change to content position.
+            return;
+        }
     }
-
-    public void scrollToTop(){
-        scrollButtonClicked(ScrollDirection.TOP);
-    }
-
-
-    
 }

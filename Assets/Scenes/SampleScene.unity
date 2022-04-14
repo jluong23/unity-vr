@@ -710,7 +710,6 @@ MonoBehaviour:
     type: 3}
   content: {fileID: 1136454534}
   user: {fileID: 1453126921}
-  galleryScroller: {fileID: 1632458247}
 --- !u!1 &72309959
 GameObject:
   m_ObjectHideFlags: 0
@@ -7779,7 +7778,7 @@ MonoBehaviour:
     m_Top: 3
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 1
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -9068,7 +9067,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1300366379}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 876d03901066bcb4da97e6edbd158cce, type: 3}
+  m_Script: {fileID: 11500000, guid: d10962966ed19c745b878761cbdc1da2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   contentLayout: {fileID: 189361970}
