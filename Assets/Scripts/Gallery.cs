@@ -11,6 +11,8 @@ public class Gallery : MonoBehaviour
     public DateMenu dateMenu;
     public CategoryMenu categoryMenu;
     public GameObject thumbnailPrefab;
+    public GameObject monthSectionPrefab;
+    public GameObject monthTextPrefab;
     private GameObject newThumbnail; // used to generate instances of thumbnail prefab
     public GameObject content;
     public User user;
@@ -32,7 +34,7 @@ public class Gallery : MonoBehaviour
         categoryMenu.setToggles(user.libraryPhotos.initialCategoryCounts);
         // update the start and end date ranges
         dateMenu.setMaxDateRanges(user.libraryPhotos);
-        populateGrid();
+        populateGrid(user.libraryPhotos.getPhotos());
         // save the user data
         user.libraryPhotos.saveData();
 
@@ -47,18 +49,31 @@ public class Gallery : MonoBehaviour
         StartCoroutine(photosLoadedCheck());
     }
 
-	void populateGrid()
+	void populateGrid(List<MediaItem> newPhotos)
 	{
         /// <summary>
-        /// Populate gallery with all images
+        /// Populate gallery with the new photos (use user.libraryPhotos.getPhotos() to show all..)
         /// </summary>
         /// <returns></returns>
-        currentPhotos = user.libraryPhotos.getPhotos();
+        currentPhotos = newPhotos;
+        int prevMonth = 0;
+        GameObject monthSection = null;
 		foreach (var photo in currentPhotos)
 		{
-			 // Create new instances of our thumbnailPrefab until we've created as many as we specified
-			newThumbnail = Instantiate(thumbnailPrefab, content.transform);
+            DateTime photoDate = Convert.ToDateTime(photo.mediaMetadata.creationTime);
+
+            if(photoDate.Month != prevMonth){
+                // this picture has a different month then last seen. Create a date header
+                GameObject monthText = Instantiate(monthTextPrefab, content.transform);
+                monthText.GetComponent<Text>().text = photoDate.ToString("MMMM yyyy");
+                // start a new gallery section for this month
+                monthSection = Instantiate(monthSectionPrefab, content.transform);
+            }
+			 // Create new instances of our thumbnailPrefab under month section
+			newThumbnail = Instantiate(thumbnailPrefab, monthSection.transform);
 			newThumbnail.GetComponent<GalleryThumbnail>().displayTexture(photo);
+            // update prevMonth
+            prevMonth = photoDate.Month;
 		}
 	}
 
@@ -75,14 +90,8 @@ public class Gallery : MonoBehaviour
             // only update photos if the photos are different
             if(!Enumerable.SequenceEqual(newPhotos, currentPhotos)) {
                 clearGallery();
-                // load new photos into current
-                currentPhotos = new List<MediaItem>(newPhotos);
-                foreach (var photo in currentPhotos)
-                {
-                    // Create new instances of our thumbnailPrefab until we've created as many as we specified
-                    newThumbnail = Instantiate(thumbnailPrefab, content.transform);
-                    newThumbnail.GetComponent<GalleryThumbnail>().displayTexture(photo);
-                }
+                // load new photos into gallery grid
+                populateGrid(newPhotos);
                 // update category menu, reflecting new category counts
                 Dictionary<string, int> newCategoryCounts = user.libraryPhotos.getCategoryCounts(selectedCategories, currentDateRange); 
                 categoryMenu.setToggles(newCategoryCounts);

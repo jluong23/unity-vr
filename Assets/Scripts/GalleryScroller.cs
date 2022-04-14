@@ -7,7 +7,7 @@ using System.Linq;
 public class GalleryScroller : MonoBehaviour
 {
     enum ScrollDirection {TOP, UP_ROW, DOWN_ROW, BOTTOM};
-    public GridLayoutGroup contentLayout;
+    public LayoutGroup contentLayout;
     public Button toTopButton;
     public Button rowUpButton;
     public Button rowDownButton;
@@ -22,15 +22,11 @@ public class GalleryScroller : MonoBehaviour
         rowUpButton.onClick.AddListener(delegate{scrollButtonClicked(ScrollDirection.UP_ROW);});
         rowDownButton.onClick.AddListener(delegate{scrollButtonClicked(ScrollDirection.DOWN_ROW);});
         toBottomButton.onClick.AddListener(delegate{scrollButtonClicked(ScrollDirection.BOTTOM);});
-        numCols = contentLayout.constraintCount;
-    }
-
-    public int getGridRows(){
-        return (int) content.transform.childCount / numCols;        
     }
 
     void scrollButtonClicked(ScrollDirection scrollDirection){
-        float rowHeight = contentLayout.cellSize.y + 1.667f*contentLayout.padding.top;
+        float childHeight = content.transform.GetChild(0).GetComponent<RectTransform>().rect.height;
+        float rowHeight = childHeight + 1.667f*contentLayout.padding.top;
         Vector3 scrollDownRow = new Vector3(0,rowHeight,0);
         Vector3 topPosition = Vector3.zero;
         float bottomY =  content.transform.GetComponentsInChildren<Transform>().

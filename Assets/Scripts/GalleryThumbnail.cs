@@ -40,7 +40,7 @@ public class GalleryThumbnail : MonoBehaviour
 
             }
         }else{
-            GetComponent<RawImage>().texture = mediaItem.texture;
+            GetComponentInChildren<RawImage>().texture = mediaItem.texture;
         }
     } 
 }
