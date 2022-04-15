@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class AuthorizationPopup : MenuPopup
 {
     public Text progressText;
+    public LoadSavePopup loadSavePopup;
+
 
     // Start is called before the first frame update
     protected override void Start()
@@ -22,5 +24,7 @@ public class AuthorizationPopup : MenuPopup
     public void allowProgress(string email){
         progressText.text = string.Format("Status: Completed\nEmail: {0}", email);
         continueButton.interactable = true;
+        //update savebuttons to show the new user just authorised
+        loadSavePopup.updateSaveButtons();
     }
 }

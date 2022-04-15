@@ -35,7 +35,7 @@ public class ImageInfoPanel : MonoBehaviour
         fileNameText.text = mediaItem.filename;
         // create body info of panel
         DateTime dateTime = Convert.ToDateTime(mediaItem.mediaMetadata.creationTime);
-        // dictionary from field string (date, albums...) to value string (the date taken, albums attached to...)
+        // dictionary from field string (date...) to value string (the date taken...)
         Dictionary<string, string> bodyDict = new Dictionary<string, string>();
         bodyDict.Add("Categories", string.Join(",", mediaItem.categories));
         bodyDict.Add("Date Taken", dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString());

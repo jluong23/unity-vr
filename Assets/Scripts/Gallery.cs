@@ -41,6 +41,7 @@ public class Gallery : MonoBehaviour
 
     // ran when the 'show photos data' button is pressed for the first time
     public void initPhotos(){
+        clearGallery();
         // load the user data if a save does not exist
         if(!user.libraryPhotos.hasSave){
             user.populatePhotosByAPI();

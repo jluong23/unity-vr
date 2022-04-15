@@ -19,7 +19,7 @@ public class MenuPopup : MonoBehaviour
         if(backButton != null){
             backButton.onClick.AddListener(backButtonClicked);
         }
-        gameObject.SetActive(false);
+        Close();
     }
 
     protected virtual void continueButtonClicked(){
@@ -27,17 +27,21 @@ public class MenuPopup : MonoBehaviour
         if(nextPopup != null){
             // replace next popup with this popup
             nextPopup.transform.position = gameObject.transform.position; 
-            nextPopup.SetActive(true);
         }
-        gameObject.SetActive(false);
+        Close();
     }
     protected virtual void backButtonClicked(){
         GameObject previousPopup = panelHistory.Pop();
         if(previousPopup != null){
-            // replace next popup with this popup
+            // replace previous popup with this popup
             previousPopup.transform.position = gameObject.transform.position; 
-            previousPopup.SetActive(true);
         }
-        gameObject.SetActive(false);
+        Close();
+    }
+
+    public void Close() {
+        // gameObject.SetActive(false);
+        // TODO: hide the element by moving it out of the scene
+        transform.position = new Vector3(0, 200, 0);
     }
 }

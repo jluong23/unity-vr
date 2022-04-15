@@ -15,9 +15,9 @@ public class MainDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Close();
         sideMenus = GetComponentsInChildren<SideMenu>();
         previousClick = false;
+        Close();
     }
 
     void Update(){
@@ -42,15 +42,19 @@ public class MainDisplay : MonoBehaviour
             toggle.isOn = false;
         }
         transform.position = mainCamera.transform.position + 3f * mainCamera.transform.forward - new Vector3(0,0.7f,0);
-        foreach (SideMenu sideMenu in sideMenus)
-        {
-            sideMenu.Close();
-        }
+        closeSideMenus();
     }
 
     public void Close(){
         showing = false;
         // TODO: hide the element by moving it out of the scene
         transform.position = new Vector3(0,200,0);
+    }
+
+    void closeSideMenus(){
+        foreach (SideMenu sideMenu in sideMenus)
+        {
+            sideMenu.Close();
+        }
     }
 }

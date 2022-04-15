@@ -41,8 +41,10 @@ public class User : MonoBehaviour{
 
     public void Login(string username)
    {
-      loggedIn = false;
-      setCredential(username);
+      if(this.username != username){
+         loggedIn = false;
+         setCredential(username);
+      }
    }
 
    /// <summary>
@@ -108,7 +110,7 @@ public class User : MonoBehaviour{
    /// <returns></returns>
    private IEnumerator loadPhotos(string nextPageToken){
       string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-      // perform post request to get all photos for the given album, no categorisation
+      // perform post request to get all photos in user google library, no categorisation
       MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_REQUEST, nextPageToken, new string[]{}, new string[] {}, libraryPhotos.loadVideos, libraryPhotos.loadOrder); 
       // perform post request
       UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", searchReq.getJson());
@@ -223,7 +225,6 @@ public class User : MonoBehaviour{
          // allow user to progress the auth menu popup
          authorizationMenuPopup.allowProgress(this.email);
       }
-
       loggedIn = true;
    }         
 

@@ -25,7 +25,7 @@ public class UserPhotos{
    public static int MAX_PHOTOS_PER_CATEGORY = 100;
    // max number of photos in library to load
    public int maxPhotos;
-   // if the user photo variables (allPhotos and initialCategoryCounts) are fully loaded in with all albums, useful for unity coroutine conditions
+   // if the user photo variables (allPhotos and initialCategoryCounts) are fully loaded, useful for unity coroutine conditions
    public bool loaded;
    // if there exists a json save for the user
    public bool hasSave;
