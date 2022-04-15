@@ -112,7 +112,6 @@ public class User : MonoBehaviour{
       MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_REQUEST, nextPageToken, new string[]{}, new string[] {}, libraryPhotos.loadVideos, libraryPhotos.loadOrder); 
       // perform post request
       UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", searchReq.getJson());
-      Debug.Log(searchReq.getJson());
       yield return unityWebRequest.SendWebRequest();
       if(unityWebRequest.result == UnityWebRequest.Result.ConnectionError){
          Debug.Log(unityWebRequest.error);

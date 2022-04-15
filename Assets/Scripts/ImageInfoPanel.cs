@@ -15,7 +15,6 @@ public class ImageInfoPanel : MonoBehaviour
     public GameObject placeImageFrameButton;
     public GameObject removeImageFrameButton;
     public GameObject closeButton;
-
     public GameObject mainDisplay;
 
     // Start is called before the first frame update
@@ -40,10 +39,7 @@ public class ImageInfoPanel : MonoBehaviour
         Dictionary<string, string> bodyDict = new Dictionary<string, string>();
         bodyDict.Add("Categories", string.Join(",", mediaItem.categories));
         bodyDict.Add("Date Taken", dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString());
-        // TODO: albums if exists
-        // if(mediaItem.albums.Count > 0){
-        //     bodyDict.Add("Albums", string.Format("Albums: {0}\n", string.Join(",", mediaItem.albums))); 
-        // }
+
         if(mediaItem.description != null && mediaItem.description != ""){
             bodyDict.Add("Description", mediaItem.description);
         }
@@ -72,11 +68,16 @@ public class ImageInfoPanel : MonoBehaviour
         instantiatedImageFrame = Instantiate(imageFramePrefab, mainDisplay.transform.position - 0.2f * mainDisplay.transform.forward, Quaternion.identity);
         // rotate the image frame in direction of main display
         instantiatedImageFrame.transform.rotation = mainDisplay.transform.rotation;
+        // scale the image frame to match the aspect ratio of the full texture
+        float xScale = float.Parse(mediaItem.mediaMetadata.width) / ImageFrame.SCALE_DOWN_FACTOR;
+        float yScale = float.Parse(mediaItem.mediaMetadata.height) / ImageFrame.SCALE_DOWN_FACTOR;
+        instantiatedImageFrame.transform.localScale = new Vector3(xScale,yScale,transform.localScale.z);
+
         // set the texture of this image frame prefab
         ImageFrame imageFrameComponent = instantiatedImageFrame.GetComponent<ImageFrame>();
-        imageFrameComponent.setTexture(mediaItem);
+        StartCoroutine(imageFrameComponent.setFullTextureCoroutine(mediaItem));
+        //close the main display and this info panel when a frame is spawned in
         Close();
-        //close the main display when a frame is spawned in
         mainDisplay.GetComponent<MainDisplay>().Close();
     }
 

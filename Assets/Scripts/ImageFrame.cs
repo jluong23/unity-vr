@@ -1,7 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.Networking;
+using System;
+
 using UnityEngine.InputSystem;
 public class ImageFrame : MonoBehaviour
 {
@@ -11,7 +15,7 @@ public class ImageFrame : MonoBehaviour
     public MediaItem mediaItem;
     private OffsetInteractable offsetInteractable;
     private XRRayInteractor xrRayInteractor;
-
+    public static float SCALE_DOWN_FACTOR = 1000;
 
     private void Awake()
     {
@@ -27,13 +31,24 @@ public class ImageFrame : MonoBehaviour
     {
         imageInfoPanel.Show(gameObject);
     }
-    public void setTexture(MediaItem mediaItem)
+    public IEnumerator setFullTextureCoroutine(MediaItem mediaItem)
     {
         image = transform.Find("Image").gameObject;
-        if (mediaItem != null)
-        {
-            this.mediaItem = mediaItem;
-            image.GetComponent<Renderer>().material.mainTexture = mediaItem.texture;
+        this.mediaItem = mediaItem;
+
+        if(mediaItem.fullTexture == null){
+            // append =d to the request to download the full image
+            UnityWebRequest request = UnityWebRequestTexture.GetTexture(mediaItem.baseUrl + "=d");
+            // yield return: returns to main thread whilst sending the request
+            yield return request.SendWebRequest();
+            if(request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+                Debug.Log(request.error);
+            else{
+                var texture = ((DownloadHandlerTexture) request.downloadHandler).texture;
+                mediaItem.fullTexture = texture;
+            }
         }
+        // set the full texture
+        image.GetComponent<Renderer>().material.mainTexture = mediaItem.fullTexture;
     }
 }

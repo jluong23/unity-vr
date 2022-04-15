@@ -24,7 +24,7 @@ public class GalleryThumbnail : MonoBehaviour
 
     private IEnumerator SetTextureCoroutine()
     {
-        if(mediaItem.texture == null){
+        if(mediaItem.thumbnailTexture == null){
             // append =d to the request to download the image.
             // width and height constraints for thumbnail also requested
             
@@ -35,12 +35,12 @@ public class GalleryThumbnail : MonoBehaviour
                 Debug.Log(request.error);
             else{
                 var texture = ((DownloadHandlerTexture) request.downloadHandler).texture;
-                mediaItem.texture = texture;
+                mediaItem.thumbnailTexture = texture;
                 GetComponentInChildren<RawImage>().texture = texture;
 
             }
         }else{
-            GetComponentInChildren<RawImage>().texture = mediaItem.texture;
+            GetComponentInChildren<RawImage>().texture = mediaItem.thumbnailTexture;
         }
     } 
 }

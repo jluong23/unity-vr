@@ -1527,7 +1527,7 @@ MonoBehaviour:
   m_HoverToSelect: 0
   m_HoverTimeToSelect: 0.5
   m_EnableUIInteraction: 1
-  m_AllowAnchorControl: 0
+  m_AllowAnchorControl: 1
   m_UseForceGrab: 1
   m_RotateSpeed: 180
   m_TranslateSpeed: 1
@@ -2434,7 +2434,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202543390}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000000074506}
+  m_LocalPosition: {x: 0, y: 0, z: 0.000000037253}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1325394688}
@@ -2442,8 +2442,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10.375, y: 0.0000009536743}
-  m_SizeDelta: {x: -27.63, y: -15.64}
+  m_AnchoredPosition: {x: -9.599998, y: 0.02299881}
+  m_SizeDelta: {x: -23.09, y: -5.52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &202543392
 MonoBehaviour:
@@ -2478,7 +2478,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Load Videos?
+  m_Text: Include Videos (as images)?
 --- !u!222 &202543393
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13917,7 +13917,7 @@ MonoBehaviour:
   m_HoverToSelect: 0
   m_HoverTimeToSelect: 0.5
   m_EnableUIInteraction: 1
-  m_AllowAnchorControl: 0
+  m_AllowAnchorControl: 1
   m_UseForceGrab: 1
   m_RotateSpeed: 180
   m_TranslateSpeed: 1
