@@ -12,17 +12,19 @@ public class LoadSavePopup : MenuPopup
     public MenuPopup enterUsernamePopup;
     public GameObject mainDisplay;
     private Gallery gallery;
-
     public User user;
     private List<string> usernames;
     protected override void Start()
     {
+        //dont call base.Start()
         gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
 
-        //dont call base.Start()
         // assign back button
         backButton.onClick.AddListener(backButtonClicked);
         saveButtons = GameObject.FindGameObjectsWithTag("Save Button");
+
+        // assign continue button
+        continueButton.onClick.AddListener(createNewUsername);
 
         // create save directories if does not exist
         createSaveDirectories();
@@ -31,9 +33,9 @@ public class LoadSavePopup : MenuPopup
     }
 
     void createSaveDirectories(){
-        if(!Directory.Exists(User.PHOTOS_SAVE_PATH)){
-            Directory.CreateDirectory(User.PHOTOS_SAVE_PATH);
-            Directory.CreateDirectory(User.OAUTH_SAVE_PATH);
+        if(!Directory.Exists(User.photos_save_path)){
+            Directory.CreateDirectory(User.photos_save_path);
+            Directory.CreateDirectory(User.oauth_save_path);
         }
     }
 
@@ -41,7 +43,7 @@ public class LoadSavePopup : MenuPopup
         // find usernames in oauth folder
         usernames = new List<string>();
         // exclude meta files when looking for oauth files
-        FileInfo[] oauthFiles = new DirectoryInfo(User.OAUTH_SAVE_PATH).GetFiles().Where(f => !f.Name.EndsWith(".meta")).ToArray();
+        FileInfo[] oauthFiles = new DirectoryInfo(User.oauth_save_path).GetFiles().Where(f => !f.Name.EndsWith(".meta")).ToArray();
 
         //find usernames
         foreach (FileInfo file in oauthFiles)
@@ -56,13 +58,13 @@ public class LoadSavePopup : MenuPopup
             saveButton.onClick.RemoveAllListeners();
 
             string username = i < usernames.Count ? usernames[i] : null; 
-            if(username == null){
-                // this button should move to next panel to create a new user, make a username
-                saveButton.onClick.AddListener(createNewUsername);
-            }else{
+            if(username != null){
+                saveButton.interactable = true;
                 // this button holds existing user, load save when pressed
                 saveButton.GetComponentInChildren<Text>().text = username;
                 saveButton.onClick.AddListener(delegate {StartCoroutine(loadSave(username));});
+            }else{
+                saveButton.interactable = false;
             }
         }
     }

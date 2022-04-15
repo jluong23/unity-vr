@@ -16,9 +16,9 @@ using Google.Apis.Auth.OAuth2.Responses;
 public class User : MonoBehaviour{
 
    // where photos data is stored in json files
-   static public string PHOTOS_SAVE_PATH = "Assets/photos_data/";
+   static public string photos_save_path;
    // where oauth tokens are stored
-   static public string OAUTH_SAVE_PATH = PHOTOS_SAVE_PATH + "oauth/";
+   static public string oauth_save_path;
    // in minutes. default is 60mins (1h)
    public static int DEFAULT_OAUTH_EXPIRY_TIME = 60;
 
@@ -39,6 +39,12 @@ public class User : MonoBehaviour{
    // if the user needed to refresh their oauth token, as previous expired, record if refresh took place
    public bool oauthRefreshRequired;
 
+   void Start()
+   {
+      photos_save_path = Application.persistentDataPath + "/photos_data/";
+      oauth_save_path = photos_save_path + "oauth/";
+
+   }
     public void Login(string username)
    {
       if(this.username != username){
@@ -61,7 +67,7 @@ public class User : MonoBehaviour{
          // cts.CancelAfter(TimeSpan.FromSeconds(60)); //60 seconds to complete login
 
          credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-            clientSecrets,scopes,username,cts.Token,new FileDataStore(OAUTH_SAVE_PATH, true));
+            clientSecrets,scopes,username,cts.Token,new FileDataStore(oauth_save_path, true));
 
          //Refresh OAuth token if necessary. Record if an oauth refresh was required
          TimeSpan diff = DateTime.UtcNow.Subtract(credential.Token.IssuedUtc);
@@ -220,7 +226,7 @@ public class User : MonoBehaviour{
          string tokenDataJson = unityWebRequest.downloadHandler.text;
          Dictionary<string, string> tokenData = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenDataJson);
          this.email = tokenData["email"]; 
-         photosSavePath = PHOTOS_SAVE_PATH + username + ".json";
+         photosSavePath = photos_save_path + username + ".json";
          libraryPhotos = new UserPhotos(this, photosSavePath); // initialise photos as empty
          // allow user to progress the auth menu popup
          authorizationMenuPopup.allowProgress(this.email);

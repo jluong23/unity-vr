@@ -36,6 +36,7 @@ public class Gallery : MonoBehaviour
         populateGrid(user.libraryPhotos.getPhotos());
         // save the user data
         user.libraryPhotos.saveData();
+        user.libraryPhotos.hasSave = true;
 
     }
 

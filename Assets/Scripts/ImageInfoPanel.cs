@@ -71,7 +71,7 @@ public class ImageInfoPanel : MonoBehaviour
         // scale the image frame to match the aspect ratio of the full texture
         float xScale = float.Parse(mediaItem.mediaMetadata.width) / ImageFrame.SCALE_DOWN_FACTOR;
         float yScale = float.Parse(mediaItem.mediaMetadata.height) / ImageFrame.SCALE_DOWN_FACTOR;
-        instantiatedImageFrame.transform.localScale = new Vector3(xScale,yScale,transform.localScale.z);
+        instantiatedImageFrame.transform.localScale = new Vector3(xScale,yScale,instantiatedImageFrame.transform.localScale.z);
 
         // set the texture of this image frame prefab
         ImageFrame imageFrameComponent = instantiatedImageFrame.GetComponent<ImageFrame>();
