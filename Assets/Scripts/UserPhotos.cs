@@ -34,6 +34,9 @@ public class UserPhotos{
    public string savePath;
    // used for User.performCategorisation coroutine, incrementing after categorisation has completed for the given category
    public int categoriesLoaded;
+   public bool loadVideos;
+   public enum LoadOrder {OLDEST_FIRST, NEWEST_FIRST}; 
+   public LoadOrder loadOrder; 
 
    public UserPhotos(User user, string savePath){
       /// <summary>
@@ -42,6 +45,8 @@ public class UserPhotos{
       this.user = user;
       this.savePath = savePath;
       this.maxPhotos = 500;
+      this.loadOrder = LoadOrder.NEWEST_FIRST;
+      this.loadVideos = false;
 
       if(File.Exists(savePath) && !user.oauthRefreshRequired){
          // read stored data file if it exists

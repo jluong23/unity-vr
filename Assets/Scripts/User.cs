@@ -108,8 +108,8 @@ public class User : MonoBehaviour{
    /// <returns></returns>
    private IEnumerator loadPhotos(string nextPageToken){
       string link = "https://photoslibrary.googleapis.com/v1/mediaItems:search";
-      // perform post request to get all photos for the given album
-      MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_REQUEST, nextPageToken, new string[]{}, new string[] {}); //no categories
+      // perform post request to get all photos for the given album, no categorisation
+      MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_REQUEST, nextPageToken, new string[]{}, new string[] {}, libraryPhotos.loadVideos); 
       // perform post request
       UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", searchReq.getJson());
       yield return unityWebRequest.SendWebRequest();
@@ -151,8 +151,8 @@ public class User : MonoBehaviour{
             string nextPageToken = "";
 
             while(!categoryLoaded){
-               // perform post request for each category (api calls = num categories)
-               MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_CATEGORY, nextPageToken, new string[]{category}, new string[] {}); //no excluded categories
+               // perform post request for each category (api calls = num categories), no excluded categories
+               MediaItemSearchRequest searchReq = new MediaItemSearchRequest(UserPhotos.MAX_PHOTOS_PER_CATEGORY, nextPageToken, new string[]{category}, new string[] {}, libraryPhotos.loadVideos); 
                // perform post request
                UnityWebRequest unityWebRequest = createUnityWebRequest(link, "POST", searchReq.getJson());
                yield return unityWebRequest.SendWebRequest();

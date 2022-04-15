@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class LoadPhotosPopup : MenuPopup
 {    
@@ -10,6 +11,9 @@ public class LoadPhotosPopup : MenuPopup
     public User user;
     public Text bodyText;
     public Text sliderHandleValue;
+    public Button loadOrderButton;
+    public Text loadOrderText;
+    public Toggle loadVideosToggle;
     private Slider slider;
     private bool defaultSliderValueSet = false;
     // Start is called before the first frame update
@@ -18,6 +22,8 @@ public class LoadPhotosPopup : MenuPopup
         base.Start();
         gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         //buttons
+        loadOrderButton.onClick.AddListener(loadOrderButtonClicked);
+        loadVideosToggle.onValueChanged.AddListener(loadVideosToggleClicked);
         loadPhotosButton.onClick.AddListener(loadPhotosButtonClicked);
         //slider for max userphotos
         slider = GetComponentInChildren<Slider>();
@@ -36,6 +42,17 @@ public class LoadPhotosPopup : MenuPopup
         }
     }
 
+    void loadOrderButtonClicked(){
+        string[] toggleLabels = {"Newest First", "Oldest First"};
+        int newIndex = (Array.IndexOf(toggleLabels, loadOrderText.text) + 1) % 2;
+        loadOrderText.text = toggleLabels[newIndex];
+        user.libraryPhotos.loadOrder = newIndex == 0 ? UserPhotos.LoadOrder.NEWEST_FIRST : UserPhotos.LoadOrder.OLDEST_FIRST;
+
+    }
+
+    void loadVideosToggleClicked(bool toggleVal){
+        user.libraryPhotos.loadVideos = toggleVal;
+    }
     void maxPhotosSliderChanged()
     {
         //Slider is currently 1 to x scale, multiply by 100 for 100-100*x scale, with steps of 100
@@ -48,7 +65,9 @@ public class LoadPhotosPopup : MenuPopup
 
     void loadPhotosButtonClicked()
     {
-        // load button pressed, swap slider with bodyText with load progress
+        // load button pressed, swap slider and other options with bodyText for load progress
+        loadOrderButton.gameObject.SetActive(false);
+        loadVideosToggle.gameObject.SetActive(false);
         slider.gameObject.SetActive(false);
         updateBodyText();
         backButton.interactable = false;

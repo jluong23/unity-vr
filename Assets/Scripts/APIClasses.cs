@@ -82,10 +82,15 @@ public class MediaTypeFilter
 {
    public string[] mediaTypes;
 
-   public MediaTypeFilter(){
+   /// <summary>
+   /// photos and videos if includeVideos is true, only photos if includeVideos is false.
+   /// </summary>
+   /// <param name="includeVideos"></param>
+   public MediaTypeFilter(bool includeVideos){
       // Defaults to PHOTO
       // can also be ALL_MEDIA, VIDEO
-      mediaTypes = new string[] {"PHOTO"};
+      mediaTypes = includeVideos ? new string[] {"ALL_MEDIA"} : new string[] {"PHOTO"};
+
    }
 }
 
@@ -112,15 +117,15 @@ public class MediaFilter
       // uses defaults for each filter, default content is "NONE" 
       // dateFilter = new DateFilter();
       contentFilter = new ContentFilter();
-      mediaTypeFilter = new MediaTypeFilter();
+      mediaTypeFilter = new MediaTypeFilter(false);
       featureFilter = new FeatureFilter();
    }
 
-   public MediaFilter(string[] includedCategories, string[] excludedCategories){
+   public MediaFilter(string[] includedCategories, string[] excludedCategories, bool includeVideos){
       // uses defaults for each filter, but use included and excluded categories arrays
       // dateFilter = new DateFilter();
       contentFilter = new ContentFilter(includedCategories, excludedCategories);
-      mediaTypeFilter = new MediaTypeFilter();
+      mediaTypeFilter = new MediaTypeFilter(includeVideos);
       featureFilter = new FeatureFilter();
    }
 }
@@ -135,8 +140,8 @@ public class MediaItemSearchRequest
    public MediaFilter mediaFilter;
    public string orderBy;
 
-   public MediaItemSearchRequest(int pageSize, string pageToken, string[] includedCategories, string[] excludedCategories){
-      this.mediaFilter = new MediaFilter(includedCategories, excludedCategories);
+   public MediaItemSearchRequest(int pageSize, string pageToken, string[] includedCategories, string[] excludedCategories, bool includeVideos){
+      this.mediaFilter = new MediaFilter(includedCategories, excludedCategories, includeVideos);
       this.pageSize = pageSize;
       this.pageToken = pageToken;
    }

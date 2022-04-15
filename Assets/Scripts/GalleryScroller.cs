@@ -6,7 +6,7 @@ using System.Linq;
 
 public class GalleryScroller : ContentScroller
 {
-    void Start()
+    protected override void Start()
     {
         content = contentLayout.gameObject;
         rowUpButton.onClick.AddListener(delegate{scrollButtonClicked(ScrollDirection.UP_ROW);});
