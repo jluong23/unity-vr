@@ -116,7 +116,7 @@ public class MediaFilter
 
    public MediaFilter(string[] includedCategories, string[] excludedCategories, bool includeVideos){
       // uses defaults for each filter, but use included and excluded categories arrays
-      dateFilter = new DateFilter();
+      // dateFilter = new DateFilter();
       contentFilter = new ContentFilter(includedCategories, excludedCategories);
       mediaTypeFilter = new MediaTypeFilter(includeVideos);
       featureFilter = new FeatureFilter();
@@ -133,18 +133,10 @@ public class MediaItemSearchRequest
    public MediaFilter mediaFilter;
    public string orderBy;
 
-   public MediaItemSearchRequest(int pageSize, string pageToken, string[] includedCategories, string[] excludedCategories, bool includeVideos, UserPhotos.LoadOrder loadOrder){
+   public MediaItemSearchRequest(int pageSize, string pageToken, string[] includedCategories, string[] excludedCategories, bool includeVideos){
       this.mediaFilter = new MediaFilter(includedCategories, excludedCategories, includeVideos);
       this.pageSize = pageSize;
       this.pageToken = pageToken;
-      if(loadOrder == UserPhotos.LoadOrder.OLDEST_FIRST)
-      {
-         // does oldest first 
-         this.orderBy = "MediaMetadata.creation_time"; 
-      } else{
-         this.orderBy = "";
-      }
-         
    }
 
    public string getJson(){

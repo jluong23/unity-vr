@@ -27,4 +27,9 @@ public class AuthorizationPopup : MenuPopup
         //update savebuttons to show the new user just authorised
         loadSavePopup.updateSaveButtons();
     }
+
+    public void blockProgress(){
+        progressText.text = string.Format("Status: Waiting...\nEmail: ");
+        continueButton.interactable = false;
+    }
 }

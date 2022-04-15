@@ -11,43 +11,20 @@ public class LoadPhotosPopup : MenuPopup
     public User user;
     public Text bodyText;
     public Text sliderHandleValue;
-    public Button loadOrderButton;
-    public Text loadOrderText;
     public Toggle loadVideosToggle;
     private Slider slider;
-    private bool defaultSliderValueSet = false;
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         //buttons
-        loadOrderButton.onClick.AddListener(loadOrderButtonClicked);
         loadVideosToggle.onValueChanged.AddListener(loadVideosToggleClicked);
         loadPhotosButton.onClick.AddListener(loadPhotosButtonClicked);
         //slider for max userphotos
         slider = GetComponentInChildren<Slider>();
         slider.onValueChanged.AddListener(delegate { maxPhotosSliderChanged(); });
         maxPhotosSliderChanged(); // run once to update slider value
-    }
-
-    private void Update()
-    {
-        if(!defaultSliderValueSet && user.loggedIn)
-        {
-            //used set user.libraryPhotos.maxPhotos to the default slider value
-
-            defaultSliderValueSet = true;
-            maxPhotosSliderChanged();
-        }
-    }
-
-    void loadOrderButtonClicked(){
-        string[] toggleLabels = {"Newest First", "Oldest First"};
-        int newIndex = (Array.IndexOf(toggleLabels, loadOrderText.text) + 1) % 2;
-        loadOrderText.text = toggleLabels[newIndex];
-        user.libraryPhotos.loadOrder = newIndex == 0 ? UserPhotos.LoadOrder.NEWEST_FIRST : UserPhotos.LoadOrder.OLDEST_FIRST;
-
     }
 
     void loadVideosToggleClicked(bool toggleVal){
@@ -66,7 +43,6 @@ public class LoadPhotosPopup : MenuPopup
     void loadPhotosButtonClicked()
     {
         // load button pressed, swap slider and other options with bodyText for load progress
-        loadOrderButton.gameObject.SetActive(false);
         loadVideosToggle.gameObject.SetActive(false);
         slider.gameObject.SetActive(false);
         updateBodyText();
@@ -92,6 +68,14 @@ public class LoadPhotosPopup : MenuPopup
     void updateBodyText(){
         int numTotalCategories = ContentFilter.ALL_CATEGORIES.Length;
         bodyText.text = string.Format("Photos loaded: {0}\nCategorisation: {1}/{2}", user.libraryPhotos.allPhotos.Count, user.libraryPhotos.categoriesLoaded, numTotalCategories);
+    }
+
+    public void Reset(){
+        loadVideosToggle.gameObject.SetActive(true);
+        slider.gameObject.SetActive(true);
+        bodyText.text = "";
+        loadPhotosButton.interactable = true;
+        backButton.interactable = true;
 
     }
 }

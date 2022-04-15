@@ -64,8 +64,17 @@ public class LoadSavePopup : MenuPopup
                 saveButton.GetComponentInChildren<Text>().text = username;
                 saveButton.onClick.AddListener(delegate {StartCoroutine(loadSave(username));});
             }else{
+                // no save exists
+                saveButton.GetComponentInChildren<Text>().text = string.Format("Save {0}", i+1);
                 saveButton.interactable = false;
             }
+        }   
+
+        if(usernames.Count == saveButtons.Length){
+            // no more save slots, can't click new save
+            continueButton.interactable = false;
+        }else{
+            continueButton.interactable = true;
         }
     }
 
