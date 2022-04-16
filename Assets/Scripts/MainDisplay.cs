@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class MainDisplay : MonoBehaviour
 {
-    public GameObject mainCamera;
+    public User user;
     public InputActionReference openMenuInput;
     public GameObject navigationPanel;
     private SideMenu[] sideMenus;
@@ -41,7 +41,8 @@ public class MainDisplay : MonoBehaviour
         {
             toggle.isOn = false;
         }
-        transform.position = mainCamera.transform.position + 3f * mainCamera.transform.forward - new Vector3(0,0.7f,0);
+        user.appearObject(gameObject, 2f, -.2f);
+        
         closeSideMenus();
     }
 

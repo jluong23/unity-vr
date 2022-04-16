@@ -6,13 +6,14 @@ using UnityEngine.UI;
 public class InitialMenuPopup : MenuPopup
 {
     private Button startButton;
-    public GameObject mainCamera;
+    public Camera mainCamera;
+    public User user;
     // Start is called before the first frame update
     protected override void Start()
     {
         //move to front of camera
         base.Start();
-        transform.position = mainCamera.transform.position + mainCamera.transform.forward * 3f + new Vector3(0,1f,0);
+        user.appearObject(gameObject, 2f, .5f);
         gameObject.SetActive(true);
     }
 }

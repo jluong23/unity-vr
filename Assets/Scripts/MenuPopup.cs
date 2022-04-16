@@ -27,6 +27,8 @@ public class MenuPopup : MonoBehaviour
         if(nextPopup != null){
             // replace next popup with this popup
             nextPopup.transform.position = gameObject.transform.position; 
+            nextPopup.transform.rotation = gameObject.transform.rotation;
+
         }
         Close();
     }
@@ -34,7 +36,9 @@ public class MenuPopup : MonoBehaviour
         GameObject previousPopup = panelHistory.Pop();
         if(previousPopup != null){
             // replace previous popup with this popup
-            previousPopup.transform.position = gameObject.transform.position; 
+            previousPopup.transform.position = gameObject.transform.position;
+            previousPopup.transform.rotation = gameObject.transform.rotation;
+
         }
         Close();
     }

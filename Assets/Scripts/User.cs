@@ -46,6 +46,16 @@ public class User : MonoBehaviour{
       oauth_save_path = photos_save_path + "oauth/";
 
    }
+
+    public void appearObject(GameObject obj, float dist, float yOffset)
+    {
+
+        Camera mainCamera = GetComponentInChildren<Camera>();
+        obj.transform.position = mainCamera.transform.position + dist * mainCamera.transform.forward + new Vector3(0, yOffset, 0);
+        obj.transform.LookAt(mainCamera.transform);
+        obj.transform.Rotate(new Vector3(0, 180, 0));
+    }
+
     public void Login(string username)
    {
       // reset these menu popups ahead..
