@@ -13,7 +13,7 @@ public class InitialMenuPopup : MenuPopup
     {
         //move to front of camera
         base.Start();
-        user.appearObject(gameObject, 2f, .5f);
+        user.appearObject(gameObject, 2.5f, .8f, false);
         gameObject.SetActive(true);
     }
 }

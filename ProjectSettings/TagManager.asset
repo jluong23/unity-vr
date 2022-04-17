@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Save Button
+  - Keyboard Key
   layers:
   - Default
   - TransparentFX

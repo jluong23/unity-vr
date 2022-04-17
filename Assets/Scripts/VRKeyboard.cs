@@ -18,6 +18,7 @@ public class VRKeyboard: MonoBehaviour
     private bool shiftOn = false;
     private bool isOpen = false;
     public InputField currentInputField;
+    private int tiltAngle = 20;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +63,10 @@ public class VRKeyboard: MonoBehaviour
         {
             isOpen = true;
             gameObject.SetActive(true);
-            transform.position = (currentInputField.transform.position + currentInputField.transform.forward * -1f) - new Vector3(0, 1f, 0);
+            transform.position = currentInputField.transform.position + -1f * currentInputField.transform.forward - new Vector3(0, 1f, 0);
+            transform.rotation = currentInputField.transform.rotation;
+            // tilt the keyboard slightly for user experience
+            transform.Rotate(new Vector3(tiltAngle, 0, 0));
         }
     }
 
@@ -105,7 +109,7 @@ public class VRKeyboard: MonoBehaviour
 
     void backButtonClicked()
     {
-        if (currentInputField != null)
+        if (currentInputField != null && currentInputField.text != "")
         {
             currentInputField.text = currentInputField.text.Remove(currentInputField.text.Length - 1, 1);
         }

@@ -47,13 +47,31 @@ public class User : MonoBehaviour{
 
    }
 
-    public void appearObject(GameObject obj, float dist, float yOffset)
+    /// <summary>
+    /// Appear an object in front of the user.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="dist">The z distance from the user.</param>
+    /// <param name="yOffset"> The change in y</param>
+    /// <param name="tilt">Given a change in y, should the object tilt towards the player or appear straight on? </param>
+    public void appearObject(GameObject obj, float dist, float yOffset, bool tilt)
     {
 
         Camera mainCamera = GetComponentInChildren<Camera>();
+        //move object in front of user
         obj.transform.position = mainCamera.transform.position + dist * mainCamera.transform.forward;
-        obj.transform.LookAt(mainCamera.transform);
-        obj.transform.position += new Vector3(0, yOffset, 0);
+        if (tilt)
+        {
+            //translate up, then make object look at user
+            obj.transform.position += new Vector3(0, yOffset, 0);
+            obj.transform.LookAt(mainCamera.transform);
+        }
+        else
+        {
+            //swap the order for no tilt
+            obj.transform.LookAt(mainCamera.transform);
+            obj.transform.position += new Vector3(0, yOffset, 0);
+        }
         obj.transform.Rotate(new Vector3(0, 180, 0));
     }
 

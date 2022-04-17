@@ -41,7 +41,7 @@ public class MainDisplay : MonoBehaviour
         {
             toggle.isOn = false;
         }
-        user.appearObject(gameObject, 2f, -.2f);
+        user.appearObject(gameObject, 2f, 0.2f, false);
         
         closeSideMenus();
     }
