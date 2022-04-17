@@ -5,8 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.Networking;
 using System;
-
-using UnityEngine.InputSystem;
 public class ImageFrame : MonoBehaviour
 {
 
@@ -14,21 +12,25 @@ public class ImageFrame : MonoBehaviour
     private ImageInfoPanel imageInfoPanel;
     public MediaItem mediaItem;
     private OffsetInteractable offsetInteractable;
-    private XRRayInteractor xrRayInteractor;
+    private UserInteractors userInteractors;
+    private ContinuousMoveProviderBase moveProviderBase;
     public static float SCALE_DOWN_FACTOR = 1000;
 
     private void Awake()
     {
         offsetInteractable = GetComponent<OffsetInteractable>();
         offsetInteractable.interactionManager = GameObject.Find("XR Interaction Manager").GetComponent<XRInteractionManager>();
-        xrRayInteractor = GameObject.Find("LeftHand Controller").GetComponent<XRRayInteractor>();
         imageInfoPanel = GameObject.Find("Image Info Panel").GetComponent<ImageInfoPanel>();
-        //when the user selects an image frame with a trigger, show image panel
-        offsetInteractable.activated.AddListener(delegate { showImagePanel(); });
+        //assign listener when user selects this image frame
+        userInteractors = GameObject.Find("XR Origin").GetComponent<UserInteractors>();
+        offsetInteractable.activated.AddListener(delegate { Activated(); });
     }
 
-    public void showImagePanel()
+    void Activated()
     {
+        // stop the user from moving
+        moveProviderBase = userInteractors.GetComponent<ContinuousMoveProviderBase>();
+        moveProviderBase.moveSpeed = 0;
         imageInfoPanel.Show(gameObject);
     }
     public IEnumerator setFullTextureCoroutine(MediaItem mediaItem)
