@@ -12,8 +12,6 @@ public class ImageFrame : MonoBehaviour
     private ImageInfoPanel imageInfoPanel;
     public MediaItem mediaItem;
     private OffsetInteractable offsetInteractable;
-    private UserInteractors userInteractors;
-    private ContinuousMoveProviderBase moveProviderBase;
     public static float SCALE_DOWN_FACTOR = 1000;
 
     private void Awake()
@@ -21,16 +19,12 @@ public class ImageFrame : MonoBehaviour
         offsetInteractable = GetComponent<OffsetInteractable>();
         offsetInteractable.interactionManager = GameObject.Find("XR Interaction Manager").GetComponent<XRInteractionManager>();
         imageInfoPanel = GameObject.Find("Image Info Panel").GetComponent<ImageInfoPanel>();
-        //assign listener when user selects this image frame
-        userInteractors = GameObject.Find("XR Origin").GetComponent<UserInteractors>();
         offsetInteractable.activated.AddListener(delegate { Activated(); });
     }
 
     void Activated()
     {
-        // stop the user from moving
-        moveProviderBase = userInteractors.GetComponent<ContinuousMoveProviderBase>();
-        moveProviderBase.moveSpeed = 0;
+
         imageInfoPanel.Show(gameObject);
     }
     public IEnumerator setFullTextureCoroutine(MediaItem mediaItem)

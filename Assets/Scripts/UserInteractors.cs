@@ -11,17 +11,32 @@ public class UserInteractors : MonoBehaviour
     public XRRayInteractor leftHandInteractor;
     public XRRayInteractor rightHandInteractor;
     public InputActionReference leftHandMove;
+    private ContinuousMoveProviderBase moveProviderBase;
+
 
     void Start()
     {
+        // stop the user from moving
+        moveProviderBase = GetComponent<ContinuousMoveProviderBase>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(leftHandMove.action.ReadValue<Vector2>());
-        if(leftHandInteractor.firstInteractableSelected != null){
-            
+        var leftHandMoveInput = leftHandMove.action.ReadValue<Vector2>();
+        float x = leftHandMoveInput.x;
+        float y = leftHandMoveInput.y;
+
+        if(leftHandInteractor.hasSelection){
+            moveProviderBase.moveSpeed = 0;
+
+            Transform interactableTransform = leftHandInteractor.interactablesSelected[0].transform;
+            interactableTransform.localScale += new Vector3(x,y) / 1000;
+        }
+        else
+        {
+            moveProviderBase.moveSpeed = 1;
+
         }
     }
 }
