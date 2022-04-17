@@ -51,8 +51,9 @@ public class User : MonoBehaviour{
     {
 
         Camera mainCamera = GetComponentInChildren<Camera>();
-        obj.transform.position = mainCamera.transform.position + dist * mainCamera.transform.forward + new Vector3(0, yOffset, 0);
+        obj.transform.position = mainCamera.transform.position + dist * mainCamera.transform.forward;
         obj.transform.LookAt(mainCamera.transform);
+        obj.transform.position += new Vector3(0, yOffset, 0);
         obj.transform.Rotate(new Vector3(0, 180, 0));
     }
 
