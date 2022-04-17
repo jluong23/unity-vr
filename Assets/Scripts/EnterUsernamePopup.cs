@@ -23,7 +23,7 @@ public class EnterUsernamePopup : MenuPopup
     {
         if (usernameInput.isFocused)
         {
-            keyboard.Open(usernameInput);
+            keyboard.currentInputField = usernameInput;
         }
     }
 
