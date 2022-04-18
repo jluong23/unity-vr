@@ -7,12 +7,14 @@ using UnityEngine.Networking;
 using System;
 public class ImageFrame : MonoBehaviour
 {
-
+    //image frame can be scaled n times bigger or smaller for constraint = n
+    public static float WIDTH_CONSTRAINT_MULTIPLIER = 2;
     private GameObject image;
     private ImageInfoPanel imageInfoPanel;
     public MediaItem mediaItem;
     private OffsetInteractable offsetInteractable;
     public static float SCALE_DOWN_FACTOR = 1000;
+    public Tuple<Vector3, Vector3> localScaleRange;
 
     private void Awake()
     {
@@ -20,7 +22,10 @@ public class ImageFrame : MonoBehaviour
         offsetInteractable.interactionManager = GameObject.Find("XR Interaction Manager").GetComponent<XRInteractionManager>();
         imageInfoPanel = GameObject.Find("Image Info Panel").GetComponent<ImageInfoPanel>();
         offsetInteractable.activated.AddListener(delegate { Activated(); });
+        localScaleRange = new Tuple<Vector3, Vector3>(transform.localScale / WIDTH_CONSTRAINT_MULTIPLIER, transform.localScale * WIDTH_CONSTRAINT_MULTIPLIER);
+
     }
+
 
     void Activated()
     {

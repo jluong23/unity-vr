@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
+using System;
 
 public class UserInteractors : MonoBehaviour
 {
@@ -11,31 +12,29 @@ public class UserInteractors : MonoBehaviour
     public XRRayInteractor leftHandInteractor;
     public XRRayInteractor rightHandInteractor;
     public InputActionReference leftHandMove;
-    private ContinuousMoveProviderBase moveProviderBase;
+    public ContinuousTurnProviderBase turnProviderBase;
+    public ContinuousMoveProviderBase moveProviderBase;
 
+    public float frameScaleSpeed = 80;
 
-    void Start()
-    {
-        // stop the user from moving
-        moveProviderBase = GetComponent<ContinuousMoveProviderBase>();
-    }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        
         var leftHandMoveInput = leftHandMove.action.ReadValue<Vector2>();
-        float x = leftHandMoveInput.x;
-        float y = leftHandMoveInput.y;
-
         if(leftHandInteractor.hasSelection){
             moveProviderBase.moveSpeed = 0;
-
+            turnProviderBase.turnSpeed = 0;
             Transform interactableTransform = leftHandInteractor.interactablesSelected[0].transform;
-            interactableTransform.localScale += new Vector3(x,y) / 1000;
+            ImageFrame imageFrameComponent = interactableTransform.GetComponent<ImageFrame>();
+            interactableTransform.localScale += new Vector3(leftHandMoveInput.x, leftHandMoveInput.x) * frameScaleSpeed / 1000;
         }
         else
         {
+            //reset movement when user has let go of object
             moveProviderBase.moveSpeed = 1;
+            turnProviderBase.turnSpeed = 60;
 
         }
     }
