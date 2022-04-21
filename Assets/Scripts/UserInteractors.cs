@@ -18,7 +18,6 @@ public class UserInteractors : MonoBehaviour
     public float frameScaleSpeed = 80;
 
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         
