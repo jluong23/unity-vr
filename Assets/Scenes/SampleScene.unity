@@ -15945,16 +15945,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1453126916}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f40dfa4891213784aa7499cd9503760a, type: 3}
+  m_Script: {fileID: 11500000, guid: f3ee2f801956020478081cf9c4d6bd75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftHandInteractor: {fileID: 120744460}
   rightHandInteractor: {fileID: 1850834188}
   leftHandMove: {fileID: 6972639530819350904, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
-  turnProviderBase: {fileID: 2098506591}
-  moveProviderBase: {fileID: 2098506586}
-  frameScaleSpeed: 80
+  locomotionSystem: {fileID: 2098506589}
+  interactableScaleSpeed: 80
 --- !u!1 &1463437209
 GameObject:
   m_ObjectHideFlags: 0
