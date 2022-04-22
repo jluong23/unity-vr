@@ -263,6 +263,11 @@ public class User : MonoBehaviour{
          this.email = tokenData["email"]; 
          photosSavePath = photos_save_path + username + ".json";
          libraryPhotos = new UserPhotos(this, photosSavePath); // initialise photos as empty
+         if(oauthRefreshRequired){
+            // delete the json save if exists as baseUrls will be expired, returning a 403 Forbidden error. 
+            // don't delete oauth
+            libraryPhotos.deleteSave(false, true);
+         }
          // allow user to progress the auth menu popup
          authorizationMenuPopup.allowProgress(this.email);
       }

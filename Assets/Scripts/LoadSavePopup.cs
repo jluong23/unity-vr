@@ -84,6 +84,7 @@ public class LoadSavePopup : MenuPopup
         continueButtonClicked();
     }
     IEnumerator loadSave(string username){
+        Debug.Log(username + " button clicked");
         user.Login(username);
         while(user.loggedIn == false){
             // wait until user has logged in 

@@ -32,18 +32,10 @@ public class SettingsMenu : SideMenu
 
     IEnumerator deleteSaveButtonClicked(){
         if(user != null && user.username != ""){
-            string oauthSave = "Google.Apis.Auth.OAuth2.Responses.TokenResponse-" + user.username;
-            string jsonSave = user.username + ".json";
-            // delete oauth and json save, with meta files  
-            File.Delete(User.oauth_save_path + oauthSave);
-            File.Delete(User.oauth_save_path + oauthSave + ".meta");
-            File.Delete(User.photos_save_path + jsonSave);
-            File.Delete(User.photos_save_path + jsonSave + ".meta");
-            UnityEditor.AssetDatabase.Refresh();
+            user.libraryPhotos.deleteSave(true, true);
             loadSavePopup.updateSaveButtons();
             yield return new WaitForSeconds(1f);
             changeUserButtonClicked();
-
         }
     }
 

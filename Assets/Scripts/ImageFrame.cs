@@ -18,14 +18,15 @@ public class ImageFrame : MonoBehaviour
 
     private void Awake()
     {
+        // assign the XR Interaction Manager gameobject
         offsetInteractable = GetComponent<OffsetInteractable>();
         offsetInteractable.interactionManager = GameObject.Find("XR Interaction Manager").GetComponent<XRInteractionManager>();
+        // load the image info panel on click of the image frame
         imageInfoPanel = GameObject.Find("Image Info Panel").GetComponent<ImageInfoPanel>();
         offsetInteractable.activated.AddListener(delegate { Activated(); });
+        // used for max scaling of image frame
         localScaleRange = new Tuple<Vector3, Vector3>(transform.localScale / WIDTH_CONSTRAINT_MULTIPLIER, transform.localScale * WIDTH_CONSTRAINT_MULTIPLIER);
-
     }
-
 
     void Activated()
     {

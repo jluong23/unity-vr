@@ -153,4 +153,18 @@ public class UserPhotos{
       writer.WriteLine(JsonConvert.SerializeObject(this));
       writer.Close();
    }
+
+   public void deleteSave(bool deleteOauth, bool deleteJsonSave){
+      string oauthSave = "Google.Apis.Auth.OAuth2.Responses.TokenResponse-" + user.username;
+      string jsonSave = user.username + ".json";
+      // delete saves with meta files depending on bool params  
+      if(deleteOauth){
+         File.Delete(User.oauth_save_path + oauthSave);
+         File.Delete(User.oauth_save_path + oauthSave + ".meta");
+      }if(deleteJsonSave){
+         File.Delete(User.photos_save_path + jsonSave);
+         File.Delete(User.photos_save_path + jsonSave + ".meta");
+      }
+      UnityEditor.AssetDatabase.Refresh();
+   }
 }
