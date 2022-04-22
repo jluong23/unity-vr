@@ -86,10 +86,14 @@ public class LoadSavePopup : MenuPopup
     IEnumerator loadSave(string username){
         Debug.Log(username + " button clicked");
         user.Login(username);
+
+        buttonsInteractable(false); // turn off interaction for all buttons when logging in
         while(user.loggedIn == false){
             // wait until user has logged in 
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.5f);
         }
+        updateSaveButtons(); // user logged in, change buttons back to previous
+
         if(user.oauthRefreshRequired || !user.libraryPhotos.hasSave){
             // two cases, user does not has a save, or the oauth expired
             // with expired oauth, would need to reload the image set download links for images will return FORBIDDEN 403 error.
@@ -100,5 +104,19 @@ public class LoadSavePopup : MenuPopup
             nextPopup = mainDisplay;
         }
         continueButtonClicked();
+    }
+
+    /// <summary>
+    /// Sets all buttons on this panel to off and on based on parameter
+    /// </summary>
+    void buttonsInteractable(bool isInteractable){
+        continueButton.interactable = isInteractable;
+        backButton.interactable = isInteractable;
+        for (int i = 0; i < saveButtons.Length; i++)
+        {
+            Button saveButton = saveButtons[i].GetComponent<Button>();
+            saveButton.interactable = isInteractable;
+
+        }
     }
 }

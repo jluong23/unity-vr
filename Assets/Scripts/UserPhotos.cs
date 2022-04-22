@@ -45,6 +45,15 @@ public class UserPhotos{
       this.maxPhotos = 100;
       this.loadVideos = false;
 
+      if(File.Exists(savePath) && user.oauthRefreshRequired){
+         // delete the json save if exists as baseUrls will be expired, returning a 403 Forbidden error. 
+         // don't delete oauth
+         deleteSave(false, true);
+         Debug.Log("File found at " + savePath + " but oauth expired, overwriting...");
+      }else{
+         Debug.Log("Could not find an existing user photos save for " + user.username);
+      }
+
       if(File.Exists(savePath) && !user.oauthRefreshRequired){
          // read stored data file if it exists
          // save exists and variables will be fully loaded in
@@ -59,11 +68,6 @@ public class UserPhotos{
          this.categoriesLoaded = initialCategoryCounts.Count;
 
       }else{
-         if(user.oauthRefreshRequired && File.Exists(savePath)){
-            Debug.Log("File found at " + savePath + " but oauth expired, overwriting...");
-         }else{
-            Debug.Log("Could not find an existing user photos save for " + user.username);
-         }
          // initialise category counts, all categories to a count of 0 images
          initialCategoryCounts = ContentFilter.ALL_CATEGORIES.ToDictionary(x => x, x => 0);
          allPhotos = new Dictionary<string, MediaItem>();
@@ -71,7 +75,6 @@ public class UserPhotos{
          this.hasSave = false;
          this.categoriesLoaded = 0;
       }
-
    }
 
    [JsonConstructor]
