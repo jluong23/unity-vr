@@ -13,6 +13,7 @@ public class SettingsMenu : SideMenu
     public Button quitButton;
     public User user;
     public LoadSavePopup loadSavePopup;
+    public Text infoText;
 
     protected override void Start()
     {
@@ -37,6 +38,10 @@ public class SettingsMenu : SideMenu
             yield return new WaitForSeconds(1f);
             changeUserButtonClicked();
         }
+    }
+
+    public void setInfoText(int numImages, string loadTimeString){
+        infoText.text = string.Format("Load Time:{0}\n# Images: {1}", loadTimeString, numImages);
     }
 
     void quitButtonClicked(){

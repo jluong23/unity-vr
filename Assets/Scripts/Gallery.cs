@@ -17,12 +17,8 @@ public class Gallery : MonoBehaviour
     public GameObject content;
     public User user;
     private List<MediaItem> currentPhotos;
+    public SettingsMenu settingsMenu;
 
-    /// <summary>
-    /// Check if photo variables have finished loading with categorisation every .5 seconds. Once loaded,
-    /// update category and date menus and content grid on main display to reflect the loaded data.
-    /// </summary>
-    /// <returns></returns>
     IEnumerator photosLoadedCheck()
     {
         while(!user.libraryPhotos.loaded){
@@ -37,10 +33,15 @@ public class Gallery : MonoBehaviour
         // save the user data
         user.libraryPhotos.saveData();
         user.libraryPhotos.hasSave = true;
+        settingsMenu.setInfoText(user.libraryPhotos.getPhotos().Count, user.libraryPhotos.loadTimeString);
 
     }
 
-    // ran when the 'show photos data' button is pressed for the first time
+    /// <summary>
+    /// Load user data by Google Photos API if user.hasSave is false. 
+    /// Whilst loading, keep checking if photo variables have finished loading with categorisation every .5 seconds. Once loaded,
+    /// update category and date menus and content grid on main display to reflect the loaded data.
+    /// </summary>
     public void initPhotos(){
         clearGallery();
         // load the user data if a save does not exist

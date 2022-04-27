@@ -39,7 +39,7 @@ public class LoadSavePopup : MenuPopup
         }
     }
 
-    public void updateSaveButtons(){
+    public List<string> getSavedUsernames(){
         // find usernames in oauth folder
         usernames = new List<string>();
         // exclude meta files when looking for oauth files
@@ -51,6 +51,11 @@ public class LoadSavePopup : MenuPopup
             string username = file.Name;
             usernames.Add(username.Substring(username.IndexOf("-")+1));
         }
+        return usernames;
+    }
+
+    public void updateSaveButtons(){
+        List<string> usernames = getSavedUsernames();
         // map event listeners to the save buttons
         for (int i = 0; i < saveButtons.Length; i++)
         {

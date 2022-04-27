@@ -6,8 +6,14 @@ public class UnityStopwatch{
     public static string stop(){
         timer.Stop();
         var elapsedTime = timer.Elapsed;
-        string output = string.Format("{0:00}:{1:00}.{2:00}",
-            elapsedTime.Minutes, elapsedTime.Seconds, elapsedTime.Milliseconds / 10);
+        string output;
+        if(elapsedTime.Minutes > 0){
+            output = string.Format("{0:00}mins, {1:00}.{2:00}s",
+                elapsedTime.Minutes, elapsedTime.Seconds, elapsedTime.Milliseconds / 10);
+        }else{
+            output = string.Format("{1:00}.{2:00}s",
+                elapsedTime.Seconds, elapsedTime.Milliseconds / 10);
+        }
         return output;
     }
 

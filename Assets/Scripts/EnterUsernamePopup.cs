@@ -10,6 +10,7 @@ public class EnterUsernamePopup : MenuPopup
     public InputField usernameInput;
     public Text usernameInputText;
     public VRKeyboard keyboard;
+    public LoadSavePopup loadSavePopup;
     protected override void Start()
     {
         // don't use base.Start()
@@ -29,7 +30,9 @@ public class EnterUsernamePopup : MenuPopup
 
     void usernameInputChanged(string currentInputText)
     {
-        if (currentInputText == ""){
+        List<string> savedUsernames = loadSavePopup.getSavedUsernames();
+        if (currentInputText == "" || savedUsernames.Contains(currentInputText)){
+            // don't allow empty usernames or usernames which already exist
             continueButton.interactable = false;
         }else{
             continueButton.interactable = true;

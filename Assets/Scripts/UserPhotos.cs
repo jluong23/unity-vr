@@ -25,6 +25,8 @@ public class UserPhotos{
    public static int MAX_PHOTOS_PER_CATEGORY = 100;
    // max number of photos in library to load
    public int maxPhotos;
+   [JsonProperty]
+   public string loadTimeString;
    // if the user photo variables (allPhotos and initialCategoryCounts) are fully loaded, useful for unity coroutine conditions
    public bool loaded;
    // if there exists a json save for the user
@@ -79,9 +81,9 @@ public class UserPhotos{
 
    [JsonConstructor]
    // used when serialising an object, loading save data
-   private UserPhotos(Dictionary<string, MediaItem> allPhotos, Dictionary<string, int> initialCategoryCounts){
-      this.allPhotos = allPhotos;
+   private UserPhotos(Dictionary<string, MediaItem> allPhotos, Dictionary<string, int> initialCategoryCounts, string loadTimeString){
       this.initialCategoryCounts = initialCategoryCounts;
+      this.loadTimeString = loadTimeString;
    }
 
    public List<MediaItem> getPhotos(){
@@ -100,7 +102,6 @@ public class UserPhotos{
       /// If the entire dataset is currently being shown on menu, the initial category counts for the dataset is returned.
       /// </summary>
       /// 
-      
       // original data set is shown, return initial counts
       if(getPhotos(selectedCategories, dateRange).Count == allPhotos.Count) return initialCategoryCounts;
       Dictionary<string, int> subCategoryCounts = new Dictionary<string, int>();

@@ -120,6 +120,7 @@ public class User : MonoBehaviour{
 
    // function which populates photos 
    public void populatePhotosByAPI(){
+      UnityStopwatch.start();
       StartCoroutine(loadPhotos(""));
    }
 
@@ -232,6 +233,8 @@ public class User : MonoBehaviour{
          }
          // finished categorising after all categories have been enumerated
          libraryPhotos.loaded = true;
+         libraryPhotos.loadTimeString = UnityStopwatch.stop();
+         Debug.Log(libraryPhotos.loadTimeString);
 
 
       }
