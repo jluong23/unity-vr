@@ -83,6 +83,7 @@ public class User : MonoBehaviour{
       loadPhotosPopup.Reset();
 
       if(this.username != username){
+         // initially set logged in to false, then set to true after coroutine finishes
          loggedIn = false;
          setCredential(username);
       }
@@ -234,9 +235,6 @@ public class User : MonoBehaviour{
          // finished categorising after all categories have been enumerated
          libraryPhotos.loaded = true;
          libraryPhotos.loadTimeString = UnityStopwatch.stop();
-         Debug.Log(libraryPhotos.loadTimeString);
-
-
       }
       else{
          // categorisePhotos = false, all photos have empty category list

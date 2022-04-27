@@ -11,7 +11,7 @@ public class UnityStopwatch{
             output = string.Format("{0:00}mins, {1:00}.{2:00}s",
                 elapsedTime.Minutes, elapsedTime.Seconds, elapsedTime.Milliseconds / 10);
         }else{
-            output = string.Format("{1:00}.{2:00}s",
+            output = string.Format("{0:00}.{0:00}s",
                 elapsedTime.Seconds, elapsedTime.Milliseconds / 10);
         }
         return output;

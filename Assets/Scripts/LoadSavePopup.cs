@@ -89,7 +89,7 @@ public class LoadSavePopup : MenuPopup
         continueButtonClicked();
     }
     IEnumerator loadSave(string username){
-        Debug.Log(username + " button clicked");
+        Debug.Log(username + " being logged in..");
         user.Login(username);
 
         buttonsInteractable(false); // turn off interaction for all buttons when logging in

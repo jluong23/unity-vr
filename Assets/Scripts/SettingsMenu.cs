@@ -41,7 +41,7 @@ public class SettingsMenu : SideMenu
     }
 
     public void setInfoText(int numImages, string loadTimeString){
-        infoText.text = string.Format("Load Time:{0}\n# Images: {1}", loadTimeString, numImages);
+        infoText.text = string.Format("Load Time: {0}\n# Images: {1}", loadTimeString, numImages);
     }
 
     void quitButtonClicked(){

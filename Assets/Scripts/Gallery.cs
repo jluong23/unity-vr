@@ -31,9 +31,10 @@ public class Gallery : MonoBehaviour
         dateMenu.setMaxDateRanges(user.libraryPhotos);
         populateGrid(user.libraryPhotos.getPhotos());
         // save the user data
-        user.libraryPhotos.saveData();
         user.libraryPhotos.hasSave = true;
         settingsMenu.setInfoText(user.libraryPhotos.getPhotos().Count, user.libraryPhotos.loadTimeString);
+        yield return new WaitForSeconds(1f);
+        user.libraryPhotos.saveData();
 
     }
 

@@ -63,9 +63,11 @@ public class UserPhotos{
          this.hasSave = true; 
          Debug.Log("Loading user photos data from " + savePath);
          StreamReader reader = new StreamReader(savePath);
+         // load data from save
          UserPhotos loadedData = JsonConvert.DeserializeObject<UserPhotos>(reader.ReadToEnd());
          reader.Close();
          this.allPhotos = loadedData.allPhotos;
+         this.loadTimeString = loadedData.loadTimeString;
          this.initialCategoryCounts = loadedData.initialCategoryCounts;
          this.categoriesLoaded = initialCategoryCounts.Count;
 
@@ -83,6 +85,7 @@ public class UserPhotos{
    // used when serialising an object, loading save data
    private UserPhotos(Dictionary<string, MediaItem> allPhotos, Dictionary<string, int> initialCategoryCounts, string loadTimeString){
       this.initialCategoryCounts = initialCategoryCounts;
+      this.allPhotos = allPhotos;
       this.loadTimeString = loadTimeString;
    }
 
