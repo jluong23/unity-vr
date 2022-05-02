@@ -60,7 +60,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 # google api data
-Assets/credentials.json
-Assets/credentials.json.meta
-Assets/photos_data/*
-Assets/photos_data.meta
+Assets/Resources/credentials.json
+Assets/Resources/credentials.json.meta
+Assets/Resources/photos_data/*
+Assets/Resources/photos_data.meta

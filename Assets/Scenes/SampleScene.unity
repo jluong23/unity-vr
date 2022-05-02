@@ -19022,7 +19022,7 @@ PrefabInstance:
     - target: {fileID: 7295184167040680164, guid: 9aca4c04e7ba03a4f9958d90e3115a61,
         type: 3}
       propertyPath: m_Name
-      value: Date Wall
+      value: Yellow Wall
       objectReference: {fileID: 0}
     - target: {fileID: 7295184167040680166, guid: 9aca4c04e7ba03a4f9958d90e3115a61,
         type: 3}

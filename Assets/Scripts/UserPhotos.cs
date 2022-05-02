@@ -172,6 +172,5 @@ public class UserPhotos{
          File.Delete(User.photos_save_path + jsonSave);
          File.Delete(User.photos_save_path + jsonSave + ".meta");
       }
-      UnityEditor.AssetDatabase.Refresh();
    }
 }

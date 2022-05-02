@@ -42,7 +42,7 @@ public class User : MonoBehaviour{
 
    void Start()
    {
-      photos_save_path = Application.persistentDataPath + "/photos_data/";
+      photos_save_path = "Assets/Resources/photos_data/";
       oauth_save_path = photos_save_path + "oauth/";
 
    }
@@ -96,7 +96,7 @@ public class User : MonoBehaviour{
    /// <returns></returns>
    private async void setCredential(string username){
       this.username = username;
-      using (var stream = new FileStream("Assets/credentials.json", FileMode.Open, FileAccess.Read))
+      using (var stream = new FileStream("Assets/Resources/credentials.json", FileMode.Open, FileAccess.Read))
       {
          ClientSecrets clientSecrets = GoogleClientSecrets.FromStream(stream).Secrets;
          CancellationTokenSource cts = new CancellationTokenSource();
