@@ -52,8 +52,6 @@ public class UserPhotos{
          // don't delete oauth
          deleteSave(false, true);
          Debug.Log("File found at " + savePath + " but oauth expired, overwriting...");
-      }else{
-         Debug.Log("Could not find an existing user photos save for " + user.username);
       }
 
       if(File.Exists(savePath) && !user.oauthRefreshRequired){

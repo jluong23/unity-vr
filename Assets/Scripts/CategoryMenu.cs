@@ -8,7 +8,7 @@ using System.Linq;
 public class CategoryMenu : SideMenu
 {
     // different category buttons as children
-    private CategoryToggle[] categoryToggles;
+    public CategoryToggle[] categoryToggles;
     public GameObject categoryTogglePrefab;
     public GameObject content;
 

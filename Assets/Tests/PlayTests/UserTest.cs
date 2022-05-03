@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class UserTest
 {
 
-    private string testUsername = "sheffield";
+    private string testUsername = "Test";
     private string expectedEmail = "jluong1@sheffield.ac.uk";
     private int expectedImagesLoaded = 478;
 
@@ -43,6 +43,19 @@ public class UserTest
         }
     }
 
+    private int countNumberOfThumbnails(){
+        Gallery galleryComponent = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
+        // count number of thumbnails
+        // the date headers have no children, so its fine to add 0 to thumbnailCount
+        int thumbnailCount = 0;
+        for (int i = 0; i < galleryComponent.content.transform.childCount; i++)
+        {
+            Transform child = galleryComponent.content.transform.GetChild(i);
+            thumbnailCount += child.childCount;
+        }
+        return thumbnailCount;
+    }
+
     [UnityTest]
     public IEnumerator PhotosLoaded()
     {   
@@ -59,19 +72,32 @@ public class UserTest
     [UnityTest]
     public IEnumerator ThumbnailsLoaded()
     {   
-        Gallery galleryComponent = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
-
-        // count number of thumbnails
-        // the date headers have no children, so its fine to add 0 to thumbnailCount
-        int thumbnailCount = 0;
-        for (int i = 0; i < galleryComponent.content.transform.childCount; i++)
-        {
-            Transform child = galleryComponent.content.transform.GetChild(i);
-            thumbnailCount += child.childCount;
-        }
-
         // number of thumbnails should be equal to images loaded
-        Assert.AreEqual(expectedImagesLoaded, thumbnailCount);
+        Assert.AreEqual(expectedImagesLoaded, countNumberOfThumbnails());
+        yield return null;
+    }
+
+    /// <summary>
+    /// Apply each of the categories
+    /// </summary>
+    /// <returns></returns>
+    [UnityTest]
+    public IEnumerator TestCategoryFilters()
+    {   
+        CategoryMenu categoryMenu = GameObject.Find("Category Side Menu").GetComponent<CategoryMenu>();
+        int numCategoriesToTest = categoryMenu.categoryToggles.Length; 
+        for (int i = 0; i < numCategoriesToTest; i++)
+        {
+            CategoryToggle categoryToggle = categoryMenu.categoryToggles[i];
+            ColoredToggle toggleComponent = categoryToggle.GetComponent<ColoredToggle>(); 
+            // apply the category filter
+            toggleComponent.isOn = true;
+            // expected number of thumbnails: the number next to the category filter
+            // actual: The number of thumbnails on the gallery display
+            Assert.AreEqual(categoryToggle.getCount(), countNumberOfThumbnails());
+            // remove the category filter
+            toggleComponent.isOn = false;
+        }
         yield return null;
     }
 }

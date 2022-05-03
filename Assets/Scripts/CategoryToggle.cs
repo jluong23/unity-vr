@@ -10,11 +10,13 @@ public class CategoryToggle : MonoBehaviour
     private Gallery gallery; 
     private string category;
     private Text textElement;
+    private int count;
 
     private void Awake()
     {
 
         category = "";
+        count = 0;
         textElement = GetComponentInChildren<Text>();
         gallery = GameObject.Find("Gallery Scroll View").GetComponent<Gallery>();
         toggle = GetComponent<ColoredToggle>();
@@ -28,16 +30,18 @@ public class CategoryToggle : MonoBehaviour
         return category;
     }
 
+    public int getCount(){
+        return count;
+    }
+
     public void setCategory(string newCategory){
         category = newCategory;
         // update text element of toggle
         textElement.text = category;
     }
 
-    public void updateCategoryCount(int count){
-        textElement.text = string.Format(" {0} <b>({1})</b>", category, count);
-    }
     public void appendCategoryCount(int count){
+        this.count = count;
         textElement.text += string.Format(" <b>({0})</b>", count);
     }
 }
