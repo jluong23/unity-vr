@@ -7,8 +7,6 @@ using System.Linq;
 
 public class CategoryMenu : SideMenu
 {
-    // different category buttons as children
-    public CategoryToggle[] categoryToggles;
     public GameObject categoryTogglePrefab;
     public GameObject content;
 
@@ -40,10 +38,12 @@ public class CategoryMenu : SideMenu
     public void setToggles(Dictionary<string, int> categoryCounts, bool isInitialCategories){
         if (isInitialCategories)
         {
+            //used when changing user and between data sets, remove all selected categories
             Clear();
         }
         else
         {
+            //used within one session, clean categories by retaining selected categories but deleting the unselected ones
             Clean();        
         }
         List<string> selectedCategories = getSelectedCategories(); 
@@ -72,10 +72,14 @@ public class CategoryMenu : SideMenu
         }
     }
 
+    public CategoryToggle[] getCategoryToggles()
+    {
+        return transform.Find("Category Scroll Panel").GetComponentsInChildren<CategoryToggle>();
+    }
+
     // return a list of categories which are selected on the menu
     public List<string> getSelectedCategories(){
-        categoryToggles = transform.Find("Category Scroll Panel").GetComponentsInChildren<CategoryToggle>();
-        return categoryToggles.Where(i => i.GetComponent<Toggle>().isOn).Select(i => i.getCategory()).ToList();
+        return getCategoryToggles().Where(i => i.GetComponent<Toggle>().isOn).Select(i => i.getCategory()).ToList();
     }
 
     void Clear(){
