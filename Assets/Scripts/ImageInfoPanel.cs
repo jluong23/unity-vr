@@ -90,6 +90,7 @@ public class ImageInfoPanel : MonoBehaviour
 
     public void Show(GameObject objectClicked)
     {
+        instantiatedImageFrame = objectClicked;
         ImageFrame imageFrameComponent = objectClicked.GetComponent<ImageFrame>();
         GalleryThumbnail galleryThumbnailComponent = objectClicked.GetComponent<GalleryThumbnail>();
         

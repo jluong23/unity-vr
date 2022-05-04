@@ -26,7 +26,7 @@ public class Gallery : MonoBehaviour
             yield return new WaitForSeconds(.5f);
         }
         // update category menu with initial category counts
-        categoryMenu.setToggles(user.libraryPhotos.initialCategoryCounts);
+        categoryMenu.setToggles(user.libraryPhotos.initialCategoryCounts, true);
         // update the start and end date ranges
         dateMenu.setMaxDateRanges(user.libraryPhotos);
         populateGrid(user.libraryPhotos.getPhotos());
@@ -97,7 +97,7 @@ public class Gallery : MonoBehaviour
                 populateGrid(newPhotos);
                 // update category menu, reflecting new category counts
                 Dictionary<string, int> newCategoryCounts = user.libraryPhotos.getCategoryCounts(selectedCategories, currentDateRange); 
-                categoryMenu.setToggles(newCategoryCounts);
+                categoryMenu.setToggles(newCategoryCounts, false);
                 // scroll to top of gallery
                 GetComponentInChildren<GalleryScroller>().scrollToTop();
             }

@@ -22,7 +22,6 @@ public class CategoryMenu : SideMenu
         /// Used temporarily before user logs in, showing all categories.
     /// </summary>
     void setToggles(){
-        // used
         Clear();
         foreach (var category in ContentFilter.ALL_CATEGORIES)
         {
@@ -35,10 +34,18 @@ public class CategoryMenu : SideMenu
     /// <summary>
     /// add toggles with category names and counts, ordering by highest category count.
     /// Used when a different category selection has been made.
+    /// isInitialCategories: true when the images are first loaded. False for future category changes
     /// </summary>
     /// <param name="categoryCounts"></param>
-    public void setToggles(Dictionary<string, int> categoryCounts){
-        Clean();
+    public void setToggles(Dictionary<string, int> categoryCounts, bool isInitialCategories){
+        if (isInitialCategories)
+        {
+            Clear();
+        }
+        else
+        {
+            Clean();        
+        }
         List<string> selectedCategories = getSelectedCategories(); 
         // initialise new categories, starting with all categories
         List<string> newCategories = new List<string>(ContentFilter.ALL_CATEGORIES);
