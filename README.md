@@ -15,5 +15,6 @@ As of 09/05/22:
 3. Under the credentials tab, create an Oauth 2.0 Client ID. Ensure the type is Desktop Application.
 4. In the OAuth consent screen tab, add your email which will be used for Photos Library API as a test user (and subsequent emails to test) .
 5. Download the credential json file of the created Oauth 2.0 ID, copying into the ```Assets/Resources``` directory with file name ```credentials.json```. 
-6. Run the application in the Unity Editor (haven't got the Google Cloud and XR Interaction Toolkit to work when exporting the project on Desktop).
+6. Ensure the Oculus Quest is plugged in to your computer with Oculus Link enabled.
+7. Run the application in the Unity Editor and wear the headset (have not got the Google Cloud and XR Interaction Toolkit to work when exporting the project on desktop).
 
