@@ -76,28 +76,4 @@ public class UserTest
         Assert.AreEqual(expectedImagesLoaded, countNumberOfThumbnails());
         yield return null;
     }
-
-    /// <summary>
-    /// Apply each of the categories
-    /// </summary>
-    /// <returns></returns>
-    //[UnityTest]
-    //public IEnumerator TestCategoryFilters()
-    //{   
-    //    CategoryMenu categoryMenu = GameObject.Find("Category Side Menu").GetComponent<CategoryMenu>();
-    //    int numCategoriesToTest = categoryMenu.getCategoryToggles().Length; 
-    //    for (int i = 0; i < numCategoriesToTest; i++)
-    //    {
-    //        CategoryToggle categoryToggle = categoryMenu.getCategoryToggles()[i];
-    //        ColoredToggle toggleComponent = categoryToggle.GetComponent<ColoredToggle>(); 
-    //        // apply the category filter
-    //        toggleComponent.isOn = true;
-    //        // expected number of thumbnails: the number next to the category filter
-    //        // actual: The number of thumbnails on the gallery display
-    //        Assert.AreEqual(categoryToggle.getCount(), countNumberOfThumbnails());
-    //        // remove the category filter
-    //        toggleComponent.isOn = false;
-    //    }
-    //    yield return null;
-    //}
 }
